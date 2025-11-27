@@ -224,11 +224,19 @@ const Evaluation = () => {
                       className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                       required
                     >
-                      <option value="">Выберите город</option>
+                      <option value="">Выберите населённый пункт</option>
                       <option value="khabarovsk">Хабаровск</option>
                       <option value="komsomolsk">Комсомольск-на-Амуре</option>
-                      <option value="lazo">Район имени Лазо</option>
-                      <option value="other">Другой населённый пункт</option>
+                      <option value="amursk">Амурск</option>
+                      <option value="sovetskaya-gavan">Советская Гавань</option>
+                      <option value="bikin">Бикин</option>
+                      <option value="vyazemsky">Вяземский</option>
+                      <option value="nikolaevsk">Николаевск-на-Амуре</option>
+                      <option value="vanino">Ванино</option>
+                      <option value="pereyaslavka">Переяславка</option>
+                      <option value="khabarovsky-raion">Хабаровский район</option>
+                      <option value="komsomolsky-raion">Комсомольский район</option>
+                      <option value="other">Другой населённый пункт края</option>
                     </select>
                   </div>
                 </div>
@@ -253,7 +261,16 @@ const Evaluation = () => {
                       <p><strong>Местоположение:</strong> {
                         formData.location === 'khabarovsk' ? 'Хабаровск' :
                         formData.location === 'komsomolsk' ? 'Комсомольск-на-Амуре' :
-                        formData.location === 'lazo' ? 'Район имени Лазо' : 'Другой населённый пункт'
+                        formData.location === 'amursk' ? 'Амурск' :
+                        formData.location === 'sovetskaya-gavan' ? 'Советская Гавань' :
+                        formData.location === 'bikin' ? 'Бикин' :
+                        formData.location === 'vyazemsky' ? 'Вяземский' :
+                        formData.location === 'nikolaevsk' ? 'Николаевск-на-Амуре' :
+                        formData.location === 'vanino' ? 'Ванино' :
+                        formData.location === 'pereyaslavka' ? 'Переяславка' :
+                        formData.location === 'khabarovsky-raion' ? 'Хабаровский район' :
+                        formData.location === 'komsomolsky-raion' ? 'Комсомольский район' :
+                        'Другой населённый пункт края'
                       }</p>
                     </div>
                   </div>
