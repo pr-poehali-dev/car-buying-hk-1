@@ -10,6 +10,7 @@ import Icon from "@/components/ui/icon";
 const Evaluation = () => {
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
+  const [photos, setPhotos] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     brand: "",
     model: "",
@@ -53,6 +54,7 @@ const Evaluation = () => {
       name: "",
       phone: ""
     });
+    setPhotos([]);
     setCurrentStep(1);
   };
 
@@ -61,6 +63,32 @@ const Evaluation = () => {
       ...formData,
       [e.target.id]: e.target.value
     });
+  };
+
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+
+    const newPhotos: string[] = [];
+    const remainingSlots = 5 - photos.length;
+    const filesToProcess = Math.min(files.length, remainingSlots);
+
+    for (let i = 0; i < filesToProcess; i++) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target?.result) {
+          newPhotos.push(event.target.result as string);
+          if (newPhotos.length === filesToProcess) {
+            setPhotos([...photos, ...newPhotos]);
+          }
+        }
+      };
+      reader.readAsDataURL(files[i]);
+    }
+  };
+
+  const removePhoto = (index: number) => {
+    setPhotos(photos.filter((_, i) => i !== index));
   };
 
   const isStepValid = () => {
@@ -161,6 +189,40 @@ const Evaluation = () => {
                       placeholder="2020" 
                       required 
                     />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="photos">Фото автомобиля (по желанию, до 5 фото)</Label>
+                    <Input 
+                      id="photos" 
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={handlePhotoUpload}
+                      disabled={photos.length >= 5}
+                      className="cursor-pointer"
+                    />
+                    {photos.length > 0 && (
+                      <div className="grid grid-cols-5 gap-2 mt-4">
+                        {photos.map((photo, index) => (
+                          <div key={index} className="relative group">
+                            <img 
+                              src={photo} 
+                              alt={`Фото ${index + 1}`}
+                              className="w-full h-20 object-cover rounded border border-gray-200"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => removePhoto(index)}
+                              className="absolute -top-2 -right-2 bg-gray-900 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
+                            >
+                              <Icon name="X" size={14} />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    <p className="text-sm text-gray-500 mt-2">Загружено: {photos.length} из 5</p>
                   </div>
                 </div>
               )}
