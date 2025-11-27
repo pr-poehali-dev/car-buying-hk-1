@@ -1,8 +1,17 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
+import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
+  const { toast } = useToast();
+
+  const handleCallRequest = () => {
+    toast({
+      title: "Заявка принята!",
+      description: "Мы перезвоним вам в ближайшее время",
+    });
+  };
   return (
     <div className="min-h-screen bg-white">
       <header className="border-b border-gray-200">
@@ -32,11 +41,23 @@ const Index = () => {
           <div className="max-w-2xl text-white">
             <h1 className="text-5xl font-bold mb-4">Выкуп автомобилей в Хабаровске</h1>
             <p className="text-xl mb-8 text-gray-100">Быстрая оценка и честная цена за ваш автомобиль</p>
-            <Link to="/evaluation">
-              <Button size="lg" className="bg-white text-gray-900 hover:bg-gray-100">
-                Оценить авто
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link to="/evaluation">
+                <Button size="lg" className="bg-white text-gray-900 hover:bg-gray-100 text-lg px-8 py-6 h-auto">
+                  <Icon name="Calculator" size={24} className="mr-2" />
+                  Оценить авто
+                </Button>
+              </Link>
+              <Button 
+                size="lg" 
+                variant="outline" 
+                onClick={handleCallRequest}
+                className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 text-lg px-8 py-6 h-auto"
+              >
+                <Icon name="Phone" size={24} className="mr-2" />
+                Заказать звонок
               </Button>
-            </Link>
+            </div>
           </div>
         </div>
       </section>
