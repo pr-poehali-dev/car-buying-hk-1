@@ -70,32 +70,106 @@ const Index = () => {
         </div>
       </section>
 
+      <section className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-4 text-gray-900">Какие автомобили выкупаем</h2>
+          <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">Мы выкупаем легковые автомобили любых марок и в любом состоянии</p>
+          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <div className="bg-white p-6 rounded-lg border border-gray-200">
+              <Icon name="Car" size={32} className="text-gray-900 mb-3" />
+              <h3 className="font-semibold mb-2 text-gray-900">Отечественные</h3>
+              <p className="text-gray-600 text-sm">LADA, УАЗ, ГАЗ и другие российские марки</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg border border-gray-200">
+              <Icon name="Car" size={32} className="text-gray-900 mb-3" />
+              <h3 className="font-semibold mb-2 text-gray-900">Иномарки</h3>
+              <p className="text-gray-600 text-sm">Toyota, Honda, Nissan, Mazda, Hyundai, Kia и другие</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg border border-gray-200">
+              <Icon name="Car" size={32} className="text-gray-900 mb-3" />
+              <h3 className="font-semibold mb-2 text-gray-900">Премиум</h3>
+              <p className="text-gray-600 text-sm">Mercedes, BMW, Audi, Lexus и другие премиум-бренды</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="py-20">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-4 text-gray-900">Где мы работаем</h2>
+          <p className="text-center text-gray-600 mb-12">Выкупаем автомобили по всему Хабаровскому краю</p>
+          <div className="max-w-4xl mx-auto">
+            <div className="grid md:grid-cols-3 gap-4 mb-6">
+              <div className="flex items-center gap-2 p-4 bg-gray-50 rounded-lg">
+                <Icon name="MapPin" size={20} className="text-gray-900 flex-shrink-0" />
+                <span className="text-gray-900 font-medium">Хабаровск</span>
+              </div>
+              <div className="flex items-center gap-2 p-4 bg-gray-50 rounded-lg">
+                <Icon name="MapPin" size={20} className="text-gray-900 flex-shrink-0" />
+                <span className="text-gray-900 font-medium">Комсомольск-на-Амуре</span>
+              </div>
+              <div className="flex items-center gap-2 p-4 bg-gray-50 rounded-lg">
+                <Icon name="MapPin" size={20} className="text-gray-900 flex-shrink-0" />
+                <span className="text-gray-900 font-medium">Амурск</span>
+              </div>
+              <div className="flex items-center gap-2 p-4 bg-gray-50 rounded-lg">
+                <Icon name="MapPin" size={20} className="text-gray-900 flex-shrink-0" />
+                <span className="text-gray-900 font-medium">Советская Гавань</span>
+              </div>
+              <div className="flex items-center gap-2 p-4 bg-gray-50 rounded-lg">
+                <Icon name="MapPin" size={20} className="text-gray-900 flex-shrink-0" />
+                <span className="text-gray-900 font-medium">Бикин</span>
+              </div>
+              <div className="flex items-center gap-2 p-4 bg-gray-50 rounded-lg">
+                <Icon name="MapPin" size={20} className="text-gray-900 flex-shrink-0" />
+                <span className="text-gray-900 font-medium">Вяземский</span>
+              </div>
+              <div className="flex items-center gap-2 p-4 bg-gray-50 rounded-lg">
+                <Icon name="MapPin" size={20} className="text-gray-900 flex-shrink-0" />
+                <span className="text-gray-900 font-medium">Николаевск-на-Амуре</span>
+              </div>
+              <div className="flex items-center gap-2 p-4 bg-gray-50 rounded-lg">
+                <Icon name="MapPin" size={20} className="text-gray-900 flex-shrink-0" />
+                <span className="text-gray-900 font-medium">Ванино</span>
+              </div>
+              <div className="flex items-center gap-2 p-4 bg-gray-50 rounded-lg">
+                <Icon name="MapPin" size={20} className="text-gray-900 flex-shrink-0" />
+                <span className="text-gray-900 font-medium">Переяславка</span>
+              </div>
+            </div>
+            <div className="text-center">
+              <p className="text-gray-600">А также Хабаровский район, Комсомольский район и все населённые пункты края</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">Наши преимущества</h2>
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            <div className="flex gap-4 items-start p-6 border border-gray-200 rounded-lg">
+            <div className="flex gap-4 items-start p-6 bg-white border border-gray-200 rounded-lg">
               <Icon name="Clock" size={24} className="text-gray-900 flex-shrink-0 mt-1" />
               <div>
                 <h3 className="font-semibold mb-1 text-gray-900">Быстрая сделка</h3>
                 <p className="text-gray-600">Оформление за 30 минут</p>
               </div>
             </div>
-            <div className="flex gap-4 items-start p-6 border border-gray-200 rounded-lg">
+            <div className="flex gap-4 items-start p-6 bg-white border border-gray-200 rounded-lg">
               <Icon name="ShieldCheck" size={24} className="text-gray-900 flex-shrink-0 mt-1" />
               <div>
                 <h3 className="font-semibold mb-1 text-gray-900">Честная оценка</h3>
                 <p className="text-gray-600">Реальная рыночная цена</p>
               </div>
             </div>
-            <div className="flex gap-4 items-start p-6 border border-gray-200 rounded-lg">
-              <Icon name="MapPin" size={24} className="text-gray-900 flex-shrink-0 mt-1" />
+            <div className="flex gap-4 items-start p-6 bg-white border border-gray-200 rounded-lg">
+              <Icon name="Banknote" size={24} className="text-gray-900 flex-shrink-0 mt-1" />
               <div>
-                <h3 className="font-semibold mb-1 text-gray-900">Работаем по региону</h3>
-                <p className="text-gray-600">Хабаровск, Комсомольск-на-Амуре, район имени Лазо, Хабаровский край</p>
+                <h3 className="font-semibold mb-1 text-gray-900">Оплата наличными</h3>
+                <p className="text-gray-600">Получите деньги сразу после сделки</p>
               </div>
             </div>
-            <div className="flex gap-4 items-start p-6 border border-gray-200 rounded-lg">
+            <div className="flex gap-4 items-start p-6 bg-white border border-gray-200 rounded-lg">
               <Icon name="FileText" size={24} className="text-gray-900 flex-shrink-0 mt-1" />
               <div>
                 <h3 className="font-semibold mb-1 text-gray-900">Все документы</h3>
