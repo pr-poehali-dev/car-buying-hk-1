@@ -24,7 +24,12 @@ const Index = () => {
             <Link to="/" className="text-gray-600 hover:text-gray-900 transition">Главная</Link>
             <Link to="/evaluation" className="text-gray-600 hover:text-gray-900 transition">Оценка авто</Link>
           </nav>
-          <a href="tel:+74212000000" className="text-gray-900 font-medium">+7 (4212) 00-00-00</a>
+          <div className="flex items-center gap-2">
+            <a href="tel:+79841771588" className="text-gray-900 font-bold">+7 (984) 177-15-88</a>
+            <a href="https://wa.me/79841771588" target="_blank" rel="noopener noreferrer" className="text-green-600 hover:text-green-700 transition">
+              <Icon name="MessageCircle" size={24} />
+            </a>
+          </div>
         </div>
       </header>
 
@@ -257,7 +262,12 @@ const Index = () => {
             <div className="text-gray-600 text-sm">
               © 2024 Выкуп автомобилей в Хабаровске
             </div>
-            <a href="tel:+74212000000" className="text-gray-900 font-medium">+7 (4212) 00-00-00</a>
+            <div className="flex items-center gap-2">
+              <a href="tel:+79841771588" className="text-gray-900 font-bold">+7 (984) 177-15-88</a>
+              <a href="https://wa.me/79841771588" target="_blank" rel="noopener noreferrer" className="text-green-600 hover:text-green-700 transition">
+                <Icon name="MessageCircle" size={24} />
+              </a>
+            </div>
           </div>
         </div>
       </footer>
