@@ -503,6 +503,16 @@ const Evaluation = () => {
         </div>
       </section>
 
+      {/* Floating Home Button */}
+      <Link 
+        to="/"
+        className="fixed bottom-6 left-6 bg-gray-900 hover:bg-gray-800 text-white rounded-lg px-4 py-3 flex items-center gap-2 shadow-lg transition z-50"
+        aria-label="На главную"
+      >
+        <Icon name="Car" size={24} />
+        <span className="font-semibold">АвтоВыкуп</span>
+      </Link>
+
       {/* Floating WhatsApp Button */}
       <a 
         href="https://wa.me/79841771588" 
