@@ -19,7 +19,7 @@ const Evaluation = () => {
     legalStatus: "",
     description: "",
     location: "",
-    name: "",
+    contactMethod: "",
     phone: ""
   });
 
@@ -51,7 +51,7 @@ const Evaluation = () => {
       legalStatus: "",
       description: "",
       location: "",
-      name: "",
+      contactMethod: "",
       phone: ""
     });
     setPhotos([]);
@@ -102,7 +102,7 @@ const Evaluation = () => {
       return formData.location;
     }
     if (currentStep === 4) {
-      return formData.name && formData.phone;
+      return formData.contactMethod && formData.phone;
     }
     return false;
   };
@@ -338,18 +338,22 @@ const Evaluation = () => {
                   </div>
 
                   <div>
-                    <Label htmlFor="name">Ваше имя</Label>
-                    <Input 
-                      id="name" 
-                      value={formData.name}
-                      onChange={handleChange}
-                      placeholder="Иван Иванов" 
-                      required 
-                    />
+                    <Label htmlFor="contactMethod">Как с вами связаться?</Label>
+                    <select
+                      id="contactMethod"
+                      value={formData.contactMethod}
+                      onChange={(e) => setFormData({...formData, contactMethod: e.target.value})}
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      required
+                    >
+                      <option value="">Выберите способ связи</option>
+                      <option value="phone">Телефон</option>
+                      <option value="whatsapp">WhatsApp</option>
+                    </select>
                   </div>
 
                   <div>
-                    <Label htmlFor="phone">Телефон</Label>
+                    <Label htmlFor="phone">Номер телефона</Label>
                     <Input 
                       id="phone" 
                       type="tel"
