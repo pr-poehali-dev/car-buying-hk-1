@@ -172,10 +172,10 @@ const Evaluation = () => {
     <div className="min-h-screen bg-white">
       <header className="border-b border-gray-200">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition">
             <Icon name="Car" size={28} className="text-gray-900" />
             <span className="text-xl font-semibold text-gray-900">АвтоВыкуп</span>
-          </div>
+          </Link>
           <nav className="hidden md:flex gap-8">
             <span className="text-gray-600">Оценка авто</span>
           </nav>
