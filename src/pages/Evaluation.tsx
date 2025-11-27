@@ -116,8 +116,7 @@ const Evaluation = () => {
             <span className="text-xl font-semibold text-gray-900">АвтоВыкуп</span>
           </div>
           <nav className="hidden md:flex gap-8">
-            <Link to="/" className="text-gray-600 hover:text-gray-900 transition">Главная</Link>
-            <Link to="/evaluation" className="text-gray-600 hover:text-gray-900 transition">Оценка авто</Link>
+            <span className="text-gray-600">Оценка авто</span>
           </nav>
           <a href="tel:+79841771588" className="text-gray-900 font-bold text-lg">+7 (984) 177-15-88</a>
         </div>

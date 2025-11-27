@@ -1,16 +1,21 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
 import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleCallRequest = () => {
     toast({
       title: "Заявка принята!",
       description: "Мы перезвоним вам в ближайшее время",
     });
+  };
+
+  const handleEvaluationClick = () => {
+    navigate('/evaluation', { replace: true });
   };
   return (
     <div className="min-h-screen bg-white">
@@ -42,12 +47,14 @@ const Index = () => {
             <h1 className="text-5xl font-bold mb-4">Выкуп автомобилей в Хабаровске</h1>
             <p className="text-xl mb-8 text-gray-100">Быстрая оценка и честная цена за ваш автомобиль</p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link to="/evaluation">
-                <Button size="lg" className="bg-white text-gray-900 hover:bg-gray-100 text-lg px-8 py-6 h-auto">
-                  <Icon name="Calculator" size={24} className="mr-2" />
-                  Оценить авто
-                </Button>
-              </Link>
+              <Button 
+                size="lg" 
+                onClick={handleEvaluationClick}
+                className="bg-white text-gray-900 hover:bg-gray-100 text-lg px-8 py-6 h-auto"
+              >
+                <Icon name="Calculator" size={24} className="mr-2" />
+                Оценить авто
+              </Button>
               <Button 
                 size="lg" 
                 variant="outline" 
@@ -239,11 +246,14 @@ const Index = () => {
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">Готовы продать авто?</h2>
           <p className="text-xl mb-8 text-gray-300">Получите оценку прямо сейчас</p>
-          <Link to="/evaluation">
-            <Button size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-gray-900">
-              Оценить авто
-            </Button>
-          </Link>
+          <Button 
+            size="lg" 
+            variant="outline" 
+            onClick={handleEvaluationClick}
+            className="bg-transparent border-white text-white hover:bg-white hover:text-gray-900"
+          >
+            Оценить авто
+          </Button>
         </div>
       </section>
 
