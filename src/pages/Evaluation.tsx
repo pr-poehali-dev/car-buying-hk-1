@@ -9,15 +9,31 @@ import Icon from "@/components/ui/icon";
 
 const Evaluation = () => {
   const { toast } = useToast();
+  const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
     brand: "",
     model: "",
     year: "",
     mileage: "",
-    description: ""
+    condition: "",
+    description: "",
+    name: "",
+    phone: ""
   });
+
+  const totalSteps = 3;
+
+  const handleNext = () => {
+    if (currentStep < totalSteps) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const handleBack = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,14 +42,16 @@ const Evaluation = () => {
       description: "Мы свяжемся с вами в ближайшее время",
     });
     setFormData({
-      name: "",
-      phone: "",
       brand: "",
       model: "",
       year: "",
       mileage: "",
-      description: ""
+      condition: "",
+      description: "",
+      name: "",
+      phone: ""
     });
+    setCurrentStep(1);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -41,6 +59,19 @@ const Evaluation = () => {
       ...formData,
       [e.target.id]: e.target.value
     });
+  };
+
+  const isStepValid = () => {
+    if (currentStep === 1) {
+      return formData.brand && formData.model && formData.year;
+    }
+    if (currentStep === 2) {
+      return formData.mileage && formData.condition;
+    }
+    if (currentStep === 3) {
+      return formData.name && formData.phone;
+    }
+    return false;
   };
 
   return (
@@ -61,80 +92,59 @@ const Evaluation = () => {
 
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto">
+          <div className="max-w-2xl mx-auto">
             <h1 className="text-4xl font-bold mb-4 text-gray-900">Оценка автомобиля</h1>
-            <p className="text-lg text-gray-600 mb-12">Заполните форму, и мы свяжемся с вами для оценки вашего автомобиля</p>
+            <p className="text-lg text-gray-600 mb-8">Ответьте на несколько вопросов для быстрой оценки</p>
 
-            <div className="grid md:grid-cols-2 gap-12">
-              <div>
-                <img 
-                  src="https://cdn.poehali.dev/projects/67e7cf58-b4b6-432f-8bfa-54cde7992932/files/753add99-68a6-474d-aae2-47f03011789a.jpg"
-                  alt="Оценка автомобиля"
-                  className="w-full h-auto rounded-lg"
-                />
-                <div className="mt-8 space-y-4">
-                  <div className="flex gap-3 items-start">
-                    <Icon name="CheckCircle2" size={24} className="text-gray-900 flex-shrink-0 mt-1" />
-                    <p className="text-gray-600">Бесплатная оценка в течение 1 часа</p>
+            <div className="mb-12">
+              <div className="flex items-center justify-between mb-2">
+                {[1, 2, 3].map((step) => (
+                  <div key={step} className="flex items-center flex-1">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${
+                      step <= currentStep ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-500'
+                    }`}>
+                      {step}
+                    </div>
+                    {step < 3 && (
+                      <div className={`flex-1 h-1 mx-2 ${
+                        step < currentStep ? 'bg-gray-900' : 'bg-gray-200'
+                      }`}></div>
+                    )}
                   </div>
-                  <div className="flex gap-3 items-start">
-                    <Icon name="CheckCircle2" size={24} className="text-gray-900 flex-shrink-0 mt-1" />
-                    <p className="text-gray-600">Выезд специалиста для осмотра</p>
-                  </div>
-                  <div className="flex gap-3 items-start">
-                    <Icon name="CheckCircle2" size={24} className="text-gray-900 flex-shrink-0 mt-1" />
-                    <p className="text-gray-600">Оплата сразу после сделки</p>
-                  </div>
-                </div>
+                ))}
               </div>
+              <div className="flex justify-between text-sm text-gray-600 mt-2">
+                <span>Данные авто</span>
+                <span>Состояние</span>
+                <span>Контакты</span>
+              </div>
+            </div>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <Label htmlFor="name">Ваше имя</Label>
-                  <Input 
-                    id="name" 
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder="Иван Иванов" 
-                    required 
-                  />
-                </div>
+            <form onSubmit={handleSubmit}>
+              {currentStep === 1 && (
+                <div className="space-y-6 animate-in fade-in duration-300">
+                  <div>
+                    <Label htmlFor="brand">Марка автомобиля</Label>
+                    <Input 
+                      id="brand" 
+                      value={formData.brand}
+                      onChange={handleChange}
+                      placeholder="Toyota" 
+                      required 
+                    />
+                  </div>
 
-                <div>
-                  <Label htmlFor="phone">Телефон</Label>
-                  <Input 
-                    id="phone" 
-                    type="tel"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    placeholder="+7 (___) ___-__-__" 
-                    required 
-                  />
-                </div>
+                  <div>
+                    <Label htmlFor="model">Модель</Label>
+                    <Input 
+                      id="model" 
+                      value={formData.model}
+                      onChange={handleChange}
+                      placeholder="Camry" 
+                      required 
+                    />
+                  </div>
 
-                <div>
-                  <Label htmlFor="brand">Марка автомобиля</Label>
-                  <Input 
-                    id="brand" 
-                    value={formData.brand}
-                    onChange={handleChange}
-                    placeholder="Toyota" 
-                    required 
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="model">Модель</Label>
-                  <Input 
-                    id="model" 
-                    value={formData.model}
-                    onChange={handleChange}
-                    placeholder="Camry" 
-                    required 
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="year">Год выпуска</Label>
                     <Input 
@@ -146,6 +156,11 @@ const Evaluation = () => {
                       required 
                     />
                   </div>
+                </div>
+              )}
+
+              {currentStep === 2 && (
+                <div className="space-y-6 animate-in fade-in duration-300">
                   <div>
                     <Label htmlFor="mileage">Пробег, км</Label>
                     <Input 
@@ -157,23 +172,124 @@ const Evaluation = () => {
                       required 
                     />
                   </div>
-                </div>
 
-                <div>
-                  <Label htmlFor="description">Дополнительная информация</Label>
-                  <Textarea 
-                    id="description" 
-                    value={formData.description}
-                    onChange={handleChange}
-                    placeholder="Опишите состояние автомобиля, комплектацию..."
-                    rows={4}
-                  />
-                </div>
+                  <div>
+                    <Label htmlFor="condition">Состояние автомобиля</Label>
+                    <select
+                      id="condition"
+                      value={formData.condition}
+                      onChange={(e) => setFormData({...formData, condition: e.target.value})}
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      required
+                    >
+                      <option value="">Выберите состояние</option>
+                      <option value="excellent">Отличное</option>
+                      <option value="good">Хорошее</option>
+                      <option value="fair">Среднее</option>
+                      <option value="poor">Требует ремонта</option>
+                    </select>
+                  </div>
 
-                <Button type="submit" size="lg" className="w-full">
-                  Отправить заявку
-                </Button>
-              </form>
+                  <div>
+                    <Label htmlFor="description">Дополнительная информация</Label>
+                    <Textarea 
+                      id="description" 
+                      value={formData.description}
+                      onChange={handleChange}
+                      placeholder="Комплектация, особенности, повреждения..."
+                      rows={4}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {currentStep === 3 && (
+                <div className="space-y-6 animate-in fade-in duration-300">
+                  <div className="bg-gray-50 p-6 rounded-lg mb-6">
+                    <h3 className="font-semibold mb-3 text-gray-900">Данные автомобиля:</h3>
+                    <div className="space-y-2 text-gray-600">
+                      <p><strong>Марка и модель:</strong> {formData.brand} {formData.model}</p>
+                      <p><strong>Год:</strong> {formData.year}</p>
+                      <p><strong>Пробег:</strong> {formData.mileage} км</p>
+                      <p><strong>Состояние:</strong> {
+                        formData.condition === 'excellent' ? 'Отличное' :
+                        formData.condition === 'good' ? 'Хорошее' :
+                        formData.condition === 'fair' ? 'Среднее' : 'Требует ремонта'
+                      }</p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="name">Ваше имя</Label>
+                    <Input 
+                      id="name" 
+                      value={formData.name}
+                      onChange={handleChange}
+                      placeholder="Иван Иванов" 
+                      required 
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="phone">Телефон</Label>
+                    <Input 
+                      id="phone" 
+                      type="tel"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      placeholder="+7 (___) ___-__-__" 
+                      required 
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div className="flex gap-4 mt-8">
+                {currentStep > 1 && (
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    onClick={handleBack}
+                    className="flex-1"
+                  >
+                    Назад
+                  </Button>
+                )}
+                
+                {currentStep < totalSteps ? (
+                  <Button 
+                    type="button" 
+                    onClick={handleNext}
+                    disabled={!isStepValid()}
+                    className="flex-1"
+                  >
+                    Далее
+                  </Button>
+                ) : (
+                  <Button 
+                    type="submit"
+                    disabled={!isStepValid()}
+                    className="flex-1"
+                  >
+                    Отправить заявку
+                  </Button>
+                )}
+              </div>
+            </form>
+
+            <div className="mt-12 space-y-4 border-t border-gray-200 pt-8">
+              <div className="flex gap-3 items-start">
+                <Icon name="CheckCircle2" size={24} className="text-gray-900 flex-shrink-0 mt-1" />
+                <p className="text-gray-600">Бесплатная оценка в течение 1 часа</p>
+              </div>
+              <div className="flex gap-3 items-start">
+                <Icon name="CheckCircle2" size={24} className="text-gray-900 flex-shrink-0 mt-1" />
+                <p className="text-gray-600">Выезд специалиста для осмотра</p>
+              </div>
+              <div className="flex gap-3 items-start">
+                <Icon name="CheckCircle2" size={24} className="text-gray-900 flex-shrink-0 mt-1" />
+                <p className="text-gray-600">Оплата сразу после сделки</p>
+              </div>
             </div>
           </div>
         </div>
