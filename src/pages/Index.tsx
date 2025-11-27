@@ -24,12 +24,7 @@ const Index = () => {
             <Link to="/" className="text-gray-600 hover:text-gray-900 transition">Главная</Link>
             <Link to="/evaluation" className="text-gray-600 hover:text-gray-900 transition">Оценка авто</Link>
           </nav>
-          <div className="flex items-center gap-3 whitespace-nowrap">
-            <a href="tel:+79841771588" className="text-gray-900 font-bold text-lg">+7 (984) 177-15-88</a>
-            <a href="https://wa.me/79841771588" target="_blank" rel="noopener noreferrer" className="text-green-600 hover:text-green-700 transition font-medium">
-              WhatsApp
-            </a>
-          </div>
+          <a href="tel:+79841771588" className="text-gray-900 font-bold text-lg">+7 (984) 177-15-88</a>
         </div>
       </header>
 
@@ -252,6 +247,17 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Floating WhatsApp Button */}
+      <a 
+        href="https://wa.me/79841771588" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="fixed bottom-6 right-6 bg-green-600 hover:bg-green-700 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg transition z-50"
+        aria-label="WhatsApp"
+      >
+        <Icon name="MessageCircle" size={28} />
+      </a>
+
       <footer className="bg-white border-t border-gray-200 py-8">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
@@ -262,12 +268,7 @@ const Index = () => {
             <div className="text-gray-600 text-sm">
               © 2024 Выкуп автомобилей в Хабаровске
             </div>
-            <div className="flex items-center gap-3 whitespace-nowrap">
-              <a href="tel:+79841771588" className="text-gray-900 font-bold text-lg">+7 (984) 177-15-88</a>
-              <a href="https://wa.me/79841771588" target="_blank" rel="noopener noreferrer" className="text-green-600 hover:text-green-700 transition font-medium">
-                WhatsApp
-              </a>
-            </div>
+            <a href="tel:+79841771588" className="text-gray-900 font-bold text-lg">+7 (984) 177-15-88</a>
           </div>
         </div>
       </footer>
