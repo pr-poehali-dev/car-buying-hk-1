@@ -22,7 +22,7 @@ const Evaluation = () => {
     phone: ""
   });
 
-  const totalSteps = 3;
+  const totalSteps = 4;
 
   const handleNext = () => {
     if (currentStep < totalSteps) {
@@ -71,7 +71,10 @@ const Evaluation = () => {
       return formData.condition && formData.legalStatus;
     }
     if (currentStep === 3) {
-      return formData.location && formData.name && formData.phone;
+      return formData.location;
+    }
+    if (currentStep === 4) {
+      return formData.name && formData.phone;
     }
     return false;
   };
@@ -100,14 +103,14 @@ const Evaluation = () => {
 
             <div className="mb-12">
               <div className="flex items-center justify-between mb-2">
-                {[1, 2, 3].map((step) => (
+                {[1, 2, 3, 4].map((step) => (
                   <div key={step} className="flex items-center flex-1">
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${
                       step <= currentStep ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-500'
                     }`}>
                       {step}
                     </div>
-                    {step < 3 && (
+                    {step < 4 && (
                       <div className={`flex-1 h-1 mx-2 ${
                         step < currentStep ? 'bg-gray-900' : 'bg-gray-200'
                       }`}></div>
@@ -115,10 +118,11 @@ const Evaluation = () => {
                   </div>
                 ))}
               </div>
-              <div className="flex justify-between text-sm text-gray-600 mt-2">
-                <span>Данные авто</span>
-                <span>Состояние</span>
-                <span>Местоположение</span>
+              <div className="grid grid-cols-4 text-sm text-gray-600 mt-2">
+                <span className="text-center">Данные авто</span>
+                <span className="text-center">Состояние</span>
+                <span className="text-center">Местоположение</span>
+                <span className="text-center">Контакты</span>
               </div>
             </div>
 
@@ -226,6 +230,32 @@ const Evaluation = () => {
                       <option value="lazo">Район имени Лазо</option>
                       <option value="other">Другой населённый пункт</option>
                     </select>
+                  </div>
+                </div>
+              )}
+
+              {currentStep === 4 && (
+                <div className="space-y-6 animate-in fade-in duration-300">
+                  <div className="bg-gray-50 p-6 rounded-lg mb-6">
+                    <h3 className="font-semibold mb-3 text-gray-900">Данные автомобиля:</h3>
+                    <div className="space-y-2 text-gray-600">
+                      <p><strong>Марка и модель:</strong> {formData.brand} {formData.model}</p>
+                      <p><strong>Год:</strong> {formData.year}</p>
+                      <p><strong>Состояние:</strong> {
+                        formData.condition === 'excellent' ? 'Отличное' :
+                        formData.condition === 'good' ? 'Хорошее' :
+                        formData.condition === 'fair' ? 'Среднее' : 'Требует ремонта'
+                      }</p>
+                      <p><strong>Юридическая чистота:</strong> {
+                        formData.legalStatus === 'clean' ? 'Чистая' :
+                        formData.legalStatus === 'issues' ? 'Есть нюансы' : 'Не уверен'
+                      }</p>
+                      <p><strong>Местоположение:</strong> {
+                        formData.location === 'khabarovsk' ? 'Хабаровск' :
+                        formData.location === 'komsomolsk' ? 'Комсомольск-на-Амуре' :
+                        formData.location === 'lazo' ? 'Район имени Лазо' : 'Другой населённый пункт'
+                      }</p>
+                    </div>
                   </div>
 
                   <div>
