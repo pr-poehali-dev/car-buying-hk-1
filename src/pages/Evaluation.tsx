@@ -360,8 +360,12 @@ const Evaluation = () => {
                       value={formData.phone}
                       onChange={handleChange}
                       placeholder="+7 (___) ___-__-__" 
+                      pattern="[0-9]{11}"
+                      minLength={11}
+                      maxLength={11}
                       required 
                     />
+                    <p className="text-sm text-gray-500 mt-1">Введите 11 цифр без пробелов и символов</p>
                   </div>
                 </div>
               )}
