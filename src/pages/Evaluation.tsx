@@ -517,10 +517,10 @@ const Evaluation = () => {
       <footer className="bg-white border-t border-gray-200 py-8">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <Link to="/" className="flex items-center gap-2">
+            <div className="flex items-center gap-2">
               <Icon name="Car" size={24} className="text-gray-900" />
               <span className="font-semibold text-gray-900">АвтоВыкуп</span>
-            </Link>
+            </div>
             <div className="text-gray-600 text-sm">
               © 2024 Выкуп автомобилей в Хабаровске
             </div>
