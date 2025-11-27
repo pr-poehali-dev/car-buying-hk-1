@@ -24,7 +24,7 @@ const Index = () => {
             <Link to="/" className="text-gray-600 hover:text-gray-900 transition">Главная</Link>
             <Link to="/evaluation" className="text-gray-600 hover:text-gray-900 transition">Оценка авто</Link>
           </nav>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 whitespace-nowrap">
             <a href="tel:+79841771588" className="text-gray-900 font-bold text-lg">+7 (984) 177-15-88</a>
             <a href="https://wa.me/79841771588" target="_blank" rel="noopener noreferrer" className="text-green-600 hover:text-green-700 transition font-medium">
               WhatsApp
@@ -262,7 +262,7 @@ const Index = () => {
             <div className="text-gray-600 text-sm">
               © 2024 Выкуп автомобилей в Хабаровске
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 whitespace-nowrap">
               <a href="tel:+79841771588" className="text-gray-900 font-bold text-lg">+7 (984) 177-15-88</a>
               <a href="https://wa.me/79841771588" target="_blank" rel="noopener noreferrer" className="text-green-600 hover:text-green-700 transition font-medium">
                 WhatsApp
