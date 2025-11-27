@@ -15,6 +15,7 @@ const Evaluation = () => {
     model: "",
     year: "",
     condition: "",
+    legalStatus: "",
     description: "",
     name: "",
     phone: ""
@@ -45,6 +46,7 @@ const Evaluation = () => {
       model: "",
       year: "",
       condition: "",
+      legalStatus: "",
       description: "",
       name: "",
       phone: ""
@@ -64,7 +66,7 @@ const Evaluation = () => {
       return formData.brand && formData.model && formData.year;
     }
     if (currentStep === 2) {
-      return formData.condition;
+      return formData.condition && formData.legalStatus;
     }
     if (currentStep === 3) {
       return formData.name && formData.phone;
@@ -177,6 +179,22 @@ const Evaluation = () => {
                   </div>
 
                   <div>
+                    <Label htmlFor="legalStatus">Юридическая чистота</Label>
+                    <select
+                      id="legalStatus"
+                      value={formData.legalStatus}
+                      onChange={(e) => setFormData({...formData, legalStatus: e.target.value})}
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      required
+                    >
+                      <option value="">Выберите статус</option>
+                      <option value="clean">Чистая</option>
+                      <option value="issues">Есть нюансы</option>
+                      <option value="unclear">Не уверен</option>
+                    </select>
+                  </div>
+
+                  <div>
                     <Label htmlFor="description">Дополнительная информация</Label>
                     <Textarea 
                       id="description" 
@@ -200,6 +218,10 @@ const Evaluation = () => {
                         formData.condition === 'excellent' ? 'Отличное' :
                         formData.condition === 'good' ? 'Хорошее' :
                         formData.condition === 'fair' ? 'Среднее' : 'Требует ремонта'
+                      }</p>
+                      <p><strong>Юридическая чистота:</strong> {
+                        formData.legalStatus === 'clean' ? 'Чистая' :
+                        formData.legalStatus === 'issues' ? 'Есть нюансы' : 'Не уверен'
                       }</p>
                     </div>
                   </div>
