@@ -122,7 +122,7 @@ const Evaluation = () => {
           <div className="flex items-center gap-2">
             <a href="tel:+79841771588" className="text-gray-900 font-bold">+7 (984) 177-15-88</a>
             <a href="https://wa.me/79841771588" target="_blank" rel="noopener noreferrer" className="text-green-600 hover:text-green-700 transition">
-              <Icon name="MessageCircle" size={24} />
+              <Icon name="Phone" size={24} />
             </a>
           </div>
         </div>
@@ -439,7 +439,7 @@ const Evaluation = () => {
             <div className="flex items-center gap-2">
               <a href="tel:+79841771588" className="text-gray-900 font-bold">+7 (984) 177-15-88</a>
               <a href="https://wa.me/79841771588" target="_blank" rel="noopener noreferrer" className="text-green-600 hover:text-green-700 transition">
-                <Icon name="MessageCircle" size={24} />
+                <Icon name="Phone" size={24} />
               </a>
             </div>
           </div>
