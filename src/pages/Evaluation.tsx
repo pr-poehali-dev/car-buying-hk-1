@@ -35,67 +35,55 @@ const Evaluation = () => {
   const detectLocation = async () => {
     setIsDetectingLocation(true);
     
-    if (!navigator.geolocation) {
+    try {
+      const response = await fetch('https://ipapi.co/json/');
+      const data = await response.json();
+      
+      const city = data.city || '';
+      const region = data.region || '';
+      let detectedLocation = 'other';
+
+      const cityMap: Record<string, string> = {
+        'Хабаровск': 'khabarovsk',
+        'Khabarovsk': 'khabarovsk',
+        'Комсомольск-на-Амуре': 'komsomolsk',
+        'Komsomolsk-on-Amur': 'komsomolsk',
+        'Амурск': 'amursk',
+        'Amursk': 'amursk',
+        'Советская Гавань': 'sovetskaya-gavan',
+        'Sovetskaya Gavan': 'sovetskaya-gavan',
+        'Бикин': 'bikin',
+        'Bikin': 'bikin',
+        'Вяземский': 'vyazemsky',
+        'Vyazemsky': 'vyazemsky',
+        'Николаевск-на-Амуре': 'nikolaevsk',
+        'Nikolayevsk-on-Amure': 'nikolaevsk',
+        'Ванино': 'vanino',
+        'Vanino': 'vanino',
+        'Переяславка': 'pereyaslavka',
+        'Pereyaslavka': 'pereyaslavka'
+      };
+
+      if (city && cityMap[city]) {
+        detectedLocation = cityMap[city];
+      } else if (region && region.includes('Хабаровск')) {
+        detectedLocation = 'khabarovsk';
+      }
+
+      setFormData({...formData, location: detectedLocation});
       toast({
-        title: "Геолокация недоступна",
+        title: "Местоположение определено",
+        description: city || region || "Хабаровский край"
+      });
+    } catch (error) {
+      toast({
+        title: "Ошибка определения",
         description: "Выберите местоположение вручную",
         variant: "destructive"
       });
-      setIsDetectingLocation(false);
-      return;
     }
-
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        try {
-          const { latitude, longitude } = position.coords;
-          const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=ru`
-          );
-          const data = await response.json();
-          
-          const city = data.address?.city || data.address?.town || data.address?.village || '';
-          let detectedLocation = 'other';
-
-          const cityMap: Record<string, string> = {
-            'Хабаровск': 'khabarovsk',
-            'Комсомольск-на-Амуре': 'komsomolsk',
-            'Амурск': 'amursk',
-            'Советская Гавань': 'sovetskaya-gavan',
-            'Бикин': 'bikin',
-            'Вяземский': 'vyazemsky',
-            'Николаевск-на-Амуре': 'nikolaevsk',
-            'Ванино': 'vanino',
-            'Переяславка': 'pereyaslavka'
-          };
-
-          if (city && cityMap[city]) {
-            detectedLocation = cityMap[city];
-          }
-
-          setFormData({...formData, location: detectedLocation});
-          toast({
-            title: "Местоположение определено",
-            description: city || "Определен регион"
-          });
-        } catch (error) {
-          toast({
-            title: "Ошибка определения",
-            description: "Выберите местоположение вручную",
-            variant: "destructive"
-          });
-        }
-        setIsDetectingLocation(false);
-      },
-      (error) => {
-        toast({
-          title: "Доступ к геолокации запрещен",
-          description: "Выберите местоположение вручную",
-          variant: "destructive"
-        });
-        setIsDetectingLocation(false);
-      }
-    );
+    
+    setIsDetectingLocation(false);
   };
 
   const handleNext = () => {
