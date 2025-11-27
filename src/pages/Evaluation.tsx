@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,7 @@ const Evaluation = () => {
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [photos, setPhotos] = useState<string[]>([]);
+  const [isDetectingLocation, setIsDetectingLocation] = useState(false);
   const [formData, setFormData] = useState({
     brand: "",
     model: "",
@@ -24,6 +25,78 @@ const Evaluation = () => {
   });
 
   const totalSteps = 4;
+
+  useEffect(() => {
+    if (currentStep === 3 && !formData.location) {
+      detectLocation();
+    }
+  }, [currentStep]);
+
+  const detectLocation = async () => {
+    setIsDetectingLocation(true);
+    
+    if (!navigator.geolocation) {
+      toast({
+        title: "Геолокация недоступна",
+        description: "Выберите местоположение вручную",
+        variant: "destructive"
+      });
+      setIsDetectingLocation(false);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=ru`
+          );
+          const data = await response.json();
+          
+          const city = data.address?.city || data.address?.town || data.address?.village || '';
+          let detectedLocation = 'other';
+
+          const cityMap: Record<string, string> = {
+            'Хабаровск': 'khabarovsk',
+            'Комсомольск-на-Амуре': 'komsomolsk',
+            'Амурск': 'amursk',
+            'Советская Гавань': 'sovetskaya-gavan',
+            'Бикин': 'bikin',
+            'Вяземский': 'vyazemsky',
+            'Николаевск-на-Амуре': 'nikolaevsk',
+            'Ванино': 'vanino',
+            'Переяславка': 'pereyaslavka'
+          };
+
+          if (city && cityMap[city]) {
+            detectedLocation = cityMap[city];
+          }
+
+          setFormData({...formData, location: detectedLocation});
+          toast({
+            title: "Местоположение определено",
+            description: city || "Определен регион"
+          });
+        } catch (error) {
+          toast({
+            title: "Ошибка определения",
+            description: "Выберите местоположение вручную",
+            variant: "destructive"
+          });
+        }
+        setIsDetectingLocation(false);
+      },
+      (error) => {
+        toast({
+          title: "Доступ к геолокации запрещен",
+          description: "Выберите местоположение вручную",
+          variant: "destructive"
+        });
+        setIsDetectingLocation(false);
+      }
+    );
+  };
 
   const handleNext = () => {
     if (currentStep < totalSteps) {
@@ -277,7 +350,29 @@ const Evaluation = () => {
               {currentStep === 3 && (
                 <div className="space-y-6 animate-in fade-in duration-300">
                   <div>
-                    <Label htmlFor="location">Где находится автомобиль?</Label>
+                    <div className="flex items-center justify-between mb-2">
+                      <Label htmlFor="location">Где находится автомобиль?</Label>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={detectLocation}
+                        disabled={isDetectingLocation}
+                        className="text-xs"
+                      >
+                        {isDetectingLocation ? (
+                          <>
+                            <Icon name="Loader2" size={14} className="mr-1 animate-spin" />
+                            Определение...
+                          </>
+                        ) : (
+                          <>
+                            <Icon name="MapPin" size={14} className="mr-1" />
+                            Определить
+                          </>
+                        )}
+                      </Button>
+                    </div>
                     <select
                       id="location"
                       value={formData.location}
