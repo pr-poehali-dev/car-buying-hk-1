@@ -503,16 +503,6 @@ const Evaluation = () => {
         </div>
       </section>
 
-      {/* Floating Home Button */}
-      <Link 
-        to="/"
-        className="fixed bottom-6 left-6 bg-gray-900 hover:bg-gray-800 text-white rounded-lg px-4 py-3 flex items-center gap-2 shadow-lg transition z-50"
-        aria-label="На главную"
-      >
-        <Icon name="Car" size={24} />
-        <span className="font-semibold">АвтоВыкуп</span>
-      </Link>
-
       {/* Floating WhatsApp Button */}
       <a 
         href="https://wa.me/79841771588" 
@@ -527,10 +517,10 @@ const Evaluation = () => {
       <footer className="bg-white border-t border-gray-200 py-8">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-2">
+            <Link to="/" className="flex items-center gap-2">
               <Icon name="Car" size={24} className="text-gray-900" />
               <span className="font-semibold text-gray-900">АвтоВыкуп</span>
-            </div>
+            </Link>
             <div className="text-gray-600 text-sm">
               © 2024 Выкуп автомобилей в Хабаровске
             </div>
