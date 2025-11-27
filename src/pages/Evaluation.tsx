@@ -14,7 +14,6 @@ const Evaluation = () => {
     brand: "",
     model: "",
     year: "",
-    mileage: "",
     condition: "",
     description: "",
     name: "",
@@ -45,7 +44,6 @@ const Evaluation = () => {
       brand: "",
       model: "",
       year: "",
-      mileage: "",
       condition: "",
       description: "",
       name: "",
@@ -66,7 +64,7 @@ const Evaluation = () => {
       return formData.brand && formData.model && formData.year;
     }
     if (currentStep === 2) {
-      return formData.mileage && formData.condition;
+      return formData.condition;
     }
     if (currentStep === 3) {
       return formData.name && formData.phone;
@@ -162,18 +160,6 @@ const Evaluation = () => {
               {currentStep === 2 && (
                 <div className="space-y-6 animate-in fade-in duration-300">
                   <div>
-                    <Label htmlFor="mileage">Пробег, км</Label>
-                    <Input 
-                      id="mileage" 
-                      type="number"
-                      value={formData.mileage}
-                      onChange={handleChange}
-                      placeholder="50000" 
-                      required 
-                    />
-                  </div>
-
-                  <div>
                     <Label htmlFor="condition">Состояние автомобиля</Label>
                     <select
                       id="condition"
@@ -210,7 +196,6 @@ const Evaluation = () => {
                     <div className="space-y-2 text-gray-600">
                       <p><strong>Марка и модель:</strong> {formData.brand} {formData.model}</p>
                       <p><strong>Год:</strong> {formData.year}</p>
-                      <p><strong>Пробег:</strong> {formData.mileage} км</p>
                       <p><strong>Состояние:</strong> {
                         formData.condition === 'excellent' ? 'Отличное' :
                         formData.condition === 'good' ? 'Хорошее' :
