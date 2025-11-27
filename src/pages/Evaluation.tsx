@@ -17,6 +17,7 @@ const Evaluation = () => {
     condition: "",
     legalStatus: "",
     description: "",
+    location: "",
     name: "",
     phone: ""
   });
@@ -48,6 +49,7 @@ const Evaluation = () => {
       condition: "",
       legalStatus: "",
       description: "",
+      location: "",
       name: "",
       phone: ""
     });
@@ -69,7 +71,7 @@ const Evaluation = () => {
       return formData.condition && formData.legalStatus;
     }
     if (currentStep === 3) {
-      return formData.name && formData.phone;
+      return formData.location && formData.name && formData.phone;
     }
     return false;
   };
@@ -116,7 +118,7 @@ const Evaluation = () => {
               <div className="flex justify-between text-sm text-gray-600 mt-2">
                 <span>Данные авто</span>
                 <span>Состояние</span>
-                <span>Контакты</span>
+                <span>Местоположение</span>
               </div>
             </div>
 
@@ -209,21 +211,21 @@ const Evaluation = () => {
 
               {currentStep === 3 && (
                 <div className="space-y-6 animate-in fade-in duration-300">
-                  <div className="bg-gray-50 p-6 rounded-lg mb-6">
-                    <h3 className="font-semibold mb-3 text-gray-900">Данные автомобиля:</h3>
-                    <div className="space-y-2 text-gray-600">
-                      <p><strong>Марка и модель:</strong> {formData.brand} {formData.model}</p>
-                      <p><strong>Год:</strong> {formData.year}</p>
-                      <p><strong>Состояние:</strong> {
-                        formData.condition === 'excellent' ? 'Отличное' :
-                        formData.condition === 'good' ? 'Хорошее' :
-                        formData.condition === 'fair' ? 'Среднее' : 'Требует ремонта'
-                      }</p>
-                      <p><strong>Юридическая чистота:</strong> {
-                        formData.legalStatus === 'clean' ? 'Чистая' :
-                        formData.legalStatus === 'issues' ? 'Есть нюансы' : 'Не уверен'
-                      }</p>
-                    </div>
+                  <div>
+                    <Label htmlFor="location">Где находится автомобиль?</Label>
+                    <select
+                      id="location"
+                      value={formData.location}
+                      onChange={(e) => setFormData({...formData, location: e.target.value})}
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      required
+                    >
+                      <option value="">Выберите город</option>
+                      <option value="khabarovsk">Хабаровск</option>
+                      <option value="komsomolsk">Комсомольск-на-Амуре</option>
+                      <option value="lazo">Район имени Лазо</option>
+                      <option value="other">Другой населённый пункт</option>
+                    </select>
                   </div>
 
                   <div>
