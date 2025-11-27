@@ -73,22 +73,56 @@ const Index = () => {
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-4 text-gray-900">Какие автомобили выкупаем</h2>
-          <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">Мы выкупаем легковые автомобили любых марок и в любом состоянии</p>
-          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            <div className="bg-white p-6 rounded-lg border border-gray-200">
-              <Icon name="Car" size={32} className="text-gray-900 mb-3" />
-              <h3 className="font-semibold mb-2 text-gray-900">Отечественные</h3>
-              <p className="text-gray-600 text-sm">LADA, УАЗ, ГАЗ и другие российские марки</p>
+          <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">Выкупаем авто в любом состоянии</p>
+          <div className="grid md:grid-cols-2 gap-4 max-w-3xl mx-auto">
+            <div className="bg-white p-4 rounded-lg border border-gray-200 flex items-start gap-3">
+              <Icon name="CheckCircle2" size={24} className="text-green-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-gray-900">Отличное</h3>
+                <p className="text-gray-600 text-sm">без повреждений</p>
+              </div>
             </div>
-            <div className="bg-white p-6 rounded-lg border border-gray-200">
-              <Icon name="Car" size={32} className="text-gray-900 mb-3" />
-              <h3 className="font-semibold mb-2 text-gray-900">Иномарки</h3>
-              <p className="text-gray-600 text-sm">Toyota, Honda, Nissan, Mazda, Hyundai, Kia и другие</p>
+            <div className="bg-white p-4 rounded-lg border border-gray-200 flex items-start gap-3">
+              <Icon name="CheckCircle2" size={24} className="text-green-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-gray-900">Хорошее</h3>
+                <p className="text-gray-600 text-sm">мелкие дефекты</p>
+              </div>
             </div>
-            <div className="bg-white p-6 rounded-lg border border-gray-200">
-              <Icon name="Car" size={32} className="text-gray-900 mb-3" />
-              <h3 className="font-semibold mb-2 text-gray-900">Премиум</h3>
-              <p className="text-gray-600 text-sm">Mercedes, BMW, Audi, Lexus и другие премиум-бренды</p>
+            <div className="bg-white p-4 rounded-lg border border-gray-200 flex items-start gap-3">
+              <Icon name="CheckCircle2" size={24} className="text-green-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-gray-900">Среднее</h3>
+                <p className="text-gray-600 text-sm">требует ремонта</p>
+              </div>
+            </div>
+            <div className="bg-white p-4 rounded-lg border border-gray-200 flex items-start gap-3">
+              <Icon name="Car" size={24} className="text-orange-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-gray-900">Битое</h3>
+                <p className="text-gray-600 text-sm">после ДТП</p>
+              </div>
+            </div>
+            <div className="bg-white p-4 rounded-lg border border-gray-200 flex items-start gap-3">
+              <Icon name="Wrench" size={24} className="text-gray-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-gray-900">Не на ходу</h3>
+                <p className="text-gray-600 text-sm">не заводится, требует эвакуации</p>
+              </div>
+            </div>
+            <div className="bg-white p-4 rounded-lg border border-gray-200 flex items-start gap-3">
+              <Icon name="CreditCard" size={24} className="text-blue-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-gray-900">В кредите</h3>
+                <p className="text-gray-600 text-sm">поможем закрыть</p>
+              </div>
+            </div>
+            <div className="bg-white p-4 rounded-lg border border-gray-200 flex items-start gap-3">
+              <Icon name="FileText" size={24} className="text-gray-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-gray-900">Без документов</h3>
+                <p className="text-gray-600 text-sm">решим вопрос</p>
+              </div>
             </div>
           </div>
         </div>
