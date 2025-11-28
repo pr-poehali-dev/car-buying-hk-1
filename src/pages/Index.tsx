@@ -3,20 +3,19 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
 import { useToast } from "@/hooks/use-toast";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const Index = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [isCallbackDialogOpen, setIsCallbackDialogOpen] = useState(false);
+  const [showCallbackForm, setShowCallbackForm] = useState(false);
   const [callbackPhone, setCallbackPhone] = useState("");
   const [callbackMethod, setCallbackMethod] = useState("phone");
 
   const handleCallRequest = () => {
-    setIsCallbackDialogOpen(true);
+    setShowCallbackForm(true);
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
   };
 
   const handleCallbackSubmit = async (e: React.FormEvent) => {
@@ -53,7 +52,7 @@ const Index = () => {
           title: "Заявка принята!",
           description: "Мы перезвоним вам в ближайшее время",
         });
-        setIsCallbackDialogOpen(false);
+        setShowCallbackForm(false);
         setCallbackPhone("");
         setCallbackMethod("phone");
       } else {
@@ -341,46 +340,78 @@ const Index = () => {
         </div>
       </footer>
 
-      <Dialog open={isCallbackDialogOpen} onOpenChange={setIsCallbackDialogOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Заказать обратный звонок</DialogTitle>
-          </DialogHeader>
-          <form onSubmit={handleCallbackSubmit} className="space-y-4">
-            <div>
-              <Label htmlFor="callback-phone">Номер телефона</Label>
-              <Input
-                id="callback-phone"
-                type="tel"
-                value={callbackPhone}
-                onChange={(e) => setCallbackPhone(e.target.value)}
-                placeholder="+7 (___) ___-__-__"
-                required
-              />
+      {showCallbackForm && (
+        <section className="py-20 bg-gray-900">
+          <div className="container mx-auto px-4">
+            <div className="max-w-md mx-auto bg-white rounded-lg p-8">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-gray-900">Заказать обратный звонок</h2>
+                <button 
+                  onClick={() => setShowCallbackForm(false)}
+                  className="text-gray-500 hover:text-gray-900"
+                >
+                  <Icon name="X" size={24} />
+                </button>
+              </div>
+              <form onSubmit={handleCallbackSubmit} className="space-y-6">
+                <div>
+                  <Label htmlFor="callback-phone">Номер телефона</Label>
+                  <Input
+                    id="callback-phone"
+                    type="tel"
+                    value={callbackPhone}
+                    onChange={(e) => setCallbackPhone(e.target.value)}
+                    placeholder="+7 (___) ___-__-__"
+                    required
+                    className="mt-2"
+                  />
+                </div>
+                <div>
+                  <Label className="block mb-3">Способ связи</Label>
+                  <div className="space-y-3">
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="callback-method"
+                        value="phone"
+                        checked={callbackMethod === "phone"}
+                        onChange={(e) => setCallbackMethod(e.target.value)}
+                        className="w-4 h-4"
+                      />
+                      <span className="text-gray-900">Телефон</span>
+                    </label>
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="callback-method"
+                        value="whatsapp"
+                        checked={callbackMethod === "whatsapp"}
+                        onChange={(e) => setCallbackMethod(e.target.value)}
+                        className="w-4 h-4"
+                      />
+                      <span className="text-gray-900">WhatsApp</span>
+                    </label>
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="callback-method"
+                        value="telegram"
+                        checked={callbackMethod === "telegram"}
+                        onChange={(e) => setCallbackMethod(e.target.value)}
+                        className="w-4 h-4"
+                      />
+                      <span className="text-gray-900">Telegram</span>
+                    </label>
+                  </div>
+                </div>
+                <Button type="submit" className="w-full bg-gray-900 hover:bg-gray-800">
+                  Подтвердить
+                </Button>
+              </form>
             </div>
-            <div>
-              <Label>Способ связи</Label>
-              <RadioGroup value={callbackMethod} onValueChange={setCallbackMethod}>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="phone" id="method-phone" />
-                  <Label htmlFor="method-phone" className="cursor-pointer">Телефон</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="whatsapp" id="method-whatsapp" />
-                  <Label htmlFor="method-whatsapp" className="cursor-pointer">WhatsApp</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="telegram" id="method-telegram" />
-                  <Label htmlFor="method-telegram" className="cursor-pointer">Telegram</Label>
-                </div>
-              </RadioGroup>
-            </div>
-            <Button type="submit" className="w-full">
-              Подтвердить
-            </Button>
-          </form>
-        </DialogContent>
-      </Dialog>
+          </div>
+        </section>
+      )}
     </div>
   );
 };
