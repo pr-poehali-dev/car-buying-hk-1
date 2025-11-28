@@ -1,17 +1,75 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
 import { useToast } from "@/hooks/use-toast";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const Index = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [isCallbackDialogOpen, setIsCallbackDialogOpen] = useState(false);
+  const [callbackPhone, setCallbackPhone] = useState("");
+  const [callbackMethod, setCallbackMethod] = useState("phone");
 
   const handleCallRequest = () => {
-    toast({
-      title: "Заявка принята!",
-      description: "Мы перезвоним вам в ближайшее время",
-    });
+    setIsCallbackDialogOpen(true);
+  };
+
+  const handleCallbackSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const contactMap: Record<string, string> = {
+      'whatsapp': 'WhatsApp',
+      'telegram': 'Telegram',
+      'phone': 'Телефон'
+    };
+
+    const message = `📞 Заказ обратного звонка\n\n• Телефон: ${callbackPhone}\n• Способ связи: ${contactMap[callbackMethod]}`;
+
+    try {
+      const botToken = '7827853509:AAHLZ8JQkdRmucBRQOGh7r1XkJMDw4vxC0w';
+      const chatId = '6275725133';
+
+      const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message,
+          parse_mode: 'HTML'
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.ok) {
+        toast({
+          title: "Заявка принята!",
+          description: "Мы перезвоним вам в ближайшее время",
+        });
+        setIsCallbackDialogOpen(false);
+        setCallbackPhone("");
+        setCallbackMethod("phone");
+      } else {
+        toast({
+          title: "Ошибка",
+          description: "Не удалось отправить заявку. Попробуйте позже.",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Ошибка",
+        description: "Не удалось отправить заявку. Попробуйте позже.",
+        variant: "destructive"
+      });
+    }
   };
 
   const handleEvaluationClick = () => {
@@ -282,6 +340,47 @@ const Index = () => {
           </div>
         </div>
       </footer>
+
+      <Dialog open={isCallbackDialogOpen} onOpenChange={setIsCallbackDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Заказать обратный звонок</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleCallbackSubmit} className="space-y-4">
+            <div>
+              <Label htmlFor="callback-phone">Номер телефона</Label>
+              <Input
+                id="callback-phone"
+                type="tel"
+                value={callbackPhone}
+                onChange={(e) => setCallbackPhone(e.target.value)}
+                placeholder="+7 (___) ___-__-__"
+                required
+              />
+            </div>
+            <div>
+              <Label>Способ связи</Label>
+              <RadioGroup value={callbackMethod} onValueChange={setCallbackMethod}>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="phone" id="method-phone" />
+                  <Label htmlFor="method-phone" className="cursor-pointer">Телефон</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="whatsapp" id="method-whatsapp" />
+                  <Label htmlFor="method-whatsapp" className="cursor-pointer">WhatsApp</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="telegram" id="method-telegram" />
+                  <Label htmlFor="method-telegram" className="cursor-pointer">Telegram</Label>
+                </div>
+              </RadioGroup>
+            </div>
+            <Button type="submit" className="w-full">
+              Подтвердить
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
