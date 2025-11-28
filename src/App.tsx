@@ -23,8 +23,8 @@ const App = () => (
             path="/" 
             element={
               <TimeBasedRouter 
-                startHour={9} 
-                endHour={18}
+                startHour={0} 
+                endHour={24}
                 alternativeContent={<IndexAlternative />}
               >
                 <Index />
