@@ -118,7 +118,7 @@ const Index = () => {
                 onClick={handleCallRequest}
                 className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 text-lg px-8 py-6 h-auto"
               >
-                <Icon name="Phone" size={24} className="mr-2" />
+                <Icon name="PhoneCall" size={24} className="mr-2" />
                 Заказать звонок
               </Button>
             </div>
