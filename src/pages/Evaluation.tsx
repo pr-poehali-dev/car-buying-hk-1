@@ -98,25 +98,112 @@ const Evaluation = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Заявка отправлена!",
-      description: "Мы свяжемся с вами в ближайшее время",
-    });
-    setFormData({
-      brand: "",
-      model: "",
-      year: "",
-      condition: "",
-      legalStatus: "",
-      description: "",
-      location: "",
-      contactMethod: "",
-      phone: ""
-    });
-    setPhotos([]);
-    setCurrentStep(1);
+    
+    const conditionMap: Record<string, string> = {
+      'excellent': 'Отличное',
+      'good': 'Хорошее',
+      'average': 'Среднее',
+      'poor': 'Плохое',
+      'broken': 'Битое/на запчасти'
+    };
+    
+    const legalMap: Record<string, string> = {
+      'clean': 'Чистое',
+      'pledge': 'Залог',
+      'ban': 'Запрет на рег. действия',
+      'wanted': 'В розыске',
+      'problematic': 'Проблемное'
+    };
+    
+    const locationMap: Record<string, string> = {
+      'khabarovsk': 'Хабаровск',
+      'komsomolsk': 'Комсомольск-на-Амуре',
+      'amursk': 'Амурск',
+      'sovetskaya-gavan': 'Советская Гавань',
+      'bikin': 'Бикин',
+      'vyazemsky': 'Вяземский',
+      'nikolaevsk': 'Николаевск-на-Амуре',
+      'vanino': 'Ванино',
+      'pereyaslavka': 'Переяславка',
+      'other': 'Другое'
+    };
+    
+    const contactMap: Record<string, string> = {
+      'whatsapp': 'WhatsApp',
+      'telegram': 'Telegram',
+      'phone': 'Телефон'
+    };
+    
+    const message = `🚗 Новая заявка на выкуп авто
+
+📋 Данные автомобиля:
+• Марка: ${formData.brand}
+• Модель: ${formData.model}
+• Год: ${formData.year}
+
+🔧 Состояние:
+• Техническое: ${conditionMap[formData.condition] || formData.condition}
+• Юридическое: ${legalMap[formData.legalStatus] || formData.legalStatus}
+• Описание: ${formData.description || 'Не указано'}
+
+📍 Местоположение: ${locationMap[formData.location] || formData.location}
+
+📞 Контакты:
+• Способ связи: ${contactMap[formData.contactMethod] || formData.contactMethod}
+• Телефон: ${formData.phone}`;
+
+    try {
+      const botToken = '7827853509:AAHLZ8JQkdRmucBRQOGh7r1XkJMDw4vxC0w';
+      const chatId = '6275725133';
+      
+      const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message,
+          parse_mode: 'HTML'
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (data.ok) {
+        toast({
+          title: "Заявка отправлена!",
+          description: "Мы свяжемся с вами в ближайшее время",
+        });
+        setFormData({
+          brand: "",
+          model: "",
+          year: "",
+          condition: "",
+          legalStatus: "",
+          description: "",
+          location: "",
+          contactMethod: "",
+          phone: ""
+        });
+        setPhotos([]);
+        setCurrentStep(1);
+      } else {
+        toast({
+          title: "Ошибка",
+          description: "Не удалось отправить заявку. Попробуйте позже.",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Ошибка",
+        description: "Не удалось отправить заявку. Попробуйте позже.",
+        variant: "destructive"
+      });
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
