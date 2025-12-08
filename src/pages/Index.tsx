@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
@@ -12,20 +12,6 @@ const Index = () => {
   const [showCallbackForm, setShowCallbackForm] = useState(false);
   const [callbackPhone, setCallbackPhone] = useState("");
   const [callbackMethod, setCallbackMethod] = useState("phone");
-  const [leadsCount, setLeadsCount] = useState<number>(0);
-
-  useEffect(() => {
-    const fetchLeadsCount = async () => {
-      try {
-        const response = await fetch('https://functions.poehali.dev/a8f2aee8-9a59-444c-8d70-39de338b39c8');
-        const data = await response.json();
-        setLeadsCount(data.count);
-      } catch (error) {
-        console.error('Ошибка загрузки счётчика:', error);
-      }
-    };
-    fetchLeadsCount();
-  }, []);
 
   const handleCallRequest = () => {
     setShowCallbackForm(true);
@@ -41,11 +27,15 @@ const Index = () => {
       'phone': 'Телефон'
     };
 
-    const message = `📞 Заказ обратного звонка\n\n• Телефон: ${callbackPhone}\n• Способ связи: ${contactMap[callbackMethod]}`;
-
     try {
       const botToken = '7827853509:AAHLZ8JQkdRmucBRQOGh7r1XkJMDw4vxC0w';
       const chatId = '6275725133';
+      
+      const countResponse = await fetch('https://functions.poehali.dev/a8f2aee8-9a59-444c-8d70-39de338b39c8');
+      const countData = await countResponse.json();
+      const totalLeads = countData.count + 1;
+
+      const message = `📞 Заказ обратного звонка\n\n• Телефон: ${callbackPhone}\n• Способ связи: ${contactMap[callbackMethod]}\n\n📊 Всего заявок: ${totalLeads}`;
 
       const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
         method: 'POST',
@@ -116,15 +106,7 @@ const Index = () => {
         <div className="container mx-auto px-4 z-10 relative">
           <div className="max-w-2xl text-white">
             <h1 className="text-5xl font-bold mb-4">Выкуп автомобилей в Хабаровске</h1>
-            <p className="text-xl mb-4 text-gray-100">Быстрая оценка и честная цена за ваш автомобиль</p>
-            {leadsCount > 0 && (
-              <div className="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-lg mb-6">
-                <p className="text-white font-semibold">
-                  <Icon name="Users" size={20} className="inline mr-2" />
-                  Уже выкупили {leadsCount} {leadsCount === 1 ? 'автомобиль' : leadsCount < 5 ? 'автомобиля' : 'автомобилей'}
-                </p>
-              </div>
-            )}
+            <p className="text-xl mb-8 text-gray-100">Быстрая оценка и честная цена за ваш автомобиль</p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Button 
                 size="lg" 
