@@ -88,6 +88,12 @@ const Index = () => {
   const handleEvaluationClick = () => {
     navigate('/evaluation', { replace: true });
   };
+
+  const handlePhoneClick = () => {
+    if (typeof window !== 'undefined' && (window as any).ym) {
+      (window as any).ym(104279599, 'reachGoal', 'phone_click');
+    }
+  };
   return (
     <div className="min-h-screen bg-white">
       <header className="border-b border-gray-200">
@@ -100,7 +106,7 @@ const Index = () => {
             <Link to="/" className="text-gray-600 hover:text-gray-900 transition">Главная</Link>
             <Link to="/evaluation" className="text-gray-600 hover:text-gray-900 transition">Оценка авто</Link>
           </nav>
-          <a href="tel:+79841771588" className="text-gray-900 font-bold text-lg">+7 (984) 177-15-88</a>
+          <a href="tel:+79841771588" onClick={handlePhoneClick} className="text-gray-900 font-bold text-lg">+7 (984) 177-15-88</a>
         </div>
       </header>
 
@@ -349,7 +355,7 @@ const Index = () => {
             <div className="text-gray-600 text-sm">
               © 2024 Выкуп автомобилей в Хабаровске
             </div>
-            <a href="tel:+79841771588" className="text-gray-900 font-bold text-lg">+7 (984) 177-15-88</a>
+            <a href="tel:+79841771588" onClick={handlePhoneClick} className="text-gray-900 font-bold text-lg">+7 (984) 177-15-88</a>
           </div>
         </div>
       </footer>

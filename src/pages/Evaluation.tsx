@@ -249,6 +249,12 @@ const Evaluation = () => {
     setPhotos(photos.filter((_, i) => i !== index));
   };
 
+  const handlePhoneClick = () => {
+    if (typeof window !== 'undefined' && (window as any).ym) {
+      (window as any).ym(104279599, 'reachGoal', 'phone_click');
+    }
+  };
+
   const isStepValid = () => {
     if (currentStep === 1) {
       return formData.brand && formData.model && formData.year;
@@ -276,7 +282,7 @@ const Evaluation = () => {
           <nav className="hidden md:flex gap-8">
             <span className="text-gray-600">Оценка авто</span>
           </nav>
-          <a href="tel:+79841771588" className="text-gray-900 font-bold text-lg">+7 (984) 177-15-88</a>
+          <a href="tel:+79841771588" onClick={handlePhoneClick} className="text-gray-900 font-bold text-lg">+7 (984) 177-15-88</a>
         </div>
       </header>
 
@@ -621,7 +627,7 @@ const Evaluation = () => {
             <div className="text-gray-600 text-sm">
               © 2024 Выкуп автомобилей в Хабаровске
             </div>
-            <a href="tel:+79841771588" className="text-gray-900 font-bold text-lg">+7 (984) 177-15-88</a>
+            <a href="tel:+79841771588" onClick={handlePhoneClick} className="text-gray-900 font-bold text-lg">+7 (984) 177-15-88</a>
           </div>
         </div>
       </footer>
