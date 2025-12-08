@@ -54,7 +54,7 @@ const Index = () => {
       if (data.ok) {
         // Отправляем цель в Яндекс.Метрику
         if (typeof window !== 'undefined' && (window as any).ym) {
-          (window as any).ym(101026698, 'reachGoal', 'callback_request');
+          (window as any).ym(105723259, 'reachGoal', 'callback_request');
         }
         
         // Отправляем событие в VK Pixel

@@ -175,7 +175,7 @@ const Evaluation = () => {
       if (data.ok) {
         // Отправляем цель в Яндекс.Метрику
         if (typeof window !== 'undefined' && (window as any).ym) {
-          (window as any).ym(101026698, 'reachGoal', 'evaluation_request');
+          (window as any).ym(105723259, 'reachGoal', 'evaluation_request');
         }
         
         // Отправляем событие в VK Pixel
