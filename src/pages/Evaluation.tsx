@@ -534,6 +534,7 @@ const Evaluation = () => {
                       <option value="">Выберите способ связи</option>
                       <option value="phone">Телефон</option>
                       <option value="whatsapp">WhatsApp</option>
+                      <option value="telegram">Telegram</option>
                     </select>
                   </div>
 
