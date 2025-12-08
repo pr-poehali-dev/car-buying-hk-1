@@ -1,0 +1,45 @@
+{
+  "tests": [
+    {
+      "name": "Успешная отправка заявки",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "name": "Иван Петров",
+        "phone": "+7 900 123-45-67",
+        "car_info": "Toyota Camry 2015"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true,
+        "message": "string",
+        "lead_id": "number"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Отправка без информации об авто",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "name": "Мария Иванова",
+        "phone": "89001234567"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Ошибка валидации - пустое имя",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "name": "",
+        "phone": "89001234567"
+      },
+      "expectedStatus": 500
+    }
+  ]
+}
