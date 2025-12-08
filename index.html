@@ -60,5 +60,32 @@
     <div><img src="https://mc.yandex.ru/watch/101026698" style="position:absolute; left:-9999px;" alt=""/></div>
 </noscript>
 <!-- /Yandex.Metrika counter -->
+
+<!-- Yandex.Direct Pixel -->
+<script type="text/javascript">
+    // Замените YOUR_COUNTER_ID на ваш ID счётчика из Яндекс.Директ
+    (function(w, d, n, s, t) {
+        w[n] = w[n] || [];
+        w[n].push(function() {
+            // После создания кампании в Директе вставьте сюда код пикселя
+            // Пример: Ya.Direct.events.push(['goal', 'LEAD']);
+        });
+        t = d.getElementsByTagName("script")[0];
+        s = d.createElement("script");
+        s.type = "text/javascript";
+        s.src = "https://mc.yandex.ru/metrika/tag.js";
+        s.async = true;
+        t.parentNode.insertBefore(s, t);
+    })(window, document, "yandex_metrika_callbacks");
+</script>
+<!-- /Yandex.Direct Pixel -->
+
+<!-- VK Pixel -->
+<script type="text/javascript">
+    // Замените YOUR_VK_PIXEL_ID на ваш ID пикселя из рекламного кабинета ВК
+    !function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src='https://vk.com/js/api/openapi.js?169',t.onload=function(){VK.Retargeting.Init("YOUR_VK_PIXEL_ID"),VK.Retargeting.Hit()},document.head.appendChild(t)}();
+</script>
+<noscript><img src="https://vk.com/rtrg?p=YOUR_VK_PIXEL_ID" style="position:fixed; left:-999px;" alt=""/></noscript>
+<!-- /VK Pixel -->
 </body>
 </html>

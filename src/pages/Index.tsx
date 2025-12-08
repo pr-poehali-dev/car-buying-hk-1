@@ -52,6 +52,16 @@ const Index = () => {
       const data = await response.json();
 
       if (data.ok) {
+        // Отправляем цель в Яндекс.Метрику
+        if (typeof window !== 'undefined' && (window as any).ym) {
+          (window as any).ym(101026698, 'reachGoal', 'callback_request');
+        }
+        
+        // Отправляем событие в VK Pixel
+        if (typeof window !== 'undefined' && (window as any).VK && (window as any).VK.Retargeting) {
+          (window as any).VK.Retargeting.Event('lead');
+        }
+        
         toast({
           title: "Заявка принята!",
           description: "Мы перезвоним вам в ближайшее время",

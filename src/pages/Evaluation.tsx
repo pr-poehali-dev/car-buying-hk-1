@@ -173,6 +173,16 @@ const Evaluation = () => {
       const data = await response.json();
       
       if (data.ok) {
+        // Отправляем цель в Яндекс.Метрику
+        if (typeof window !== 'undefined' && (window as any).ym) {
+          (window as any).ym(101026698, 'reachGoal', 'evaluation_request');
+        }
+        
+        // Отправляем событие в VK Pixel
+        if (typeof window !== 'undefined' && (window as any).VK && (window as any).VK.Retargeting) {
+          (window as any).VK.Retargeting.Event('lead');
+        }
+        
         toast({
           title: "Заявка отправлена!",
           description: "Мы свяжемся с вами в ближайшее время",
