@@ -1,0 +1,14 @@
+{
+  "tests": [
+    {
+      "name": "Получение количества заявок",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "count": "number"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
