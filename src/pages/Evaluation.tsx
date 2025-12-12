@@ -112,6 +112,8 @@ const Evaluation = () => {
     
     const legalMap: Record<string, string> = {
       'clean': 'Чистое',
+      'issues': 'Есть нюансы',
+      'unclear': 'Не уверен',
       'pledge': 'Залог',
       'ban': 'Запрет на рег. действия',
       'wanted': 'В розыске',
@@ -137,16 +139,15 @@ const Evaluation = () => {
       'phone': 'Телефон'
     };
     
-    let totalLeads = '?';
+    let totalLeads = 0;
     try {
-      const leadsCountResponse = await fetch('https://poehali.dev/api/projects/p43245144/car-buying-hk-1/functions/get-leads-count', {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
-      });
-      const leadsData = await leadsCountResponse.json();
-      totalLeads = leadsData.count || '?';
+      const leadsCountResponse = await fetch('https://functions.poehali.dev/a8f2aee8-9a59-444c-8d70-39de338b39c8');
+      if (leadsCountResponse.ok) {
+        const leadsData = await leadsCountResponse.json();
+        totalLeads = leadsData.count || 0;
+      }
     } catch (error) {
-      console.log('Не удалось получить счётчик заявок, продолжаем без него');
+      console.log('Счётчик заявок недоступен');
     }
     
     const message = `🚗 Новая заявка на выкуп авто
@@ -166,6 +167,7 @@ const Evaluation = () => {
 📞 Контакты:
 • Способ связи: ${contactMap[formData.contactMethod] || formData.contactMethod}
 • Телефон: ${formData.phone}
+${photos.length > 0 ? `\n📷 Фото: ${photos.length} шт.` : ''}
 
 📊 Всего заявок: ${totalLeads}`;
 
@@ -186,6 +188,26 @@ const Evaluation = () => {
       });
       
       const data = await response.json();
+      
+      if (data.ok && photos.length > 0) {
+        for (const photo of photos) {
+          try {
+            await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                chat_id: chatId,
+                photo: photo,
+                caption: `📷 Фото автомобиля: ${formData.brand} ${formData.model}`
+              })
+            });
+          } catch (photoError) {
+            console.log('Ошибка отправки фото:', photoError);
+          }
+        }
+      }
       
       if (data.ok) {
         // Отправляем цель в Яндекс.Метрику
