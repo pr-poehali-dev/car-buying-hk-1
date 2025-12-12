@@ -130,7 +130,9 @@ const Evaluation = () => {
       'nikolaevsk': 'Николаевск-на-Амуре',
       'vanino': 'Ванино',
       'pereyaslavka': 'Переяславка',
-      'other': 'Другое'
+      'khabarovsky-raion': 'Хабаровский район',
+      'komsomolsky-raion': 'Комсомольский район',
+      'other': 'Другой населённый пункт'
     };
     
     const contactMap: Record<string, string> = {
@@ -190,18 +192,26 @@ ${photos.length > 0 ? `\n📷 Фото: ${photos.length} шт.` : ''}
       const data = await response.json();
       
       if (data.ok && photos.length > 0) {
-        for (const photo of photos) {
+        for (let i = 0; i < photos.length; i++) {
           try {
+            const base64Data = photos[i].split(',')[1];
+            const formData = new FormData();
+            
+            const byteCharacters = atob(base64Data);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let j = 0; j < byteCharacters.length; j++) {
+              byteNumbers[j] = byteCharacters.charCodeAt(j);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: 'image/jpeg' });
+            
+            formData.append('chat_id', chatId);
+            formData.append('photo', blob, `photo${i + 1}.jpg`);
+            formData.append('caption', `📷 Фото ${i + 1}`);
+            
             await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
               method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                chat_id: chatId,
-                photo: photo,
-                caption: `📷 Фото автомобиля: ${formData.brand} ${formData.model}`
-              })
+              body: formData
             });
           } catch (photoError) {
             console.log('Ошибка отправки фото:', photoError);
