@@ -104,6 +104,7 @@ const Evaluation = () => {
     const conditionMap: Record<string, string> = {
       'excellent': 'Отличное',
       'good': 'Хорошее',
+      'fair': 'Удовлетворительное',
       'average': 'Среднее',
       'poor': 'Плохое',
       'broken': 'Битое/на запчасти'
@@ -136,6 +137,13 @@ const Evaluation = () => {
       'phone': 'Телефон'
     };
     
+    const leadsCountResponse = await fetch('https://poehali.dev/api/projects/p43245144/car-buying-hk-1/functions/get-leads-count', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    const leadsData = await leadsCountResponse.json();
+    const totalLeads = leadsData.count || '?';
+    
     const message = `🚗 Новая заявка на выкуп авто
 
 📋 Данные автомобиля:
@@ -152,7 +160,9 @@ const Evaluation = () => {
 
 📞 Контакты:
 • Способ связи: ${contactMap[formData.contactMethod] || formData.contactMethod}
-• Телефон: ${formData.phone}`;
+• Телефон: ${formData.phone}
+
+📊 Всего заявок: ${totalLeads}`;
 
     try {
       const botToken = '7827853509:AAHLZ8JQkdRmucBRQOGh7r1XkJMDw4vxC0w';
