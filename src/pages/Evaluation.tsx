@@ -137,12 +137,17 @@ const Evaluation = () => {
       'phone': 'Телефон'
     };
     
-    const leadsCountResponse = await fetch('https://poehali.dev/api/projects/p43245144/car-buying-hk-1/functions/get-leads-count', {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
-    });
-    const leadsData = await leadsCountResponse.json();
-    const totalLeads = leadsData.count || '?';
+    let totalLeads = '?';
+    try {
+      const leadsCountResponse = await fetch('https://poehali.dev/api/projects/p43245144/car-buying-hk-1/functions/get-leads-count', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const leadsData = await leadsCountResponse.json();
+      totalLeads = leadsData.count || '?';
+    } catch (error) {
+      console.log('Не удалось получить счётчик заявок, продолжаем без него');
+    }
     
     const message = `🚗 Новая заявка на выкуп авто
 
