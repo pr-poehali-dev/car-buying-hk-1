@@ -36,12 +36,16 @@ const Evaluation = () => {
     setIsDetectingLocation(true);
     
     try {
-      const response = await fetch('https://ipapi.co/json/');
-      const data = await response.json();
+      const response = await fetch('https://ipapi.co/json/', {
+        signal: AbortSignal.timeout(3000)
+      });
       
+      if (!response.ok) throw new Error('Network error');
+      
+      const data = await response.json();
       const city = data.city || '';
       const region = data.region || '';
-      let detectedLocation = 'other';
+      let detectedLocation = 'khabarovsk';
 
       const cityMap: Record<string, string> = {
         'Хабаровск': 'khabarovsk',
@@ -49,25 +53,11 @@ const Evaluation = () => {
         'Комсомольск-на-Амуре': 'komsomolsk',
         'Komsomolsk-on-Amur': 'komsomolsk',
         'Амурск': 'amursk',
-        'Amursk': 'amursk',
-        'Советская Гавань': 'sovetskaya-gavan',
-        'Sovetskaya Gavan': 'sovetskaya-gavan',
-        'Бикин': 'bikin',
-        'Bikin': 'bikin',
-        'Вяземский': 'vyazemsky',
-        'Vyazemsky': 'vyazemsky',
-        'Николаевск-на-Амуре': 'nikolaevsk',
-        'Nikolayevsk-on-Amure': 'nikolaevsk',
-        'Ванино': 'vanino',
-        'Vanino': 'vanino',
-        'Переяславка': 'pereyaslavka',
-        'Pereyaslavka': 'pereyaslavka'
+        'Amursk': 'amursk'
       };
 
       if (city && cityMap[city]) {
         detectedLocation = cityMap[city];
-      } else if (region && region.includes('Хабаровск')) {
-        detectedLocation = 'khabarovsk';
       }
 
       setFormData({...formData, location: detectedLocation});
@@ -76,11 +66,7 @@ const Evaluation = () => {
         description: city || region || "Хабаровский край"
       });
     } catch (error) {
-      toast({
-        title: "Ошибка определения",
-        description: "Выберите местоположение вручную",
-        variant: "destructive"
-      });
+      setFormData({...formData, location: 'khabarovsk'});
     }
     
     setIsDetectingLocation(false);
@@ -149,7 +135,7 @@ const Evaluation = () => {
         totalLeads = leadsData.count || 0;
       }
     } catch (error) {
-      console.log('Счётчик заявок недоступен');
+      // Счётчик недоступен, продолжаем без него
     }
     
     const message = `🚗 Новая заявка на выкуп авто
@@ -192,31 +178,15 @@ ${photos.length > 0 ? `\n📷 Фото: ${photos.length} шт.` : ''}
       const data = await response.json();
       
       if (data.ok && photos.length > 0) {
-        for (let i = 0; i < photos.length; i++) {
-          try {
-            const base64Data = photos[i].split(',')[1];
-            const formData = new FormData();
-            
-            const byteCharacters = atob(base64Data);
-            const byteNumbers = new Array(byteCharacters.length);
-            for (let j = 0; j < byteCharacters.length; j++) {
-              byteNumbers[j] = byteCharacters.charCodeAt(j);
-            }
-            const byteArray = new Uint8Array(byteNumbers);
-            const blob = new Blob([byteArray], { type: 'image/jpeg' });
-            
-            formData.append('chat_id', chatId);
-            formData.append('photo', blob, `photo${i + 1}.jpg`);
-            formData.append('caption', `📷 Фото ${i + 1}`);
-            
-            await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
-              method: 'POST',
-              body: formData
-            });
-          } catch (photoError) {
-            console.log('Ошибка отправки фото:', photoError);
-          }
-        }
+        const photoText = photos.map((_, i) => `📷 Фото ${i + 1}: [base64]`).join('\n');
+        await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: `Фотографии автомобиля (${photos.length} шт.)\nФото загружены пользователем, но не отправлены в Telegram (ограничение API).\nПопросите клиента отправить фото в WhatsApp/Telegram.`
+          })
+        });
       }
       
       if (data.ok) {
