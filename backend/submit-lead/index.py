@@ -3,7 +3,8 @@ import os
 import psycopg2
 import urllib.request
 import urllib.parse
-from typing import Dict, Any
+import base64
+from typing import Dict, Any, List, Optional
 from pydantic import BaseModel, Field, field_validator
 
 class LeadRequest(BaseModel):
@@ -11,6 +12,7 @@ class LeadRequest(BaseModel):
     name: str = Field(..., min_length=1, max_length=255)
     phone: str = Field(..., min_length=5, max_length=50)
     car_info: str = Field(default='', max_length=5000)
+    photos: Optional[List[str]] = Field(default=[])
     
     @field_validator('name', 'phone')
     @classmethod
@@ -105,6 +107,57 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         
         if not telegram_response.get('ok'):
             raise Exception('Ошибка отправки в Telegram')
+        
+        # Отправляем фото если есть
+        if lead.photos and len(lead.photos) > 0:
+            for i, photo_base64 in enumerate(lead.photos[:5]):
+                try:
+                    # Удаляем data:image/jpeg;base64, префикс
+                    if ',' in photo_base64:
+                        photo_base64 = photo_base64.split(',')[1]
+                    
+                    photo_data = base64.b64decode(photo_base64)
+                    
+                    # Создаем multipart/form-data вручную
+                    boundary = '----WebKitFormBoundary7MA4YWxkTrZu0gW'
+                    body_parts = []
+                    
+                    body_parts.append(f'--{boundary}'.encode())
+                    body_parts.append(b'Content-Disposition: form-data; name="chat_id"')
+                    body_parts.append(b'')
+                    body_parts.append(chat_id.encode())
+                    
+                    body_parts.append(f'--{boundary}'.encode())
+                    body_parts.append(f'Content-Disposition: form-data; name="photo"; filename="photo{i+1}.jpg"'.encode())
+                    body_parts.append(b'Content-Type: image/jpeg')
+                    body_parts.append(b'')
+                    body_parts.append(photo_data)
+                    
+                    body_parts.append(f'--{boundary}'.encode())
+                    body_parts.append(b'Content-Disposition: form-data; name="caption"')
+                    body_parts.append(b'')
+                    body_parts.append(f'📷 Фото автомобиля {i+1}'.encode('utf-8'))
+                    
+                    body_parts.append(f'--{boundary}--'.encode())
+                    body_parts.append(b'')
+                    
+                    body = b'\r\n'.join(body_parts)
+                    
+                    photo_url = f"https://api.telegram.org/bot{bot_token}/sendPhoto"
+                    photo_req = urllib.request.Request(
+                        photo_url,
+                        data=body,
+                        headers={
+                            'Content-Type': f'multipart/form-data; boundary={boundary}'
+                        },
+                        method='POST'
+                    )
+                    
+                    with urllib.request.urlopen(photo_req, timeout=10) as photo_response:
+                        pass
+                        
+                except Exception as photo_error:
+                    print(f'Ошибка отправки фото {i+1}: {photo_error}')
         
         return {
             'statusCode': 200,

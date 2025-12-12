@@ -155,7 +155,6 @@ const Evaluation = () => {
 📞 Контакты:
 • Способ связи: ${contactMap[formData.contactMethod] || formData.contactMethod}
 • Телефон: ${formData.phone}
-${photos.length > 0 ? `\n📷 Фото: ${photos.length} шт.` : ''}
 
 📊 Всего заявок: ${totalLeads}`;
 
@@ -165,28 +164,41 @@ ${photos.length > 0 ? `\n📷 Фото: ${photos.length} шт.` : ''}
       
       const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           chat_id: chatId,
-          text: message,
-          parse_mode: 'HTML'
+          text: message
         })
       });
       
       const data = await response.json();
       
       if (data.ok && photos.length > 0) {
-        const photoText = photos.map((_, i) => `📷 Фото ${i + 1}: [base64]`).join('\n');
-        await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            chat_id: chatId,
-            text: `Фотографии автомобиля (${photos.length} шт.)\nФото загружены пользователем, но не отправлены в Telegram (ограничение API).\nПопросите клиента отправить фото в WhatsApp/Telegram.`
-          })
-        });
+        for (let i = 0; i < photos.length; i++) {
+          try {
+            const base64Data = photos[i].split(',')[1];
+            const binaryString = atob(base64Data);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let j = 0; j < binaryString.length; j++) {
+              bytes[j] = binaryString.charCodeAt(j);
+            }
+            const blob = new Blob([bytes], { type: 'image/jpeg' });
+            
+            const photoFormData = new FormData();
+            photoFormData.append('chat_id', chatId);
+            photoFormData.append('photo', blob, `photo${i + 1}.jpg`);
+            photoFormData.append('caption', `📷 Фото автомобиля ${i + 1}`);
+            
+            await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+              method: 'POST',
+              body: photoFormData
+            });
+            
+            await new Promise(resolve => setTimeout(resolve, 500));
+          } catch (photoError) {
+            console.error('Ошибка отправки фото:', photoError);
+          }
+        }
       }
       
       if (data.ok) {
