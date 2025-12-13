@@ -167,54 +167,7 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="py-12 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-center gap-3 mb-2">
-            <span className="text-4xl font-bold text-gray-900">4.9</span>
-            <div className="flex gap-1">
-              {[1,2,3,4,5].map(i => (
-                <Icon key={i} name="Star" size={24} className="text-yellow-400 fill-yellow-400" />
-              ))}
-            </div>
-          </div>
-          <p className="text-center text-gray-600">Рейтинг на Яндекс Картах</p>
-          <p className="text-center text-sm text-gray-500 mt-1">На основе 127 отзывов</p>
-        </div>
-      </section>
 
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6 text-gray-900">Как проходит выкуп автомобиля</h2>
-          <p className="text-gray-600 mb-8 max-w-2xl mx-auto">Простой процесс от заявки до получения денег за 4 шага</p>
-          <Link to="/how-it-works">
-            <Button size="lg" variant="outline" className="text-lg px-8 py-6 h-auto">
-              <Icon name="Info" size={24} className="mr-2" />
-              Подробнее о процессе
-            </Button>
-          </Link>
-        </div>
-      </section>
-
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6 text-gray-900">Что говорят наши клиенты</h2>
-          <div className="flex items-center justify-center gap-3 mb-8">
-            <span className="text-3xl font-bold text-gray-900">4.9</span>
-            <div className="flex gap-1">
-              {[1,2,3,4,5].map(i => (
-                <Icon key={i} name="Star" size={20} className="text-yellow-400 fill-yellow-400" />
-              ))}
-            </div>
-            <span className="text-gray-600">на Яндекс Картах</span>
-          </div>
-          <Link to="/reviews">
-            <Button size="lg" variant="outline" className="text-lg px-8 py-6 h-auto">
-              <Icon name="MessageSquare" size={24} className="mr-2" />
-              Читать отзывы
-            </Button>
-          </Link>
-        </div>
-      </section>
 
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
