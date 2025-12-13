@@ -86,6 +86,19 @@ const Index = () => {
     detectCity();
   }, []);
 
+  useEffect(() => {
+    const popupShown = sessionStorage.getItem('popupShown');
+    
+    if (!popupShown) {
+      const timer = setTimeout(() => {
+        setShowPopup(true);
+        sessionStorage.setItem('popupShown', 'true');
+      }, 30000);
+
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
   const handleCallRequest = () => {
     setShowCallbackForm(true);
     window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
@@ -166,6 +179,19 @@ const Index = () => {
     }
   };
 
+  const handlePopupClose = () => {
+    setShowPopup(false);
+  };
+
+  const handlePopupSubmit = () => {
+    setShowPopup(false);
+    handleCallRequest();
+    
+    if (typeof window !== 'undefined' && (window as any).ym) {
+      (window as any).ym(104279599, 'reachGoal', 'popup_conversion');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <Header 
@@ -197,11 +223,8 @@ const Index = () => {
       
       {showPopup && (
         <PopupOffer
-          onClose={() => setShowPopup(false)}
-          onSubmit={() => {
-            setShowPopup(false);
-            handleCallRequest();
-          }}
+          onClose={handlePopupClose}
+          onSubmit={handlePopupSubmit}
         />
       )}
     </div>
