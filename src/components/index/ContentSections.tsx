@@ -111,7 +111,7 @@ const ContentSections = ({ handleEvaluationClick, handlePhoneClick }: ContentSec
               </div>
             </div>
             <div className="text-center">
-              <p className="text-gray-600 text-sm md:text-base">А также Хабаровский район, Комсомольский район и все населённые пункты края</p>
+              <p className="text-gray-900 font-bold text-sm md:text-base">А также Хабаровский район, Комсомольский район и все населённые пункты края</p>
             </div>
           </div>
         </div>
