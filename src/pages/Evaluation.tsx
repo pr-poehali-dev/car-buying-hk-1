@@ -12,6 +12,7 @@ const Evaluation = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [photos, setPhotos] = useState<string[]>([]);
   const [isDetectingLocation, setIsDetectingLocation] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
     brand: "",
     model: "",
@@ -314,8 +315,26 @@ const Evaluation = () => {
             <Link to="/reviews" className="text-gray-600 hover:text-gray-900 transition">Отзывы</Link>
             <Link to="/evaluation" className="text-gray-900 font-semibold">Оценка авто</Link>
           </nav>
-          <a href="tel:+79841771588" onClick={handlePhoneClick} className="text-gray-900 font-bold text-lg">+7 (984) 177-15-88</a>
+          <button 
+            className="md:hidden p-2" 
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Меню"
+          >
+            <Icon name={mobileMenuOpen ? "X" : "Menu"} size={24} className="text-gray-900" />
+          </button>
+          <a href="tel:+79841771588" onClick={handlePhoneClick} className="hidden md:block text-gray-900 font-bold text-lg">+7 (984) 177-15-88</a>
         </div>
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-gray-200 bg-white">
+            <nav className="container mx-auto px-4 py-4 flex flex-col gap-4">
+              <Link to="/" className="text-gray-600 hover:text-gray-900 transition" onClick={() => setMobileMenuOpen(false)}>Главная</Link>
+              <Link to="/how-it-works" className="text-gray-600 hover:text-gray-900 transition" onClick={() => setMobileMenuOpen(false)}>Как мы работаем</Link>
+              <Link to="/reviews" className="text-gray-600 hover:text-gray-900 transition" onClick={() => setMobileMenuOpen(false)}>Отзывы</Link>
+              <Link to="/evaluation" className="text-gray-900 font-semibold" onClick={() => setMobileMenuOpen(false)}>Оценка авто</Link>
+              <a href="tel:+79841771588" onClick={handlePhoneClick} className="text-gray-900 font-bold text-lg">+7 (984) 177-15-88</a>
+            </nav>
+          </div>
+        )}
       </header>
 
       <section className="py-20">
