@@ -27,21 +27,33 @@ const Index = () => {
           let newCity = 'Хабаровске';
           let newCityTitle = 'Хабаровск';
           
-          if (cityName.includes('амурск')) {
-            newCity = 'Амурске';
-            newCityTitle = 'Амурск';
+          if (cityName.includes('хабаровск')) {
+            newCity = 'Хабаровске';
+            newCityTitle = 'Хабаровск';
           } else if (cityName.includes('комсомольск')) {
             newCity = 'Комсомольске-на-Амуре';
             newCityTitle = 'Комсомольск-на-Амуре';
-          } else if (cityName.includes('владивосток')) {
-            newCity = 'Владивостоке';
-            newCityTitle = 'Владивосток';
-          } else if (cityName.includes('находка')) {
-            newCity = 'Находке';
-            newCityTitle = 'Находка';
-          } else if (cityName.includes('хабаровск')) {
-            newCity = 'Хабаровске';
-            newCityTitle = 'Хабаровск';
+          } else if (cityName.includes('амурск')) {
+            newCity = 'Амурске';
+            newCityTitle = 'Амурск';
+          } else if (cityName.includes('советск') || cityName.includes('гавань')) {
+            newCity = 'Советской Гавани';
+            newCityTitle = 'Советская Гавань';
+          } else if (cityName.includes('бикин')) {
+            newCity = 'Бикине';
+            newCityTitle = 'Бикин';
+          } else if (cityName.includes('вяземск')) {
+            newCity = 'Вяземском';
+            newCityTitle = 'Вяземский';
+          } else if (cityName.includes('николаевск')) {
+            newCity = 'Николаевске-на-Амуре';
+            newCityTitle = 'Николаевск-на-Амуре';
+          } else if (cityName.includes('ванино')) {
+            newCity = 'Ванино';
+            newCityTitle = 'Ванино';
+          } else if (cityName.includes('переяславк')) {
+            newCity = 'Переяславке';
+            newCityTitle = 'Переяславка';
           }
           
           setCity(newCity);
