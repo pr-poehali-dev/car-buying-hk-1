@@ -101,5 +101,21 @@
 
   html {
     color-scheme: light;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+
+  @media (max-width: 768px) {
+    input,
+    textarea,
+    select,
+    button {
+      font-size: 16px !important;
+    }
   }
 }
