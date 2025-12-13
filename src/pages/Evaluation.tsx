@@ -26,6 +26,14 @@ const Evaluation = () => {
   });
 
   const totalSteps = 4;
+  
+  useEffect(() => {
+    document.title = "Онлайн оценка автомобиля Хабаровск - Узнайте стоимость авто за 2 минуты";
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', 'Бесплатная онлайн оценка автомобиля в Хабаровске. Узнайте стоимость вашего авто за 2 минуты. Оставьте заявку и получите звонок эксперта. Честная цена');
+    }
+  }, []);
 
   useEffect(() => {
     if (currentStep === 3 && !formData.location) {

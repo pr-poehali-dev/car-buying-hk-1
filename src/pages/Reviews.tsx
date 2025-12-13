@@ -1,10 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
 
 const Reviews = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
+  useEffect(() => {
+    document.title = "Отзывы о выкупе авто Хабаровск - 127 реальных отзывов клиентов | Рейтинг 4.9";
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', 'Реальные отзывы клиентов о выкупе автомобилей в Хабаровске. 127 отзывов, рейтинг 4.9 на Яндекс Картах. Читайте мнения людей, которые продали авто через нас');
+    }
+  }, []);
   
   return (
     <div className="min-h-screen bg-white">

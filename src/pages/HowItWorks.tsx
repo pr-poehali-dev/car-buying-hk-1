@@ -1,10 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
 
 const HowItWorks = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
+  useEffect(() => {
+    document.title = "Как мы покупаем автомобили - Процесс выкупа авто за 4 шага | Хабаровск";
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', 'Узнайте как проходит выкуп автомобилей в Хабаровске: заявка → осмотр → договор → деньги. Весь процесс за 15-30 минут. Прозрачная схема работы');
+    }
+  }, []);
   
   return (
     <div className="min-h-screen bg-white">

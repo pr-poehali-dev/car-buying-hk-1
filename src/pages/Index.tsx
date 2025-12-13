@@ -57,7 +57,12 @@ const Index = () => {
           }
           
           setCity(newCity);
-          document.title = `ВыкупАвто ${newCityTitle}`;
+          document.title = `Выкуп авто ${newCityTitle} - Срочный выкуп автомобилей за 15 минут | +7(984)177-15-88`;
+          
+          const metaDescription = document.querySelector('meta[name="description"]');
+          if (metaDescription) {
+            metaDescription.setAttribute('content', `Срочный выкуп автомобилей в ${newCity} и крае за 15 минут. Битые, кредитные, без документов. Деньги сразу. Рейтинг 4.9 ⭐ Звоните +7(984)177-15-88`);
+          }
         }
       } catch (error) {
         console.log('Не удалось определить город, используем Хабаровск');
@@ -188,15 +193,16 @@ const Index = () => {
         <div className="absolute inset-0 z-0">
           <img 
             src="https://cdn.poehali.dev/projects/67e7cf58-b4b6-432f-8bfa-54cde7992932/files/a831bee9-327c-4fa9-b47b-a42be3b0cde0.jpg"
-            alt="Автомобиль"
+            alt="Срочный выкуп автомобилей в Хабаровске - деньги сразу, оценка за 15 минут"
             className="w-full h-full object-cover"
+            loading="eager"
           />
           <div className="absolute inset-0 bg-black/40"></div>
         </div>
         <div className="container mx-auto px-4 z-10 relative">
           <div className="max-w-2xl text-white">
-            <h1 className="text-5xl font-bold mb-4">Выкуп автомобилей в {city}</h1>
-            <p className="text-xl mb-8 text-gray-100">Быстрая оценка и честная цена за ваш автомобиль</p>
+            <h1 className="text-5xl font-bold mb-4">Срочный выкуп автомобилей в {city}</h1>
+            <p className="text-xl mb-8 text-gray-100">Деньги сразу наличными. Оценка за 15 минут. Битые, кредитные, без документов</p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Button 
                 size="lg" 
@@ -362,6 +368,34 @@ const Index = () => {
                 <p className="text-gray-600">Берём на себя все вопросы с документами</p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">Частые вопросы</h2>
+          <div className="max-w-3xl mx-auto space-y-6">
+            <details className="bg-gray-50 p-6 rounded-lg">
+              <summary className="font-semibold text-gray-900 cursor-pointer text-lg">Сколько времени занимает выкуп автомобиля?</summary>
+              <p className="mt-3 text-gray-600">Весь процесс от оценки до получения денег занимает 15-30 минут. Приезжаем в удобное для вас время, осматриваем авто, оформляем договор и сразу выплачиваем деньги.</p>
+            </details>
+            <details className="bg-gray-50 p-6 rounded-lg">
+              <summary className="font-semibold text-gray-900 cursor-pointer text-lg">Выкупаете ли вы битые автомобили?</summary>
+              <p className="mt-3 text-gray-600">Да, мы выкупаем автомобили в любом состоянии: битые после ДТП, не на ходу, с проблемами двигателя или коробки передач. Оценка зависит от реального состояния.</p>
+            </details>
+            <details className="bg-gray-50 p-6 rounded-lg">
+              <summary className="font-semibold text-gray-900 cursor-pointer text-lg">Можно ли продать машину в кредите?</summary>
+              <p className="mt-3 text-gray-600">Да, выкупаем кредитные автомобили. Помогаем закрыть кредит в банке и оформить все документы. Разница выплачивается вам сразу после погашения кредита.</p>
+            </details>
+            <details className="bg-gray-50 p-6 rounded-lg">
+              <summary className="font-semibold text-gray-900 cursor-pointer text-lg">Какие документы нужны для продажи?</summary>
+              <p className="mt-3 text-gray-600">Для продажи нужен только паспорт собственника и ПТС/СТС. Если документов нет — помогаем восстановить. Договор купли-продажи оформляем сами на месте.</p>
+            </details>
+            <details className="bg-gray-50 p-6 rounded-lg">
+              <summary className="font-semibold text-gray-900 cursor-pointer text-lg">Выезжаете ли вы за город?</summary>
+              <p className="mt-3 text-gray-600">Да, выезжаем по всему Хабаровскому краю: Комсомольск-на-Амуре, Амурск, Советская Гавань, Бикин, Вяземский и другие города. Выезд оценщика бесплатный.</p>
+            </details>
           </div>
         </div>
       </section>
