@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
@@ -13,6 +13,47 @@ const Index = () => {
   const [callbackPhone, setCallbackPhone] = useState("");
   const [callbackMethod, setCallbackMethod] = useState("phone");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [city, setCity] = useState("Хабаровске");
+
+  useEffect(() => {
+    const detectCity = async () => {
+      try {
+        const response = await fetch('https://ipapi.co/json/');
+        const data = await response.json();
+        const detectedCity = data.city;
+        
+        if (detectedCity) {
+          const cityName = detectedCity.toLowerCase();
+          let newCity = 'Хабаровске';
+          let newCityTitle = 'Хабаровск';
+          
+          if (cityName.includes('амурск')) {
+            newCity = 'Амурске';
+            newCityTitle = 'Амурск';
+          } else if (cityName.includes('комсомольск')) {
+            newCity = 'Комсомольске-на-Амуре';
+            newCityTitle = 'Комсомольск-на-Амуре';
+          } else if (cityName.includes('владивосток')) {
+            newCity = 'Владивостоке';
+            newCityTitle = 'Владивосток';
+          } else if (cityName.includes('находка')) {
+            newCity = 'Находке';
+            newCityTitle = 'Находка';
+          } else if (cityName.includes('хабаровск')) {
+            newCity = 'Хабаровске';
+            newCityTitle = 'Хабаровск';
+          }
+          
+          setCity(newCity);
+          document.title = `ВыкупАвто ${newCityTitle}`;
+        }
+      } catch (error) {
+        console.log('Не удалось определить город, используем Хабаровск');
+      }
+    };
+
+    detectCity();
+  }, []);
 
   const handleCallRequest = () => {
     setShowCallbackForm(true);
@@ -142,7 +183,7 @@ const Index = () => {
         </div>
         <div className="container mx-auto px-4 z-10 relative">
           <div className="max-w-2xl text-white">
-            <h1 className="text-5xl font-bold mb-4">Выкуп автомобилей в Хабаровске</h1>
+            <h1 className="text-5xl font-bold mb-4">Выкуп автомобилей в {city}</h1>
             <p className="text-xl mb-8 text-gray-100">Быстрая оценка и честная цена за ваш автомобиль</p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Button 
