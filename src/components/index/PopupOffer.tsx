@@ -80,7 +80,7 @@ const PopupOffer = ({ onClose, onSubmit }: PopupOfferProps) => {
             size="lg"
             className="w-full bg-green-600 hover:bg-green-700 text-white text-lg font-bold py-6 rounded-xl shadow-lg hover:shadow-xl transition-all"
           >
-            Получить +5 000 ₽
+            Оставить заявку
           </Button>
 
           <p className="text-xs text-gray-500 text-center mt-3">
