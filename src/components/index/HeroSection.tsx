@@ -21,6 +21,9 @@ const HeroSection = ({ city, handleEvaluationClick, handleCallRequest }: HeroSec
       </div>
       <div className="container mx-auto px-4 z-10 relative">
         <div className="max-w-2xl text-white">
+          <div className="inline-block bg-green-600 text-white px-4 py-2 rounded-lg font-bold text-sm md:text-base mb-4 animate-pulse">
+            💰 Дороже конкурентов на 15%
+          </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 md:mb-4 leading-tight">Срочный выкуп автомобилей в {city}</h1>
           <p className="text-base sm:text-lg md:text-xl mb-6 md:mb-8 text-gray-100 leading-relaxed">Деньги сразу наличными. Оценка за 15 минут. Битые, кредитные, без документов</p>
           <div className="flex flex-col sm:flex-row gap-3 md:gap-4">

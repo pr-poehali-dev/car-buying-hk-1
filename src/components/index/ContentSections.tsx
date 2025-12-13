@@ -121,6 +121,14 @@ const ContentSections = ({ handleEvaluationClick, handlePhoneClick }: ContentSec
         <div className="container mx-auto px-4">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 md:mb-12 text-gray-900">Наши преимущества</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-4xl mx-auto">
+            <div className="flex gap-3 md:gap-4 items-start p-4 md:p-6 bg-gradient-to-br from-green-50 to-white border-2 border-green-600 rounded-lg relative overflow-hidden">
+              <div className="absolute top-2 right-2 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded">№ 1</div>
+              <Icon name="TrendingUp" size={20} className="text-green-600 flex-shrink-0 mt-1 md:w-6 md:h-6" />
+              <div>
+                <h3 className="font-bold mb-1 text-gray-900 text-sm md:text-base">Выкупаем дороже</h3>
+                <p className="text-gray-900 font-semibold text-sm md:text-base">На 15% выше конкурентов</p>
+              </div>
+            </div>
             <div className="flex gap-3 md:gap-4 items-start p-4 md:p-6 bg-white border border-gray-200 rounded-lg">
               <Icon name="Clock" size={20} className="text-gray-900 flex-shrink-0 mt-1 md:w-6 md:h-6" />
               <div>
@@ -142,7 +150,7 @@ const ContentSections = ({ handleEvaluationClick, handlePhoneClick }: ContentSec
                 <p className="text-gray-600 text-sm md:text-base">Получите деньги сразу после сделки</p>
               </div>
             </div>
-            <div className="flex gap-3 md:gap-4 items-start p-4 md:p-6 bg-white border border-gray-200 rounded-lg">
+            <div className="flex gap-3 md:gap-4 items-start p-4 md:p-6 bg-white border border-gray-200 rounded-lg md:col-span-2 md:max-w-md md:mx-auto">
               <Icon name="FileText" size={20} className="text-gray-900 flex-shrink-0 mt-1 md:w-6 md:h-6" />
               <div>
                 <h3 className="font-semibold mb-1 text-gray-900 text-sm md:text-base">Все документы</h3>
@@ -183,6 +191,9 @@ const ContentSections = ({ handleEvaluationClick, handlePhoneClick }: ContentSec
 
       <section className="py-12 md:py-20 bg-gray-900 text-white">
         <div className="container mx-auto px-4 text-center">
+          <div className="inline-block bg-green-600 text-white px-4 py-2 rounded-lg font-bold text-sm md:text-base mb-4">
+            💰 Предложим на 15% больше рынка
+          </div>
           <h2 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4">Готовы продать авто?</h2>
           <p className="text-lg md:text-xl mb-6 md:mb-8 text-gray-300">Получите оценку прямо сейчас</p>
           <Button 
