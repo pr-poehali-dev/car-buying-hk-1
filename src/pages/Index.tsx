@@ -5,6 +5,7 @@ import Header from "@/components/index/Header";
 import HeroSection from "@/components/index/HeroSection";
 import ContentSections from "@/components/index/ContentSections";
 import CallbackForm from "@/components/index/CallbackForm";
+import PopupOffer from "@/components/index/PopupOffer";
 
 const Index = () => {
   const { toast } = useToast();
@@ -14,6 +15,19 @@ const Index = () => {
   const [callbackMethod, setCallbackMethod] = useState("phone");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [city, setCity] = useState("Хабаровске");
+  const [showPopup, setShowPopup] = useState(false);
+
+  useEffect(() => {
+    const popupTimer = setTimeout(() => {
+      const popupShown = sessionStorage.getItem('popupShown');
+      if (!popupShown) {
+        setShowPopup(true);
+        sessionStorage.setItem('popupShown', 'true');
+      }
+    }, 30000);
+
+    return () => clearTimeout(popupTimer);
+  }, []);
 
   useEffect(() => {
     const detectCity = async () => {
@@ -180,6 +194,16 @@ const Index = () => {
         setCallbackMethod={setCallbackMethod}
         handleCallbackSubmit={handleCallbackSubmit}
       />
+      
+      {showPopup && (
+        <PopupOffer
+          onClose={() => setShowPopup(false)}
+          onSubmit={() => {
+            setShowPopup(false);
+            handleCallRequest();
+          }}
+        />
+      )}
     </div>
   );
 };
