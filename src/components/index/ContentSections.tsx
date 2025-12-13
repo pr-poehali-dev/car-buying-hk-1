@@ -189,6 +189,75 @@ const ContentSections = ({ handleEvaluationClick, handlePhoneClick }: ContentSec
         </div>
       </section>
 
+      <section className="py-12 md:py-20 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-3 md:mb-4 text-gray-900">Отзывы клиентов</h2>
+          <p className="text-center text-gray-600 mb-8 md:mb-12 text-sm md:text-base">Более 500 довольных клиентов за 2024 год</p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 max-w-6xl mx-auto">
+            <div className="bg-white p-4 md:p-6 rounded-lg shadow-sm border border-gray-200">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-base md:text-lg">
+                  А
+                </div>
+                <div>
+                  <div className="font-semibold text-gray-900 text-sm md:text-base">Александр</div>
+                  <div className="flex items-center gap-1 text-yellow-500">
+                    <Icon name="Star" size={14} className="fill-yellow-500 md:w-4 md:h-4" />
+                    <Icon name="Star" size={14} className="fill-yellow-500 md:w-4 md:h-4" />
+                    <Icon name="Star" size={14} className="fill-yellow-500 md:w-4 md:h-4" />
+                    <Icon name="Star" size={14} className="fill-yellow-500 md:w-4 md:h-4" />
+                    <Icon name="Star" size={14} className="fill-yellow-500 md:w-4 md:h-4" />
+                  </div>
+                </div>
+              </div>
+              <p className="text-gray-600 text-sm md:text-base leading-relaxed">Продал Камри 2015 года. Оценили реально дороже, чем в других местах. Приехали быстро, деньги отдали сразу наличными. Рекомендую!</p>
+              <div className="mt-3 text-xs md:text-sm text-gray-500">Хабаровск, 2 недели назад</div>
+            </div>
+
+            <div className="bg-white p-4 md:p-6 rounded-lg shadow-sm border border-gray-200">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-pink-600 rounded-full flex items-center justify-center text-white font-bold text-base md:text-lg">
+                  М
+                </div>
+                <div>
+                  <div className="font-semibold text-gray-900 text-sm md:text-base">Марина</div>
+                  <div className="flex items-center gap-1 text-yellow-500">
+                    <Icon name="Star" size={14} className="fill-yellow-500 md:w-4 md:h-4" />
+                    <Icon name="Star" size={14} className="fill-yellow-500 md:w-4 md:h-4" />
+                    <Icon name="Star" size={14} className="fill-yellow-500 md:w-4 md:h-4" />
+                    <Icon name="Star" size={14} className="fill-yellow-500 md:w-4 md:h-4" />
+                    <Icon name="Star" size={14} className="fill-yellow-500 md:w-4 md:h-4" />
+                  </div>
+                </div>
+              </div>
+              <p className="text-gray-600 text-sm md:text-base leading-relaxed">Машина была битая после ДТП. Думала, что никто не возьмёт. Ребята приехали, осмотрели и сразу предложили хорошую цену. Всё оформили за 20 минут. Спасибо большое!</p>
+              <div className="mt-3 text-xs md:text-sm text-gray-500">Комсомольск-на-Амуре, месяц назад</div>
+            </div>
+
+            <div className="bg-white p-4 md:p-6 rounded-lg shadow-sm border border-gray-200">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-green-600 rounded-full flex items-center justify-center text-white font-bold text-base md:text-lg">
+                  Д
+                </div>
+                <div>
+                  <div className="font-semibold text-gray-900 text-sm md:text-base">Дмитрий</div>
+                  <div className="flex items-center gap-1 text-yellow-500">
+                    <Icon name="Star" size={14} className="fill-yellow-500 md:w-4 md:h-4" />
+                    <Icon name="Star" size={14} className="fill-yellow-500 md:w-4 md:h-4" />
+                    <Icon name="Star" size={14} className="fill-yellow-500 md:w-4 md:h-4" />
+                    <Icon name="Star" size={14} className="fill-yellow-500 md:w-4 md:h-4" />
+                    <Icon name="Star" size={14} className="fill-yellow-500 md:w-4 md:h-4" />
+                  </div>
+                </div>
+              </div>
+              <p className="text-gray-600 text-sm md:text-base leading-relaxed">Выкупили машину в кредите. Помогли закрыть кредит в банке, всё сами оформили. Очень удобно и без лишней волокиты. Буду обращаться ещё!</p>
+              <div className="mt-3 text-xs md:text-sm text-gray-500">Хабаровск, 3 недели назад</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="py-12 md:py-20 bg-gray-900 text-white">
         <div className="container mx-auto px-4 text-center">
           <div className="inline-block bg-green-600 text-white px-4 py-2 rounded-lg font-bold text-sm md:text-base mb-4">
