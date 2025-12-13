@@ -103,7 +103,9 @@ const Index = () => {
             <span className="text-xl font-semibold text-gray-900">АвтоВыкуп</span>
           </div>
           <nav className="hidden md:flex gap-8">
-            <Link to="/" className="text-gray-600 hover:text-gray-900 transition">Главная</Link>
+            <Link to="/" className="text-gray-900 font-semibold">Главная</Link>
+            <Link to="/how-it-works" className="text-gray-600 hover:text-gray-900 transition">Как мы работаем</Link>
+            <Link to="/reviews" className="text-gray-600 hover:text-gray-900 transition">Отзывы</Link>
             <Link to="/evaluation" className="text-gray-600 hover:text-gray-900 transition">Оценка авто</Link>
           </nav>
           <a href="tel:+79841771588" onClick={handlePhoneClick} className="text-gray-900 font-bold text-lg">+7 (984) 177-15-88</a>
@@ -161,102 +163,37 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">Как мы покупаем автомобили</h2>
-          <div className="grid md:grid-cols-4 gap-6">
-            <div className="bg-white p-6 rounded-xl shadow-sm">
-              <div className="w-14 h-14 bg-gray-900 rounded-full flex items-center justify-center mb-4">
-                <Icon name="MessageSquare" size={28} className="text-white" />
-              </div>
-              <div className="text-2xl font-bold text-gray-900 mb-2">1</div>
-              <h3 className="text-lg font-semibold mb-2 text-gray-900">Заявка</h3>
-              <p className="text-gray-600">Оставьте заявку на сайте, по телефону или в мессенджере</p>
-            </div>
-            <div className="bg-white p-6 rounded-xl shadow-sm">
-              <div className="w-14 h-14 bg-gray-900 rounded-full flex items-center justify-center mb-4">
-                <Icon name="Search" size={28} className="text-white" />
-              </div>
-              <div className="text-2xl font-bold text-gray-900 mb-2">2</div>
-              <h3 className="text-lg font-semibold mb-2 text-gray-900">Осмотр</h3>
-              <p className="text-gray-600">Приезжаем к вам и проводим детальный осмотр автомобиля</p>
-            </div>
-            <div className="bg-white p-6 rounded-xl shadow-sm">
-              <div className="w-14 h-14 bg-gray-900 rounded-full flex items-center justify-center mb-4">
-                <Icon name="FileCheck" size={28} className="text-white" />
-              </div>
-              <div className="text-2xl font-bold text-gray-900 mb-2">3</div>
-              <h3 className="text-lg font-semibold mb-2 text-gray-900">Договор</h3>
-              <p className="text-gray-600">Оформляем договор купли-продажи на месте за 15 минут</p>
-            </div>
-            <div className="bg-white p-6 rounded-xl shadow-sm">
-              <div className="w-14 h-14 bg-gray-900 rounded-full flex items-center justify-center mb-4">
-                <Icon name="Banknote" size={28} className="text-white" />
-              </div>
-              <div className="text-2xl font-bold text-gray-900 mb-2">4</div>
-              <h3 className="text-lg font-semibold mb-2 text-gray-900">Деньги</h3>
-              <p className="text-gray-600">Выплачиваем полную сумму наличными или переводом</p>
-            </div>
-          </div>
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold mb-6 text-gray-900">Как проходит выкуп автомобиля</h2>
+          <p className="text-gray-600 mb-8 max-w-2xl mx-auto">Простой процесс от заявки до получения денег за 4 шага</p>
+          <Link to="/how-it-works">
+            <Button size="lg" variant="outline" className="text-lg px-8 py-6 h-auto">
+              <Icon name="Info" size={24} className="mr-2" />
+              Подробнее о процессе
+            </Button>
+          </Link>
         </div>
       </section>
 
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">Отзывы наших клиентов</h2>
-          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            <div className="bg-gray-50 p-6 rounded-xl">
-              <div className="flex gap-1 mb-3">
-                {[1,2,3,4,5].map(i => (
-                  <Icon key={i} name="Star" size={18} className="text-yellow-400 fill-yellow-400" />
-                ))}
-              </div>
-              <p className="text-gray-700 mb-4">"Продал Камри 2015 года. Приехали быстро, оценили честно, деньги получил сразу. Рекомендую!"</p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
-                  <Icon name="User" size={20} className="text-gray-600" />
-                </div>
-                <div>
-                  <div className="font-semibold text-gray-900">Алексей М.</div>
-                  <div className="text-sm text-gray-500">2 недели назад</div>
-                </div>
-              </div>
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold mb-6 text-gray-900">Что говорят наши клиенты</h2>
+          <div className="flex items-center justify-center gap-3 mb-8">
+            <span className="text-3xl font-bold text-gray-900">4.9</span>
+            <div className="flex gap-1">
+              {[1,2,3,4,5].map(i => (
+                <Icon key={i} name="Star" size={20} className="text-yellow-400 fill-yellow-400" />
+              ))}
             </div>
-            <div className="bg-gray-50 p-6 rounded-xl">
-              <div className="flex gap-1 mb-3">
-                {[1,2,3,4,5].map(i => (
-                  <Icon key={i} name="Star" size={18} className="text-yellow-400 fill-yellow-400" />
-                ))}
-              </div>
-              <p className="text-gray-700 mb-4">"Машина была после ДТП, думала не продам. Здесь выкупили без проблем, помогли с документами."</p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
-                  <Icon name="User" size={20} className="text-gray-600" />
-                </div>
-                <div>
-                  <div className="font-semibold text-gray-900">Марина К.</div>
-                  <div className="text-sm text-gray-500">1 месяц назад</div>
-                </div>
-              </div>
-            </div>
-            <div className="bg-gray-50 p-6 rounded-xl">
-              <div className="flex gap-1 mb-3">
-                {[1,2,3,4,5].map(i => (
-                  <Icon key={i} name="Star" size={18} className="text-yellow-400 fill-yellow-400" />
-                ))}
-              </div>
-              <p className="text-gray-700 mb-4">"Профессиональный подход! Оценили справедливо, оформление заняло 20 минут. Очень доволен."</p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
-                  <Icon name="User" size={20} className="text-gray-600" />
-                </div>
-                <div>
-                  <div className="font-semibold text-gray-900">Дмитрий В.</div>
-                  <div className="text-sm text-gray-500">3 недели назад</div>
-                </div>
-              </div>
-            </div>
+            <span className="text-gray-600">на Яндекс Картах</span>
           </div>
+          <Link to="/reviews">
+            <Button size="lg" variant="outline" className="text-lg px-8 py-6 h-auto">
+              <Icon name="MessageSquare" size={24} className="mr-2" />
+              Читать отзывы
+            </Button>
+          </Link>
         </div>
       </section>
 
