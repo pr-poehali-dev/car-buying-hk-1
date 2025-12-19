@@ -134,18 +134,18 @@ const Evaluation = () => {
       'phone': 'Телефон'
     };
     
-    let totalLeads = 0;
+    let totalLeads = 1;
     try {
       const leadsCountResponse = await fetch('https://functions.poehali.dev/a8f2aee8-9a59-444c-8d70-39de338b39c8');
       if (leadsCountResponse.ok) {
         const leadsData = await leadsCountResponse.json();
-        totalLeads = leadsData.count || 0;
+        totalLeads = (leadsData.count || 0) + 1;
       }
     } catch (error) {
       // Счётчик недоступен, продолжаем без него
     }
     
-    const message = `🚗 Новая заявка на выкуп авто
+    const message = `🚗 Новая заявка на выкуп авто #${totalLeads}
 
 📋 Данные автомобиля:
 • Марка: ${formData.brand}
@@ -161,9 +161,7 @@ const Evaluation = () => {
 
 📞 Контакты:
 • Способ связи: ${contactMap[formData.contactMethod] || formData.contactMethod}
-• Телефон: ${formData.phone}
-
-📊 Всего заявок: ${totalLeads}`;
+• Телефон: ${formData.phone}`;
 
     try {
       const botToken = '7827853509:AAHLZ8JQkdRmucBRQOGh7r1XkJMDw4vxC0w';
