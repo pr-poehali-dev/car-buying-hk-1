@@ -94,119 +94,27 @@ const Evaluation = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    const conditionMap: Record<string, string> = {
-      'excellent': 'Отличное',
-      'good': 'Хорошее',
-      'fair': 'Удовлетворительное',
-      'average': 'Среднее',
-      'poor': 'Плохое',
-      'broken': 'Битое/на запчасти'
-    };
-    
-    const legalMap: Record<string, string> = {
-      'clean': 'Чистое',
-      'issues': 'Есть нюансы',
-      'unclear': 'Не уверен',
-      'pledge': 'Залог',
-      'ban': 'Запрет на рег. действия',
-      'wanted': 'В розыске',
-      'problematic': 'Проблемное'
-    };
-    
-    const locationMap: Record<string, string> = {
-      'khabarovsk': 'Хабаровск',
-      'komsomolsk': 'Комсомольск-на-Амуре',
-      'amursk': 'Амурск',
-      'sovetskaya-gavan': 'Советская Гавань',
-      'bikin': 'Бикин',
-      'vyazemsky': 'Вяземский',
-      'nikolaevsk': 'Николаевск-на-Амуре',
-      'vanino': 'Ванино',
-      'pereyaslavka': 'Переяславка',
-      'khabarovsky-raion': 'Хабаровский район',
-      'komsomolsky-raion': 'Комсомольский район',
-      'other': 'Другой населённый пункт'
-    };
-    
-    const contactMap: Record<string, string> = {
-      'whatsapp': 'WhatsApp',
-      'telegram': 'Telegram',
-      'phone': 'Телефон'
-    };
-    
-    let totalLeads = 1;
     try {
-      const leadsCountResponse = await fetch('https://functions.poehali.dev/a8f2aee8-9a59-444c-8d70-39de338b39c8');
-      if (leadsCountResponse.ok) {
-        const leadsData = await leadsCountResponse.json();
-        totalLeads = (leadsData.count || 0) + 1;
-      }
-    } catch (error) {
-      // Счётчик недоступен, продолжаем без него
-    }
-    
-    const message = `🚗 Новая заявка на выкуп авто #${totalLeads}
-
-📋 Данные автомобиля:
-• Марка: ${formData.brand}
-• Модель: ${formData.model}
-• Год: ${formData.year}
-
-🔧 Состояние:
-• Техническое: ${conditionMap[formData.condition] || formData.condition}
-• Юридическое: ${legalMap[formData.legalStatus] || formData.legalStatus}
-• Описание: ${formData.description || 'Не указано'}
-
-📍 Местоположение: ${locationMap[formData.location] || formData.location}
-
-📞 Контакты:
-• Способ связи: ${contactMap[formData.contactMethod] || formData.contactMethod}
-• Телефон: ${formData.phone}`;
-
-    try {
-      const botToken = '7827853509:AAHLZ8JQkdRmucBRQOGh7r1XkJMDw4vxC0w';
-      const chatId = '6275725133';
-      
-      const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      const response = await fetch('https://functions.poehali.dev/1062293e-b874-498a-85ce-35532bbf2f40', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          chat_id: chatId,
-          text: message
+          brand: formData.brand,
+          model: formData.model,
+          year: formData.year,
+          condition: formData.condition,
+          legalStatus: formData.legalStatus,
+          description: formData.description,
+          location: formData.location,
+          contactMethod: formData.contactMethod,
+          phone: formData.phone,
+          photos: photos
         })
       });
       
       const data = await response.json();
       
-      if (data.ok && photos.length > 0) {
-        for (let i = 0; i < photos.length; i++) {
-          try {
-            const base64Data = photos[i].split(',')[1];
-            const binaryString = atob(base64Data);
-            const bytes = new Uint8Array(binaryString.length);
-            for (let j = 0; j < binaryString.length; j++) {
-              bytes[j] = binaryString.charCodeAt(j);
-            }
-            const blob = new Blob([bytes], { type: 'image/jpeg' });
-            
-            const photoFormData = new FormData();
-            photoFormData.append('chat_id', chatId);
-            photoFormData.append('photo', blob, `photo${i + 1}.jpg`);
-            photoFormData.append('caption', `📷 Фото автомобиля ${i + 1}`);
-            
-            await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
-              method: 'POST',
-              body: photoFormData
-            });
-            
-            await new Promise(resolve => setTimeout(resolve, 500));
-          } catch (photoError) {
-            console.error('Ошибка отправки фото:', photoError);
-          }
-        }
-      }
-      
-      if (data.ok) {
+      if (data.success) {
         // Отправляем цель в Яндекс.Метрику
         if (typeof window !== 'undefined' && (window as any).ym) {
           (window as any).ym(104279599, 'reachGoal', 'evaluation_request');

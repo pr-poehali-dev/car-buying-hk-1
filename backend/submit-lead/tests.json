@@ -5,9 +5,15 @@
       "method": "POST",
       "path": "/",
       "body": {
-        "name": "Иван Петров",
-        "phone": "+7 900 123-45-67",
-        "car_info": "Toyota Camry 2015"
+        "brand": "Toyota",
+        "model": "Camry",
+        "year": "2015",
+        "condition": "good",
+        "legalStatus": "clean",
+        "description": "Хорошее состояние",
+        "location": "khabarovsk",
+        "contactMethod": "phone",
+        "phone": "+7 900 123-45-67"
       },
       "expectedStatus": 200,
       "expectedBody": {
@@ -18,11 +24,17 @@
       "bodyMatcher": "partial"
     },
     {
-      "name": "Отправка без информации об авто",
+      "name": "Отправка без описания",
       "method": "POST",
       "path": "/",
       "body": {
-        "name": "Мария Иванова",
+        "brand": "Honda",
+        "model": "Accord",
+        "year": "2018",
+        "condition": "excellent",
+        "legalStatus": "clean",
+        "location": "komsomolsk",
+        "contactMethod": "telegram",
         "phone": "89001234567"
       },
       "expectedStatus": 200,
@@ -32,11 +44,17 @@
       "bodyMatcher": "partial"
     },
     {
-      "name": "Ошибка валидации - пустое имя",
+      "name": "Ошибка валидации - неверный год",
       "method": "POST",
       "path": "/",
       "body": {
-        "name": "",
+        "brand": "Mazda",
+        "model": "CX-5",
+        "year": "20",
+        "condition": "good",
+        "legalStatus": "clean",
+        "location": "khabarovsk",
+        "contactMethod": "phone",
         "phone": "89001234567"
       },
       "expectedStatus": 500

@@ -1,20 +1,25 @@
 import json
 import os
 import psycopg2
-import urllib.request
-import urllib.parse
+import requests
 import base64
 from typing import Dict, Any, List, Optional
 from pydantic import BaseModel, Field, field_validator
 
 class LeadRequest(BaseModel):
     """Модель для валидации заявки на выкуп авто"""
-    name: str = Field(..., min_length=1, max_length=255)
+    brand: str = Field(..., min_length=1, max_length=255)
+    model: str = Field(..., min_length=1, max_length=255)
+    year: str = Field(..., min_length=4, max_length=4)
+    condition: str = Field(..., min_length=1, max_length=100)
+    legalStatus: str = Field(..., min_length=1, max_length=100)
+    description: str = Field(default='', max_length=5000)
+    location: str = Field(..., min_length=1, max_length=255)
+    contactMethod: str = Field(..., min_length=1, max_length=100)
     phone: str = Field(..., min_length=5, max_length=50)
-    car_info: str = Field(default='', max_length=5000)
     photos: Optional[List[str]] = Field(default=[])
     
-    @field_validator('name', 'phone')
+    @field_validator('brand', 'model', 'phone')
     @classmethod
     def strip_whitespace(cls, v: str) -> str:
         return v.strip()
@@ -63,6 +68,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         conn = psycopg2.connect(db_url)
         cur = conn.cursor()
         
+        car_info = f"{lead.brand} {lead.model} {lead.year}, {lead.condition}, {lead.legalStatus}"
+        
         # Сохраняем заявку
         cur.execute(
             """
@@ -70,7 +77,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             VALUES (%s, %s, %s)
             RETURNING id
             """,
-            (lead.name, lead.phone, lead.car_info)
+            (lead.brand, lead.phone, car_info)
         )
         lead_id = cur.fetchone()[0]
         conn.commit()
@@ -82,79 +89,99 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         cur.close()
         conn.close()
         
+        # Словари для человекочитаемых значений
+        condition_map = {
+            'excellent': 'Отличное',
+            'good': 'Хорошее',
+            'fair': 'Удовлетворительное',
+            'average': 'Среднее',
+            'poor': 'Плохое',
+            'broken': 'Битое/на запчасти'
+        }
+        
+        legal_map = {
+            'clean': 'Чистое',
+            'issues': 'Есть нюансы',
+            'unclear': 'Не уверен',
+            'pledge': 'Залог',
+            'ban': 'Запрет на рег. действия',
+            'wanted': 'В розыске',
+            'problematic': 'Проблемное'
+        }
+        
+        location_map = {
+            'khabarovsk': 'Хабаровск',
+            'komsomolsk': 'Комсомольск-на-Амуре',
+            'amursk': 'Амурск',
+            'sovetskaya-gavan': 'Советская Гавань',
+            'bikin': 'Бикин',
+            'vyazemsky': 'Вяземский',
+            'nikolaevsk': 'Николаевск-на-Амуре',
+            'vanino': 'Ванино',
+            'pereyaslavka': 'Переяславка',
+            'khabarovsky-raion': 'Хабаровский район',
+            'komsomolsky-raion': 'Комсомольский район',
+            'other': 'Другой населённый пункт'
+        }
+        
+        contact_map = {
+            'whatsapp': 'WhatsApp',
+            'telegram': 'Telegram',
+            'phone': 'Телефон'
+        }
+        
         # Отправляем в Telegram
         bot_token = os.environ['TELEGRAM_BOT_TOKEN']
         chat_id = os.environ['TELEGRAM_CHAT_ID']
         
-        message = f"""🚗 Новая заявка на выкуп авто #{lead_id}
+        message = f"""🚗 Новая заявка на выкуп авто #{total_leads}
 
-👤 Имя: {lead.name}
-📞 Телефон: {lead.phone}
-🚙 Информация об авто: {lead.car_info if lead.car_info else 'Не указана'}
+📋 Данные автомобиля:
+• Марка: {lead.brand}
+• Модель: {lead.model}
+• Год: {lead.year}
 
-📊 Всего заявок: {total_leads}"""
+🔧 Состояние:
+• Техническое: {condition_map.get(lead.condition, lead.condition)}
+• Юридическое: {legal_map.get(lead.legalStatus, lead.legalStatus)}
+• Описание: {lead.description if lead.description else 'Не указано'}
+
+📍 Местоположение: {location_map.get(lead.location, lead.location)}
+
+📞 Контакты:
+• Способ связи: {contact_map.get(lead.contactMethod, lead.contactMethod)}
+• Телефон: {lead.phone}"""
         
         telegram_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
-        data = urllib.parse.urlencode({
+        telegram_response = requests.post(telegram_url, json={
             'chat_id': chat_id,
-            'text': message,
-            'parse_mode': 'HTML'
-        }).encode('utf-8')
+            'text': message
+        }, timeout=10)
         
-        req = urllib.request.Request(telegram_url, data=data, method='POST')
-        with urllib.request.urlopen(req) as response:
-            telegram_response = json.loads(response.read().decode('utf-8'))
-        
-        if not telegram_response.get('ok'):
-            raise Exception('Ошибка отправки в Telegram')
+        response_data = telegram_response.json()
+        if not response_data.get('ok'):
+            error_desc = response_data.get('description', 'Unknown error')
+            raise Exception(f'Telegram API error: {error_desc}')
         
         # Отправляем фото если есть
         if lead.photos and len(lead.photos) > 0:
+            photo_url = f"https://api.telegram.org/bot{bot_token}/sendPhoto"
             for i, photo_base64 in enumerate(lead.photos[:5]):
                 try:
-                    # Удаляем data:image/jpeg;base64, префикс
                     if ',' in photo_base64:
                         photo_base64 = photo_base64.split(',')[1]
                     
                     photo_data = base64.b64decode(photo_base64)
                     
-                    # Создаем multipart/form-data вручную
-                    boundary = '----WebKitFormBoundary7MA4YWxkTrZu0gW'
-                    body_parts = []
+                    files = {
+                        'photo': (f'photo{i+1}.jpg', photo_data, 'image/jpeg')
+                    }
+                    data = {
+                        'chat_id': chat_id,
+                        'caption': f'📷 Фото автомобиля {i+1}'
+                    }
                     
-                    body_parts.append(f'--{boundary}'.encode())
-                    body_parts.append(b'Content-Disposition: form-data; name="chat_id"')
-                    body_parts.append(b'')
-                    body_parts.append(chat_id.encode())
-                    
-                    body_parts.append(f'--{boundary}'.encode())
-                    body_parts.append(f'Content-Disposition: form-data; name="photo"; filename="photo{i+1}.jpg"'.encode())
-                    body_parts.append(b'Content-Type: image/jpeg')
-                    body_parts.append(b'')
-                    body_parts.append(photo_data)
-                    
-                    body_parts.append(f'--{boundary}'.encode())
-                    body_parts.append(b'Content-Disposition: form-data; name="caption"')
-                    body_parts.append(b'')
-                    body_parts.append(f'📷 Фото автомобиля {i+1}'.encode('utf-8'))
-                    
-                    body_parts.append(f'--{boundary}--'.encode())
-                    body_parts.append(b'')
-                    
-                    body = b'\r\n'.join(body_parts)
-                    
-                    photo_url = f"https://api.telegram.org/bot{bot_token}/sendPhoto"
-                    photo_req = urllib.request.Request(
-                        photo_url,
-                        data=body,
-                        headers={
-                            'Content-Type': f'multipart/form-data; boundary={boundary}'
-                        },
-                        method='POST'
-                    )
-                    
-                    with urllib.request.urlopen(photo_req, timeout=10) as photo_response:
-                        pass
+                    requests.post(photo_url, data=data, files=files)
                         
                 except Exception as photo_error:
                     print(f'Ошибка отправки фото {i+1}: {photo_error}')
