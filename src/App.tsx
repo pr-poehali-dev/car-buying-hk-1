@@ -8,6 +8,10 @@ import Index from "./pages/Index";
 import Evaluation from "./pages/Evaluation";
 import HowItWorks from "./pages/HowItWorks";
 import Reviews from "./pages/Reviews";
+import Komsomolsk from "./pages/cities/Komsomolsk";
+import Amursk from "./pages/cities/Amursk";
+import DamagedCars from "./pages/articles/DamagedCars";
+import CreditCars from "./pages/articles/CreditCars";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +27,10 @@ const App = () => (
           <Route path="/evaluation" element={<Evaluation />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
           <Route path="/reviews" element={<Reviews />} />
+          <Route path="/komsomolsk" element={<Komsomolsk />} />
+          <Route path="/amursk" element={<Amursk />} />
+          <Route path="/vykup-bityh-avto" element={<DamagedCars />} />
+          <Route path="/vykup-kreditnyh-avto" element={<CreditCars />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
