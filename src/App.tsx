@@ -10,8 +10,11 @@ import HowItWorks from "./pages/HowItWorks";
 import Reviews from "./pages/Reviews";
 import Komsomolsk from "./pages/cities/Komsomolsk";
 import Amursk from "./pages/cities/Amursk";
+import SovetskayaGavan from "./pages/cities/SovetskayaGavan";
+import Bikin from "./pages/cities/Bikin";
 import DamagedCars from "./pages/articles/DamagedCars";
 import CreditCars from "./pages/articles/CreditCars";
+import UrgentBuyout from "./pages/articles/UrgentBuyout";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,8 +32,11 @@ const App = () => (
           <Route path="/reviews" element={<Reviews />} />
           <Route path="/komsomolsk" element={<Komsomolsk />} />
           <Route path="/amursk" element={<Amursk />} />
+          <Route path="/sovetskaya-gavan" element={<SovetskayaGavan />} />
+          <Route path="/bikin" element={<Bikin />} />
           <Route path="/vykup-bityh-avto" element={<DamagedCars />} />
           <Route path="/vykup-kreditnyh-avto" element={<CreditCars />} />
+          <Route path="/srochnyj-vykup-avto" element={<UrgentBuyout />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
