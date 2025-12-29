@@ -7,6 +7,10 @@ import ContentSections from "@/components/index/ContentSections";
 import CallbackForm from "@/components/index/CallbackForm";
 import PopupOffer from "@/components/index/PopupOffer";
 import WhatsAppButton from "@/components/index/WhatsAppButton";
+import ReviewsWidget from "@/components/index/ReviewsWidget";
+import UrgencyTimer from "@/components/index/UrgencyTimer";
+import TrustSignals from "@/components/index/TrustSignals";
+import StickyMobileButton from "@/components/index/StickyMobileButton";
 
 const Index = () => {
   const { toast } = useToast();
@@ -207,6 +211,18 @@ const Index = () => {
         handleCallRequest={handleCallRequest}
       />
       
+      <section className="py-6 bg-white border-b border-gray-200">
+        <div className="container mx-auto px-4">
+          <ReviewsWidget />
+        </div>
+      </section>
+      
+      <section className="py-6 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <UrgencyTimer />
+        </div>
+      </section>
+      
       <ContentSections 
         handleEvaluationClick={handleEvaluationClick}
         handlePhoneClick={handlePhoneClick}
@@ -229,7 +245,14 @@ const Index = () => {
         />
       )}
       
+      <section className="py-12 md:py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <TrustSignals />
+        </div>
+      </section>
+      
       <WhatsAppButton />
+      <StickyMobileButton />
     </div>
   );
 };
