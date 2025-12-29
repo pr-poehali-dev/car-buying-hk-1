@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calculator, TrendingUp } from "lucide-react";
 
@@ -87,17 +86,18 @@ const PriceCalculator = () => {
           
           <div className="space-y-2">
             <Label htmlFor="condition">Состояние</Label>
-            <Select value={condition} onValueChange={setCondition}>
-              <SelectTrigger id="condition">
-                <SelectValue placeholder="Выберите состояние" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="excellent">Отличное</SelectItem>
-                <SelectItem value="good">Хорошее</SelectItem>
-                <SelectItem value="average">Среднее</SelectItem>
-                <SelectItem value="damaged">Битое/После ДТП</SelectItem>
-              </SelectContent>
-            </Select>
+            <select
+              id="condition"
+              value={condition}
+              onChange={(e) => setCondition(e.target.value)}
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            >
+              <option value="">Выберите состояние</option>
+              <option value="excellent">Отличное</option>
+              <option value="good">Хорошее</option>
+              <option value="average">Среднее</option>
+              <option value="damaged">Битое/После ДТП</option>
+            </select>
           </div>
         </div>
 
