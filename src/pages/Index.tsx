@@ -7,7 +7,6 @@ import ContentSections from "@/components/index/ContentSections";
 import CallbackForm from "@/components/index/CallbackForm";
 import PopupOffer from "@/components/index/PopupOffer";
 import WhatsAppButton from "@/components/index/WhatsAppButton";
-import OnlineCounter from "@/components/index/OnlineCounter";
 
 const Index = () => {
   const { toast } = useToast();
@@ -231,7 +230,6 @@ const Index = () => {
       )}
       
       <WhatsAppButton />
-      <OnlineCounter />
     </div>
   );
 };
