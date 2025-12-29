@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
+import PriceCalculator from "@/components/index/PriceCalculator";
 
 interface ContentSectionsProps {
   handleEvaluationClick: () => void;
@@ -163,6 +164,10 @@ const ContentSections = ({ handleEvaluationClick, handlePhoneClick }: ContentSec
 
       <section className="py-12 md:py-20 bg-white">
         <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto mb-12 md:mb-16">
+            <PriceCalculator />
+          </div>
+          
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 md:mb-12 text-gray-900">Частые вопросы</h2>
           <div className="max-w-3xl mx-auto space-y-4 md:space-y-6">
             <details className="bg-gray-50 p-4 md:p-6 rounded-lg">
