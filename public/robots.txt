@@ -19,4 +19,4 @@ User-agent: facebookexternalhit
 Allow: /
 
 # Sitemap
-Sitemap: https://car-buying-hk-1.poehali.app/sitemap.xml
+Sitemap: https://avtovykup.ru/sitemap.xml
