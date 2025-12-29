@@ -9,58 +9,58 @@ interface ContentSectionsProps {
 const ContentSections = ({ handleEvaluationClick, handlePhoneClick }: ContentSectionsProps) => {
   return (
     <>
-      <section className="py-12 md:py-20 bg-gray-50">
+      <section className="py-8 md:py-20 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-3 md:mb-4 text-gray-900">Какие автомобили выкупаем</h2>
-          <p className="text-center text-gray-600 mb-8 md:mb-12 max-w-2xl mx-auto text-sm md:text-base">Выкупаем авто в любом состоянии</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 max-w-3xl mx-auto">
-            <div className="bg-white p-3 md:p-4 rounded-lg border border-gray-200 flex items-start gap-3">
-              <Icon name="CheckCircle2" size={20} className="text-green-600 flex-shrink-0 mt-0.5 md:w-6 md:h-6" />
+          <h2 className="text-3xl md:text-3xl font-bold text-center mb-2 text-gray-900">Какие авто выкупаем</h2>
+          <p className="text-center text-gray-600 mb-6 md:mb-12 max-w-2xl mx-auto text-base md:text-base">В любом состоянии, быстро и дорого</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-4 max-w-3xl mx-auto">
+            <div className="bg-white p-4 md:p-4 rounded-xl border-2 border-gray-200 flex items-start gap-3 shadow-sm">
+              <Icon name="CheckCircle2" size={24} className="text-green-600 flex-shrink-0 mt-0.5 md:w-6 md:h-6" />
               <div>
-                <h3 className="font-semibold text-gray-900 text-sm md:text-base">Отличное</h3>
-                <p className="text-gray-600 text-xs md:text-sm">без повреждений</p>
+                <h3 className="font-bold text-gray-900 text-base md:text-base">Отличное</h3>
+                <p className="text-gray-600 text-sm md:text-sm">без повреждений</p>
               </div>
             </div>
-            <div className="bg-white p-3 md:p-4 rounded-lg border border-gray-200 flex items-start gap-3">
-              <Icon name="CheckCircle2" size={20} className="text-green-600 flex-shrink-0 mt-0.5 md:w-6 md:h-6" />
+            <div className="bg-white p-4 md:p-4 rounded-xl border-2 border-gray-200 flex items-start gap-3 shadow-sm">
+              <Icon name="CheckCircle2" size={24} className="text-green-600 flex-shrink-0 mt-0.5 md:w-6 md:h-6" />
               <div>
-                <h3 className="font-semibold text-gray-900 text-sm md:text-base">Хорошее</h3>
-                <p className="text-gray-600 text-xs md:text-sm">мелкие дефекты</p>
+                <h3 className="font-bold text-gray-900 text-base md:text-base">Хорошее</h3>
+                <p className="text-gray-600 text-sm md:text-sm">мелкие дефекты</p>
               </div>
             </div>
-            <div className="bg-white p-3 md:p-4 rounded-lg border border-gray-200 flex items-start gap-3">
-              <Icon name="CheckCircle2" size={20} className="text-green-600 flex-shrink-0 mt-0.5 md:w-6 md:h-6" />
+            <div className="bg-white p-4 md:p-4 rounded-xl border-2 border-gray-200 flex items-start gap-3 shadow-sm">
+              <Icon name="CheckCircle2" size={24} className="text-green-600 flex-shrink-0 mt-0.5 md:w-6 md:h-6" />
               <div>
-                <h3 className="font-semibold text-gray-900 text-sm md:text-base">Среднее</h3>
-                <p className="text-gray-600 text-xs md:text-sm">требует ремонта</p>
+                <h3 className="font-bold text-gray-900 text-base md:text-base">Среднее</h3>
+                <p className="text-gray-600 text-sm md:text-sm">требует ремонта</p>
               </div>
             </div>
-            <div className="bg-white p-3 md:p-4 rounded-lg border border-gray-200 flex items-start gap-3">
-              <Icon name="Car" size={20} className="text-orange-600 flex-shrink-0 mt-0.5 md:w-6 md:h-6" />
+            <div className="bg-white p-4 md:p-4 rounded-xl border-2 border-gray-200 flex items-start gap-3 shadow-sm">
+              <Icon name="Car" size={24} className="text-orange-600 flex-shrink-0 mt-0.5 md:w-6 md:h-6" />
               <div>
-                <h3 className="font-semibold text-gray-900 text-sm md:text-base">Битое</h3>
-                <p className="text-gray-600 text-xs md:text-sm">после ДТП</p>
+                <h3 className="font-bold text-gray-900 text-base md:text-base">Битое</h3>
+                <p className="text-gray-600 text-sm md:text-sm">после ДТП</p>
               </div>
             </div>
-            <div className="bg-white p-3 md:p-4 rounded-lg border border-gray-200 flex items-start gap-3">
-              <Icon name="Wrench" size={20} className="text-gray-600 flex-shrink-0 mt-0.5 md:w-6 md:h-6" />
+            <div className="bg-white p-4 md:p-4 rounded-xl border-2 border-gray-200 flex items-start gap-3 shadow-sm">
+              <Icon name="Wrench" size={24} className="text-gray-600 flex-shrink-0 mt-0.5 md:w-6 md:h-6" />
               <div>
-                <h3 className="font-semibold text-gray-900 text-sm md:text-base">Не на ходу</h3>
-                <p className="text-gray-600 text-xs md:text-sm">не заводится, требует эвакуации</p>
+                <h3 className="font-bold text-gray-900 text-base md:text-base">Не на ходу</h3>
+                <p className="text-gray-600 text-sm md:text-sm">не заводится, требует эвакуации</p>
               </div>
             </div>
-            <div className="bg-white p-3 md:p-4 rounded-lg border border-gray-200 flex items-start gap-3">
-              <Icon name="CreditCard" size={20} className="text-blue-600 flex-shrink-0 mt-0.5 md:w-6 md:h-6" />
+            <div className="bg-white p-4 md:p-4 rounded-xl border-2 border-gray-200 flex items-start gap-3 shadow-sm">
+              <Icon name="CreditCard" size={24} className="text-blue-600 flex-shrink-0 mt-0.5 md:w-6 md:h-6" />
               <div>
-                <h3 className="font-semibold text-gray-900 text-sm md:text-base">В кредите</h3>
-                <p className="text-gray-600 text-xs md:text-sm">поможем закрыть</p>
+                <h3 className="font-bold text-gray-900 text-base md:text-base">В кредите</h3>
+                <p className="text-gray-600 text-sm md:text-sm">поможем закрыть</p>
               </div>
             </div>
             <div className="bg-white p-3 md:p-4 rounded-lg border border-gray-200 flex items-start gap-3 md:col-span-2 md:max-w-sm md:mx-auto">
-              <Icon name="FileText" size={20} className="text-gray-600 flex-shrink-0 mt-0.5 md:w-6 md:h-6" />
+              <Icon name="FileText" size={24} className="text-gray-600 flex-shrink-0 mt-0.5 md:w-6 md:h-6" />
               <div>
-                <h3 className="font-semibold text-gray-900 text-sm md:text-base">Без документов</h3>
-                <p className="text-gray-600 text-xs md:text-sm">решим вопрос</p>
+                <h3 className="font-bold text-gray-900 text-base md:text-base">Без документов</h3>
+                <p className="text-gray-600 text-sm md:text-sm">решим вопрос</p>
               </div>
             </div>
           </div>
@@ -117,44 +117,44 @@ const ContentSections = ({ handleEvaluationClick, handlePhoneClick }: ContentSec
         </div>
       </section>
 
-      <section className="py-12 md:py-20 bg-gray-50">
+      <section className="py-8 md:py-20 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 md:mb-12 text-gray-900">Наши преимущества</h2>
+          <h2 className="text-3xl md:text-3xl font-bold text-center mb-6 md:mb-12 text-gray-900">Почему мы?</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-4xl mx-auto">
-            <div className="flex gap-3 md:gap-4 items-start p-4 md:p-6 bg-gradient-to-br from-green-50 to-white border-2 border-green-600 rounded-lg relative overflow-hidden">
-              <div className="absolute top-2 right-2 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded">№ 1</div>
-              <Icon name="TrendingUp" size={20} className="text-green-600 flex-shrink-0 mt-1 md:w-6 md:h-6" />
+            <div className="flex gap-4 md:gap-4 items-start p-5 md:p-6 bg-gradient-to-br from-green-50 to-white border-2 border-green-600 rounded-xl relative overflow-hidden shadow-md">
+              <div className="absolute top-2 right-2 bg-green-600 text-white text-sm font-bold px-3 py-1 rounded-lg">№ 1</div>
+              <Icon name="TrendingUp" size={28} className="text-green-600 flex-shrink-0 mt-1 md:w-6 md:h-6" />
               <div>
-                <h3 className="font-bold mb-1 text-gray-900 text-sm md:text-base">Выкупаем дороже</h3>
-                <p className="text-gray-900 font-semibold text-sm md:text-base">На 15% выше конкурентов</p>
+                <h3 className="font-bold mb-1 text-gray-900 text-lg md:text-base">Выкупаем дороже</h3>
+                <p className="text-gray-900 font-semibold text-base md:text-base">На 15% выше конкурентов</p>
               </div>
             </div>
-            <div className="flex gap-3 md:gap-4 items-start p-4 md:p-6 bg-white border border-gray-200 rounded-lg">
-              <Icon name="Clock" size={20} className="text-gray-900 flex-shrink-0 mt-1 md:w-6 md:h-6" />
+            <div className="flex gap-4 md:gap-4 items-start p-5 md:p-6 bg-white border-2 border-gray-200 rounded-xl shadow-sm">
+              <Icon name="Clock" size={28} className="text-gray-900 flex-shrink-0 mt-1 md:w-6 md:h-6" />
               <div>
-                <h3 className="font-semibold mb-1 text-gray-900 text-sm md:text-base">Быстрая сделка</h3>
-                <p className="text-gray-600 text-sm md:text-base">Оформление за 30 минут</p>
+                <h3 className="font-bold mb-1 text-gray-900 text-lg md:text-base">Быстрая сделка</h3>
+                <p className="text-gray-600 text-base md:text-base">Оформление за 30 минут</p>
               </div>
             </div>
-            <div className="flex gap-3 md:gap-4 items-start p-4 md:p-6 bg-white border border-gray-200 rounded-lg">
-              <Icon name="ShieldCheck" size={20} className="text-gray-900 flex-shrink-0 mt-1 md:w-6 md:h-6" />
+            <div className="flex gap-4 md:gap-4 items-start p-5 md:p-6 bg-white border-2 border-gray-200 rounded-xl shadow-sm">
+              <Icon name="ShieldCheck" size={28} className="text-gray-900 flex-shrink-0 mt-1 md:w-6 md:h-6" />
               <div>
-                <h3 className="font-semibold mb-1 text-gray-900 text-sm md:text-base">Честная оценка</h3>
-                <p className="text-gray-600 text-sm md:text-base">Реальная рыночная цена</p>
+                <h3 className="font-bold mb-1 text-gray-900 text-lg md:text-base">Честная оценка</h3>
+                <p className="text-gray-600 text-base md:text-base">Реальная рыночная цена</p>
               </div>
             </div>
-            <div className="flex gap-3 md:gap-4 items-start p-4 md:p-6 bg-white border border-gray-200 rounded-lg">
-              <Icon name="Banknote" size={20} className="text-gray-900 flex-shrink-0 mt-1 md:w-6 md:h-6" />
+            <div className="flex gap-4 md:gap-4 items-start p-5 md:p-6 bg-white border-2 border-gray-200 rounded-xl shadow-sm">
+              <Icon name="Banknote" size={28} className="text-gray-900 flex-shrink-0 mt-1 md:w-6 md:h-6" />
               <div>
-                <h3 className="font-semibold mb-1 text-gray-900 text-sm md:text-base">Оплата наличными</h3>
-                <p className="text-gray-600 text-sm md:text-base">Получите деньги сразу после сделки</p>
+                <h3 className="font-bold mb-1 text-gray-900 text-lg md:text-base">Оплата наличными</h3>
+                <p className="text-gray-600 text-base md:text-base">Деньги сразу после сделки</p>
               </div>
             </div>
-            <div className="flex gap-3 md:gap-4 items-start p-4 md:p-6 bg-white border border-gray-200 rounded-lg md:col-span-2 md:max-w-md md:mx-auto">
-              <Icon name="FileText" size={20} className="text-gray-900 flex-shrink-0 mt-1 md:w-6 md:h-6" />
+            <div className="flex gap-4 md:gap-4 items-start p-5 md:p-6 bg-white border-2 border-gray-200 rounded-xl shadow-sm md:col-span-2 md:max-w-md md:mx-auto">
+              <Icon name="FileText" size={28} className="text-gray-900 flex-shrink-0 mt-1 md:w-6 md:h-6" />
               <div>
-                <h3 className="font-semibold mb-1 text-gray-900 text-sm md:text-base">Все документы</h3>
-                <p className="text-gray-600 text-sm md:text-base">Берём на себя все вопросы с документами</p>
+                <h3 className="font-bold mb-1 text-gray-900 text-lg md:text-base">Все документы</h3>
+                <p className="text-gray-600 text-base md:text-base">Берём на себя все вопросы</p>
               </div>
             </div>
           </div>
@@ -258,33 +258,24 @@ const ContentSections = ({ handleEvaluationClick, handlePhoneClick }: ContentSec
         </div>
       </section>
 
-      <section className="py-12 md:py-20 bg-gray-900 text-white">
+      <section className="py-10 md:py-20 bg-gradient-to-br from-gray-900 to-gray-800 text-white">
         <div className="container mx-auto px-4 text-center">
-          <div className="inline-block bg-green-600 text-white px-4 py-2 rounded-lg font-bold text-sm md:text-base mb-4">
+          <div className="inline-block bg-green-600 text-white px-5 py-3 rounded-xl font-bold text-lg md:text-base mb-4 shadow-lg">
             💰 Предложим на 15% больше рынка
           </div>
-          <h2 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4">Готовы продать авто?</h2>
-          <p className="text-lg md:text-xl mb-6 md:mb-8 text-gray-300">Получите оценку прямо сейчас</p>
+          <h2 className="text-3xl md:text-3xl font-bold mb-3 md:mb-4">Готовы продать авто?</h2>
+          <p className="text-xl md:text-xl mb-6 md:mb-8 text-gray-200">Получите оценку прямо сейчас</p>
           <Button 
             size="lg" 
-            variant="outline" 
             onClick={handleEvaluationClick}
-            className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 text-base md:text-lg px-6 md:px-8 py-4 md:py-6 h-auto w-full sm:w-auto max-w-xs mx-auto touch-manipulation"
+            className="bg-white text-gray-900 hover:bg-gray-100 font-bold text-lg md:text-lg px-8 md:px-8 py-6 md:py-6 h-auto w-full sm:w-auto max-w-sm mx-auto touch-manipulation shadow-xl"
           >
             Оценить авто
           </Button>
         </div>
       </section>
 
-      <a 
-        href="https://wa.me/79841771588" 
-        target="_blank" 
-        rel="noopener noreferrer"
-        className="fixed bottom-4 right-4 md:bottom-6 md:right-6 bg-green-600 hover:bg-green-700 active:bg-green-800 text-white rounded-full w-14 h-14 md:w-16 md:h-16 flex items-center justify-center shadow-lg transition z-50 touch-manipulation"
-        aria-label="WhatsApp"
-      >
-        <Icon name="MessageCircle" size={28} className="md:w-8 md:h-8" />
-      </a>
+
 
       <footer className="bg-white border-t border-gray-200 py-6 md:py-8">
         <div className="container mx-auto px-4">

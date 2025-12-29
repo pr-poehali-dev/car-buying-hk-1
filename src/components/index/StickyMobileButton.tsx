@@ -27,12 +27,12 @@ const StickyMobileButton = () => {
   if (!isVisible) return null;
 
   return (
-    <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t-2 border-green-600 shadow-2xl p-3 animate-slide-up">
+    <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t-4 border-green-600 shadow-2xl p-3 animate-slide-up">
       <button
         onClick={handleClick}
-        className="w-full bg-green-600 hover:bg-green-700 active:bg-green-800 text-white font-bold py-4 rounded-lg flex items-center justify-center gap-2 text-lg transition shadow-lg"
+        className="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 active:from-green-800 active:to-green-700 text-white font-bold py-5 rounded-xl flex items-center justify-center gap-3 text-xl transition shadow-lg"
       >
-        <Icon name="Phone" size={24} className="animate-pulse" />
+        <Icon name="Phone" size={28} className="animate-pulse" />
         Позвонить сейчас
       </button>
     </div>

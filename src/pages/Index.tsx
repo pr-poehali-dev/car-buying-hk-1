@@ -211,13 +211,13 @@ const Index = () => {
         handleCallRequest={handleCallRequest}
       />
       
-      <section className="py-6 bg-white border-b border-gray-200">
+      <section className="py-4 bg-white">
         <div className="container mx-auto px-4">
           <ReviewsWidget />
         </div>
       </section>
       
-      <section className="py-6 bg-gray-50">
+      <section className="py-4 bg-white">
         <div className="container mx-auto px-4">
           <UrgencyTimer />
         </div>

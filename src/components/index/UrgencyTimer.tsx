@@ -36,28 +36,28 @@ const UrgencyTimer = () => {
   }, []);
 
   return (
-    <div className="bg-gradient-to-r from-red-600 to-orange-600 text-white rounded-lg p-4 shadow-lg">
-      <div className="flex items-center gap-3 mb-3">
-        <Icon name="Clock" size={24} className="flex-shrink-0" />
-        <div>
-          <div className="font-bold text-lg">Акция: +20% к цене!</div>
-          <div className="text-sm text-red-100">Успейте продать сегодня дороже</div>
+    <div className="bg-gradient-to-r from-red-600 to-orange-600 text-white rounded-xl p-5 shadow-xl">
+      <div className="text-center mb-4">
+        <div className="flex items-center justify-center gap-2 mb-2">
+          <Icon name="TrendingUp" size={28} className="flex-shrink-0" />
+          <div className="font-bold text-2xl">Акция: +20% к цене!</div>
         </div>
+        <div className="text-base text-red-50">Успейте продать сегодня дороже</div>
       </div>
-      <div className="flex items-center justify-center gap-2 bg-white/20 rounded-lg p-3 backdrop-blur-sm">
+      <div className="flex items-center justify-center gap-3 bg-white/20 rounded-xl p-4 backdrop-blur-sm">
         <div className="text-center">
-          <div className="text-3xl font-bold">{String(timeLeft.hours).padStart(2, '0')}</div>
-          <div className="text-xs">часов</div>
+          <div className="text-4xl font-bold">{String(timeLeft.hours).padStart(2, '0')}</div>
+          <div className="text-sm mt-1">часов</div>
         </div>
-        <div className="text-2xl font-bold">:</div>
+        <div className="text-3xl font-bold">:</div>
         <div className="text-center">
-          <div className="text-3xl font-bold">{String(timeLeft.minutes).padStart(2, '0')}</div>
-          <div className="text-xs">минут</div>
+          <div className="text-4xl font-bold">{String(timeLeft.minutes).padStart(2, '0')}</div>
+          <div className="text-sm mt-1">минут</div>
         </div>
-        <div className="text-2xl font-bold">:</div>
+        <div className="text-3xl font-bold">:</div>
         <div className="text-center">
-          <div className="text-3xl font-bold">{String(timeLeft.seconds).padStart(2, '0')}</div>
-          <div className="text-xs">секунд</div>
+          <div className="text-4xl font-bold">{String(timeLeft.seconds).padStart(2, '0')}</div>
+          <div className="text-sm mt-1">секунд</div>
         </div>
       </div>
     </div>

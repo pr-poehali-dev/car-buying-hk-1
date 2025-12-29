@@ -12,13 +12,10 @@ const WhatsAppButton = () => {
   return (
     <button
       onClick={handleClick}
-      className="fixed bottom-6 right-6 z-50 bg-[#25D366] hover:bg-[#20BA5A] text-white rounded-full p-4 shadow-2xl transition-all duration-300 hover:scale-110 animate-pulse-slow group"
+      className="fixed bottom-20 right-4 z-50 bg-[#25D366] hover:bg-[#20BA5A] active:bg-[#1DA851] text-white rounded-full p-5 shadow-2xl transition-all duration-300 hover:scale-110 animate-pulse-slow"
       aria-label="Написать в WhatsApp"
     >
-      <MessageCircle className="w-7 h-7" />
-      <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-gray-900 text-white px-4 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-        Написать в WhatsApp
-      </span>
+      <MessageCircle className="w-8 h-8" />
     </button>
   );
 };
