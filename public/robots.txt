@@ -19,4 +19,4 @@ User-agent: facebookexternalhit
 Allow: /
 
 # Sitemap
-Sitemap: https://avtovykup.ru/sitemap.xml
+Sitemap: https://avtovykupkhb27.ru/sitemap.xml
