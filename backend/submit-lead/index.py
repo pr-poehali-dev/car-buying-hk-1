@@ -10,7 +10,7 @@ class LeadRequest(BaseModel):
     """Модель для валидации заявки на выкуп авто"""
     brand: str = Field(..., min_length=1, max_length=255)
     model: str = Field(..., min_length=1, max_length=255)
-    year: str = Field(..., min_length=4, max_length=4)
+    year: str = Field(..., min_length=1, max_length=10)
     condition: str = Field(..., min_length=1, max_length=100)
     legalStatus: str = Field(..., min_length=1, max_length=100)
     description: str = Field(default='', max_length=5000)
@@ -19,7 +19,7 @@ class LeadRequest(BaseModel):
     phone: str = Field(..., min_length=5, max_length=50)
     photos: Optional[List[str]] = Field(default=[])
     
-    @field_validator('brand', 'model', 'phone')
+    @field_validator('brand', 'model', 'phone', 'year')
     @classmethod
     def strip_whitespace(cls, v: str) -> str:
         return v.strip()
