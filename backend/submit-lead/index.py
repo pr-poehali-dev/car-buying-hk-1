@@ -134,28 +134,38 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         bot_token = os.environ['TELEGRAM_BOT_TOKEN']
         chat_id = os.environ['TELEGRAM_CHAT_ID']
         
-        message = f"""🚗 Новая заявка на выкуп авто #{total_leads}
+        message = f"""🚗 <b>НОВАЯ ЗАЯВКА #{total_leads}</b>
 
-📋 Данные автомобиля:
-• Марка: {lead.brand}
-• Модель: {lead.model}
-• Год: {lead.year}
+━━━━━━━━━━━━━━━━━━━━
+<b>📋 АВТОМОБИЛЬ</b>
+━━━━━━━━━━━━━━━━━━━━
+🚘 {lead.brand} {lead.model} {lead.year}
 
-🔧 Состояние:
-• Техническое: {condition_map.get(lead.condition, lead.condition)}
-• Юридическое: {legal_map.get(lead.legalStatus, lead.legalStatus)}
-• Описание: {lead.description if lead.description else 'Не указано'}
+━━━━━━━━━━━━━━━━━━━━
+<b>🔧 СОСТОЯНИЕ</b>
+━━━━━━━━━━━━━━━━━━━━
+⚙️ Техническое: <b>{condition_map.get(lead.condition, lead.condition)}</b>
+📝 Юридическое: <b>{legal_map.get(lead.legalStatus, lead.legalStatus)}</b>
+💬 Описание: {lead.description if lead.description else '—'}
 
-📍 Местоположение: {location_map.get(lead.location, lead.location)}
+━━━━━━━━━━━━━━━━━━━━
+<b>📍 МЕСТОПОЛОЖЕНИЕ</b>
+━━━━━━━━━━━━━━━━━━━━
+{location_map.get(lead.location, lead.location)}
 
-📞 Контакты:
-• Способ связи: {contact_map.get(lead.contactMethod, lead.contactMethod)}
-• Телефон: {lead.phone}"""
+━━━━━━━━━━━━━━━━━━━━
+<b>📞 КОНТАКТ</b>
+━━━━━━━━━━━━━━━━━━━━
+✅ Способ: <b>{contact_map.get(lead.contactMethod, lead.contactMethod)}</b>
+📱 Телефон: <code>{lead.phone}</code>
+
+⏰ <i>Время отклика: до 15 минут</i>"""
         
         telegram_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
         telegram_response = requests.post(telegram_url, json={
             'chat_id': chat_id,
-            'text': message
+            'text': message,
+            'parse_mode': 'HTML'
         }, timeout=10)
         
         response_data = telegram_response.json()

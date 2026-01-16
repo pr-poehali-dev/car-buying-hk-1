@@ -31,37 +31,50 @@ const Bikin = () => {
 
   const handleCallbackSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const contactMap: Record<string, string> = {
-      'whatsapp': 'WhatsApp',
-      'telegram': 'Telegram',
-      'phone': 'Телефон'
-    };
 
     try {
-      const botToken = '7827853509:AAHLZ8JQkdRmucBRQOGh7r1XkJMDw4vxC0w';
-      const chatId = '6275725133';
-      
-      const countResponse = await fetch('https://functions.poehali.dev/a8f2aee8-9a59-444c-8d70-39de338b39c8');
-      const countData = await countResponse.json();
-      const totalLeads = countData.count + 1;
-
-      const message = `📞 Заказ обратного звонка (Бикин)\n\n• Телефон: ${callbackPhone}\n• Способ связи: ${contactMap[callbackMethod]}\n\n📊 Всего заявок: ${totalLeads}`;
-
-      const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      const response = await fetch('https://functions.poehali.dev/f5104568-fc2e-4198-82d3-37b4b6c4fe80', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: 'HTML' })
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          phone: callbackPhone,
+          contactMethod: callbackMethod
+        })
       });
 
       const data = await response.json();
-      if (data.ok) {
-        toast({ title: "Заявка принята!", description: "Мы перезвоним вам в ближайшее время" });
+
+      if (data.success) {
+        if (typeof window !== 'undefined' && (window as any).ym) {
+          (window as any).ym(104279599, 'reachGoal', 'callback_request');
+        }
+        
+        if (typeof window !== 'undefined' && (window as any).VK && (window as any).VK.Retargeting) {
+          (window as any).VK.Retargeting.Event('lead');
+        }
+        
+        toast({
+          title: "Заявка принята!",
+          description: "Мы перезвоним вам в ближайшее время",
+        });
         setShowCallbackForm(false);
         setCallbackPhone("");
         setCallbackMethod("phone");
+      } else {
+        toast({
+          title: "Ошибка",
+          description: "Не удалось отправить заявку. Попробуйте позже.",
+          variant: "destructive"
+        });
       }
     } catch (error) {
-      toast({ title: "Ошибка", description: "Не удалось отправить заявку", variant: "destructive" });
+      toast({
+        title: "Ошибка",
+        description: "Не удалось отправить заявку. Попробуйте позже.",
+        variant: "destructive"
+      });
     }
   };
 

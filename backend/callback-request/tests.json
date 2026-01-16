@@ -1,0 +1,25 @@
+{
+  "tests": [
+    {
+      "name": "Test callback request submission",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "phone": "+79841771588",
+        "contactMethod": "whatsapp"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true,
+        "message": "string"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Test OPTIONS for CORS",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200
+    }
+  ]
+}
