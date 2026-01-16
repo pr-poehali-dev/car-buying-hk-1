@@ -161,40 +161,44 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
 
 ⏰ <i>Время отклика: до 15 минут</i>"""
         
-        telegram_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
-        telegram_response = requests.post(telegram_url, json={
-            'chat_id': chat_id,
-            'text': message,
-            'parse_mode': 'HTML'
-        }, timeout=10)
-        
-        response_data = telegram_response.json()
-        if not response_data.get('ok'):
-            error_desc = response_data.get('description', 'Unknown error')
-            raise Exception(f'Telegram API error: {error_desc}')
-        
-        # Отправляем фото если есть
-        if lead.photos and len(lead.photos) > 0:
-            photo_url = f"https://api.telegram.org/bot{bot_token}/sendPhoto"
-            for i, photo_base64 in enumerate(lead.photos[:5]):
-                try:
-                    if ',' in photo_base64:
-                        photo_base64 = photo_base64.split(',')[1]
-                    
-                    photo_data = base64.b64decode(photo_base64)
-                    
-                    files = {
-                        'photo': (f'photo{i+1}.jpg', photo_data, 'image/jpeg')
-                    }
-                    data = {
-                        'chat_id': chat_id,
-                        'caption': f'📷 Фото автомобиля {i+1}'
-                    }
-                    
-                    requests.post(photo_url, data=data, files=files)
-                        
-                except Exception as photo_error:
-                    print(f'Ошибка отправки фото {i+1}: {photo_error}')
+        # Отправляем в Telegram (не критично если не получится)
+        try:
+            telegram_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+            telegram_response = requests.post(telegram_url, json={
+                'chat_id': chat_id,
+                'text': message,
+                'parse_mode': 'HTML'
+            }, timeout=10)
+            
+            response_data = telegram_response.json()
+            if response_data.get('ok'):
+                # Отправляем фото если есть
+                if lead.photos and len(lead.photos) > 0:
+                    photo_url = f"https://api.telegram.org/bot{bot_token}/sendPhoto"
+                    for i, photo_base64 in enumerate(lead.photos[:5]):
+                        try:
+                            if ',' in photo_base64:
+                                photo_base64 = photo_base64.split(',')[1]
+                            
+                            photo_data = base64.b64decode(photo_base64)
+                            
+                            files = {
+                                'photo': (f'photo{i+1}.jpg', photo_data, 'image/jpeg')
+                            }
+                            data = {
+                                'chat_id': chat_id,
+                                'caption': f'📷 Фото автомобиля {i+1}'
+                            }
+                            
+                            requests.post(photo_url, data=data, files=files, timeout=10)
+                                
+                        except Exception as photo_error:
+                            print(f'Ошибка отправки фото {i+1}: {photo_error}')
+            else:
+                error_desc = response_data.get('description', 'Unknown error')
+                print(f'Telegram API warning: {error_desc}')
+        except Exception as telegram_error:
+            print(f'Ошибка отправки в Telegram: {telegram_error}')
         
         return {
             'statusCode': 200,

@@ -100,17 +100,21 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
 
 ⏰ <i>Перезвонить в течение 5 минут!</i>"""
         
-        telegram_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
-        telegram_response = requests.post(telegram_url, json={
-            'chat_id': chat_id,
-            'text': message,
-            'parse_mode': 'HTML'
-        }, timeout=10)
-        
-        response_data = telegram_response.json()
-        if not response_data.get('ok'):
-            error_desc = response_data.get('description', 'Unknown error')
-            raise Exception(f'Telegram API error: {error_desc}')
+        # Отправляем в Telegram (не критично если не получится)
+        try:
+            telegram_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+            telegram_response = requests.post(telegram_url, json={
+                'chat_id': chat_id,
+                'text': message,
+                'parse_mode': 'HTML'
+            }, timeout=10)
+            
+            response_data = telegram_response.json()
+            if not response_data.get('ok'):
+                error_desc = response_data.get('description', 'Unknown error')
+                print(f'Telegram API warning: {error_desc}')
+        except Exception as telegram_error:
+            print(f'Ошибка отправки в Telegram: {telegram_error}')
         
         return {
             'statusCode': 200,
