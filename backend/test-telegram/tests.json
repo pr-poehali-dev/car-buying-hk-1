@@ -1,0 +1,10 @@
+{
+  "tests": [
+    {
+      "name": "Test telegram connection",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200
+    }
+  ]
+}
