@@ -214,7 +214,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'isBase64Encoded': False
         }
         
-    except json.JSONDecodeError:
+    except json.JSONDecodeError as e:
+        print(f'JSON decode error: {str(e)}')
         return {
             'statusCode': 400,
             'headers': {
@@ -225,6 +226,9 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'isBase64Encoded': False
         }
     except Exception as e:
+        print(f'Server error: {str(e)}')
+        import traceback
+        print(f'Traceback: {traceback.format_exc()}')
         return {
             'statusCode': 500,
             'headers': {
