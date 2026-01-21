@@ -17,7 +17,7 @@ const purchasedCars = [
   },
   {
     id: 3,
-    image: "https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=800&auto=format&fit=crop",
+    image: "https://avatars.mds.yandex.net/get-autoru-vos/1698998/7965d60772a1fab63184826508b036cb/1200x900",
     model: "Mazda Demio 2008",
     price: "280 000",
     date: "14 января 2025"
