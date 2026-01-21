@@ -10,7 +10,7 @@ const purchasedCars = [
   },
   {
     id: 2,
-    image: "https://images.unsplash.com/photo-1597404294360-c3c2b5d6853b?w=800&auto=format&fit=crop",
+    image: "https://avatars.mds.yandex.net/get-autoru-vos/2165021/643da49380b15a200850500ef6e8335c/1200x900",
     model: "Nissan Primera 2006",
     price: "320 000",
     date: "16 января 2025"
