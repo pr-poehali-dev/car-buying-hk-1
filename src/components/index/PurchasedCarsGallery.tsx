@@ -24,7 +24,7 @@ const purchasedCars = [
   },
   {
     id: 4,
-    image: "https://images.unsplash.com/photo-1549927681-0b673b8243a6?w=800&auto=format&fit=crop",
+    image: "https://avatars.mds.yandex.net/get-autoru-vos/2160912/4a91afd31522cf92deb477075220226d/1200x900",
     model: "Subaru Forester 2005",
     price: "520 000",
     date: "12 января 2025"
