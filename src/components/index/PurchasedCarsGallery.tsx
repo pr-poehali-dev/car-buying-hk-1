@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 const purchasedCars = [
   {
     id: 1,
-    image: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=800&auto=format&fit=crop",
+    image: "https://avatars.mds.yandex.net/get-autoru-vos/1640662/26275bb4df37874a90de806ebcef4059/1200x900",
     model: "Toyota Mark II 2004",
     price: "450 000",
     date: "18 января 2025"
