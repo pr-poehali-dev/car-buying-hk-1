@@ -38,7 +38,7 @@ const purchasedCars = [
   },
   {
     id: 6,
-    image: "https://images.unsplash.com/photo-1621839673705-6617adf9e890?w=800&auto=format&fit=crop",
+    image: "https://avatars.mds.yandex.net/get-autoru-vos/1904718/3c92d548f2648ac6d8f2231df2acd2d0/1200x900",
     model: "Toyota Corolla 2003",
     price: "380 000",
     date: "8 января 2025"
