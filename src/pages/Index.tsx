@@ -11,6 +11,7 @@ import ReviewsWidget from "@/components/index/ReviewsWidget";
 import UrgencyTimer from "@/components/index/UrgencyTimer";
 import TrustSignals from "@/components/index/TrustSignals";
 import StickyMobileButton from "@/components/index/StickyMobileButton";
+import PurchasedCarsGallery from "@/components/index/PurchasedCarsGallery";
 
 const Index = () => {
   const { toast } = useToast();
@@ -212,6 +213,14 @@ const Index = () => {
         handlePhoneClick={handlePhoneClick}
       />
       
+      <section className="py-12 md:py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <TrustSignals />
+        </div>
+      </section>
+      
+      <PurchasedCarsGallery />
+      
       <CallbackForm 
         showCallbackForm={showCallbackForm}
         setShowCallbackForm={setShowCallbackForm}
@@ -228,12 +237,6 @@ const Index = () => {
           onSubmit={handlePopupSubmit}
         />
       )}
-      
-      <section className="py-12 md:py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <TrustSignals />
-        </div>
-      </section>
       
       <WhatsAppButton />
       <StickyMobileButton />
