@@ -1,4 +1,6 @@
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const purchasedCars = [
   {
@@ -46,6 +48,8 @@ const purchasedCars = [
 ];
 
 export default function PurchasedCarsGallery() {
+  const navigate = useNavigate();
+
   return (
     <section className="py-12 md:py-20 bg-white">
       <div className="container mx-auto px-4">
@@ -56,7 +60,7 @@ export default function PurchasedCarsGallery() {
           Реальные сделки с нашими клиентами
         </p>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mb-8">
           {purchasedCars.map((car) => (
             <Card key={car.id} className="overflow-hidden hover:shadow-lg transition-shadow">
               <div className="aspect-[4/3] overflow-hidden">
@@ -82,6 +86,16 @@ export default function PurchasedCarsGallery() {
               </div>
             </Card>
           ))}
+        </div>
+
+        <div className="text-center">
+          <Button 
+            onClick={() => navigate('/evaluation')}
+            size="lg"
+            className="bg-green-600 hover:bg-green-700 text-white px-8 py-6 text-lg"
+          >
+            Оценить мой автомобиль
+          </Button>
         </div>
       </div>
     </section>
