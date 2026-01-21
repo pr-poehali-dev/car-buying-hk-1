@@ -31,7 +31,7 @@ const purchasedCars = [
   },
   {
     id: 5,
-    image: "https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=800&auto=format&fit=crop",
+    image: "https://s.auto.drom.ru/photo/6Ho0HQj2hQxvmIludCgwfcfm2UJyVbsuewJOqWhoW7IoO5b6TBZo8_Gtnw6SYCKOhBEuBQZ-SmTRsxHWeOoz3BuS8cQfEg.jpg",
     model: "Honda Fit 2007",
     price: "340 000",
     date: "10 января 2025"
