@@ -3,42 +3,42 @@ import { Card } from "@/components/ui/card";
 const purchasedCars = [
   {
     id: 1,
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/2004_Toyota_Mark_II_Grande_iR-V_%28GX110%29_sedan_%282015-11-11%29_01.jpg/1280px-2004_Toyota_Mark_II_Grande_iR-V_%28GX110%29_sedan_%282015-11-11%29_01.jpg",
+    image: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=800&auto=format&fit=crop",
     model: "Toyota Mark II 2004",
     price: "450 000",
     date: "18 января 2025"
   },
   {
     id: 2,
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Nissan_Primera_P12_front_20080102.jpg/1280px-Nissan_Primera_P12_front_20080102.jpg",
+    image: "https://images.unsplash.com/photo-1597404294360-c3c2b5d6853b?w=800&auto=format&fit=crop",
     model: "Nissan Primera 2006",
     price: "320 000",
     date: "16 января 2025"
   },
   {
     id: 3,
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/2007-2010_Mazda_Demio_%28DE%29_hatchback_%282011-01-13%29.jpg/1280px-2007-2010_Mazda_Demio_%28DE%29_hatchback_%282011-01-13%29.jpg",
+    image: "https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=800&auto=format&fit=crop",
     model: "Mazda Demio 2008",
     price: "280 000",
     date: "14 января 2025"
   },
   {
     id: 4,
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/2003-2005_Subaru_Forester_SG5_Cross_Sports_wagon_%282011-11-18%29_01.jpg/1280px-2003-2005_Subaru_Forester_SG5_Cross_Sports_wagon_%282011-11-18%29_01.jpg",
+    image: "https://images.unsplash.com/photo-1549927681-0b673b8243a6?w=800&auto=format&fit=crop",
     model: "Subaru Forester 2005",
     price: "520 000",
     date: "12 января 2025"
   },
   {
     id: 5,
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/2007_Honda_Fit_Sport.jpg/1280px-2007_Honda_Fit_Sport.jpg",
+    image: "https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=800&auto=format&fit=crop",
     model: "Honda Fit 2007",
     price: "340 000",
     date: "10 января 2025"
   },
   {
     id: 6,
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/2003-2004_Toyota_Corolla_%28ZZE122R%29_Ascent_sedan_%282011-04-22%29_01.jpg/1280px-2003-2004_Toyota_Corolla_%28ZZE122R%29_Ascent_sedan_%282011-04-22%29_01.jpg",
+    image: "https://images.unsplash.com/photo-1621839673705-6617adf9e890?w=800&auto=format&fit=crop",
     model: "Toyota Corolla 2003",
     price: "380 000",
     date: "8 января 2025"
