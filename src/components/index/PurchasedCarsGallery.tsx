@@ -3,45 +3,45 @@ import { Card } from "@/components/ui/card";
 const purchasedCars = [
   {
     id: 1,
-    image: "https://images.unsplash.com/photo-1621839673705-6617adf9e890?w=800&auto=format&fit=crop",
-    model: "Toyota Camry 2018",
-    price: "1 250 000",
-    date: "15 января 2025"
+    image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&auto=format&fit=crop&q=60",
+    model: "Toyota Mark II 2004",
+    price: "450 000",
+    date: "18 января 2025"
   },
   {
     id: 2,
-    image: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=800&auto=format&fit=crop",
-    model: "Nissan X-Trail 2019",
-    price: "980 000",
-    date: "12 января 2025"
+    image: "https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800&auto=format&fit=crop&q=60",
+    model: "Nissan Primera 2006",
+    price: "320 000",
+    date: "16 января 2025"
   },
   {
     id: 3,
-    image: "https://images.unsplash.com/photo-1617531653520-bd466ee81f5d?w=800&auto=format&fit=crop",
-    model: "Mazda CX-5 2020",
-    price: "1 450 000",
-    date: "10 января 2025"
+    image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&auto=format&fit=crop&q=60",
+    model: "Mazda Demio 2008",
+    price: "280 000",
+    date: "14 января 2025"
   },
   {
     id: 4,
-    image: "https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=800&auto=format&fit=crop",
-    model: "Honda CR-V 2017",
-    price: "890 000",
-    date: "8 января 2025"
+    image: "https://images.unsplash.com/photo-1494905998402-395d579af36f?w=800&auto=format&fit=crop&q=60",
+    model: "Subaru Forester 2005",
+    price: "520 000",
+    date: "12 января 2025"
   },
   {
     id: 5,
-    image: "https://images.unsplash.com/photo-1616422285623-13ff0162193c?w=800&auto=format&fit=crop",
-    model: "Hyundai Tucson 2019",
-    price: "1 100 000",
-    date: "5 января 2025"
+    image: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&auto=format&fit=crop&q=60",
+    model: "Honda Fit 2007",
+    price: "340 000",
+    date: "10 января 2025"
   },
   {
     id: 6,
-    image: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=800&auto=format&fit=crop",
-    model: "Kia Sportage 2018",
-    price: "950 000",
-    date: "3 января 2025"
+    image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&auto=format&fit=crop&q=60",
+    model: "Toyota Corolla 2003",
+    price: "380 000",
+    date: "8 января 2025"
   }
 ];
 
