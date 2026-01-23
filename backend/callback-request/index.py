@@ -9,6 +9,7 @@ class CallbackRequest(BaseModel):
     """Модель для валидации заявки на обратный звонок"""
     phone: str = Field(..., min_length=5, max_length=50)
     contactMethod: str = Field(..., min_length=1, max_length=100)
+    city: str = Field(default='khabarovsk', max_length=100)
     
     @field_validator('phone')
     @classmethod
@@ -65,7 +66,23 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'phone': 'Телефон'
         }
         
-        car_info = f"Обратный звонок через {contact_map.get(callback.contactMethod, callback.contactMethod)}"
+        location_map = {
+            'khabarovsk': 'Хабаровск',
+            'komsomolsk': 'Комсомольск-на-Амуре',
+            'amursk': 'Амурск',
+            'sovetskaya-gavan': 'Советская Гавань',
+            'bikin': 'Бикин',
+            'vyazemsky': 'Вяземский',
+            'nikolaevsk': 'Николаевск-на-Амуре',
+            'vanino': 'Ванино',
+            'pereyaslavka': 'Переяславка',
+            'khabarovsky-raion': 'Хабаровский район',
+            'komsomolsky-raion': 'Комсомольский район',
+            'other': 'Другой населённый пункт'
+        }
+        
+        city_name = location_map.get(callback.city, callback.city)
+        car_info = f"Обратный звонок через {contact_map.get(callback.contactMethod, callback.contactMethod)} • {city_name}"
         
         # Сохраняем заявку
         cur.execute(
@@ -91,6 +108,11 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         chat_id = os.environ['TELEGRAM_CHAT_ID']
         
         message = f"""📞 <b>ОБРАТНЫЙ ЗВОНОК #{total_leads}</b>
+
+━━━━━━━━━━━━━━━━━━━━
+<b>📍 МЕСТОПОЛОЖЕНИЕ</b>
+━━━━━━━━━━━━━━━━━━━━
+{city_name}
 
 ━━━━━━━━━━━━━━━━━━━━
 <b>📱 КОНТАКТ</b>
