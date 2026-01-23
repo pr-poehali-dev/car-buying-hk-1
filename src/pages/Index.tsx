@@ -23,17 +23,7 @@ const Index = () => {
   const [city, setCity] = useState("Хабаровске");
   const [showPopup, setShowPopup] = useState(false);
 
-  useEffect(() => {
-    const popupTimer = setTimeout(() => {
-      const popupShown = sessionStorage.getItem('popupShown');
-      if (!popupShown) {
-        setShowPopup(true);
-        sessionStorage.setItem('popupShown', 'true');
-      }
-    }, 30000);
 
-    return () => clearTimeout(popupTimer);
-  }, []);
 
   useEffect(() => {
     const detectCity = async () => {
@@ -99,7 +89,7 @@ const Index = () => {
       const timer = setTimeout(() => {
         setShowPopup(true);
         sessionStorage.setItem('popupShown', 'true');
-      }, 30000);
+      }, 5000);
 
       return () => clearTimeout(timer);
     }
