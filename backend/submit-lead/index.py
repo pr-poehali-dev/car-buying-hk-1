@@ -136,26 +136,18 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         
         message = f"""🚗 <b>НОВАЯ ЗАЯВКА #{total_leads}</b>
 
-━━━━━━━━━━━━━━━━━━━━
 <b>📋 АВТОМОБИЛЬ</b>
-━━━━━━━━━━━━━━━━━━━━
 🚘 {lead.brand} {lead.model} {lead.year}
 
-━━━━━━━━━━━━━━━━━━━━
 <b>🔧 СОСТОЯНИЕ</b>
-━━━━━━━━━━━━━━━━━━━━
 ⚙️ Техническое: <b>{condition_map.get(lead.condition, lead.condition)}</b>
 📝 Юридическое: <b>{legal_map.get(lead.legalStatus, lead.legalStatus)}</b>
 💬 Описание: {lead.description if lead.description else '—'}
 
-━━━━━━━━━━━━━━━━━━━━
 <b>📍 МЕСТОПОЛОЖЕНИЕ</b>
-━━━━━━━━━━━━━━━━━━━━
 {location_map.get(lead.location, lead.location)}
 
-━━━━━━━━━━━━━━━━━━━━
 <b>📞 КОНТАКТ</b>
-━━━━━━━━━━━━━━━━━━━━
 ✅ Способ: <b>{contact_map.get(lead.contactMethod, lead.contactMethod)}</b>
 📱 Телефон: <code>{lead.phone}</code>
 

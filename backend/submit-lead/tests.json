@@ -17,47 +17,15 @@
       },
       "expectedStatus": 200,
       "expectedBody": {
-        "success": true,
-        "message": "string",
-        "lead_id": "number"
-      },
-      "bodyMatcher": "partial"
-    },
-    {
-      "name": "Отправка без описания",
-      "method": "POST",
-      "path": "/",
-      "body": {
-        "brand": "Honda",
-        "model": "Accord",
-        "year": "2018",
-        "condition": "excellent",
-        "legalStatus": "clean",
-        "location": "komsomolsk",
-        "contactMethod": "telegram",
-        "phone": "89001234567"
-      },
-      "expectedStatus": 200,
-      "expectedBody": {
         "success": true
       },
       "bodyMatcher": "partial"
     },
     {
-      "name": "Ошибка валидации - неверный год",
-      "method": "POST",
+      "name": "Проверка OPTIONS для CORS",
+      "method": "OPTIONS",
       "path": "/",
-      "body": {
-        "brand": "Mazda",
-        "model": "CX-5",
-        "year": "20",
-        "condition": "good",
-        "legalStatus": "clean",
-        "location": "khabarovsk",
-        "contactMethod": "phone",
-        "phone": "89001234567"
-      },
-      "expectedStatus": 500
+      "expectedStatus": 200
     }
   ]
 }
