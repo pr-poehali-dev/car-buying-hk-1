@@ -147,12 +147,12 @@ const Index = () => {
     }
   };
 
-  const handleQuickCallback = async (phone: string) => {
+  const handleQuickCallback = async (phone: string, selectedCity: string) => {
     try {
       const response = await fetch('https://functions.poehali.dev/f5104568-fc2e-4198-82d3-37b4b6c4fe80', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone, contactMethod: 'phone' })
+        body: JSON.stringify({ phone, contactMethod: 'phone', city: selectedCity })
       });
 
       const data = await response.json();
