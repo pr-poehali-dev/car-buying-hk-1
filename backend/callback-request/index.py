@@ -114,7 +114,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
 
 <b>📱 КОНТАКТ</b>
 ✅ Способ связи: <b>{contact_map.get(callback.contactMethod, callback.contactMethod)}</b>
-📱 Телефон: <code>{callback.phone}</code>
+📱 Телефон: <a href="tel:{callback.phone}">{callback.phone}</a>
 
 ⏰ <i>Перезвонить в течение 5 минут!</i>"""
         

@@ -149,7 +149,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
 
 <b>📞 КОНТАКТ</b>
 ✅ Способ: <b>{contact_map.get(lead.contactMethod, lead.contactMethod)}</b>
-📱 Телефон: <code>{lead.phone}</code>
+📱 Телефон: <a href="tel:{lead.phone}">{lead.phone}</a>
 
 ⏰ <i>Время отклика: до 15 минут</i>"""
         
