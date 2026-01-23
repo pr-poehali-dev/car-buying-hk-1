@@ -225,6 +225,7 @@ const Index = () => {
         <PopupOffer
           onClose={handlePopupClose}
           onSubmit={handlePopupSubmit}
+          city={city}
         />
       )}
       

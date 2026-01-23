@@ -5,27 +5,16 @@ import Icon from "@/components/ui/icon";
 interface PopupOfferProps {
   onClose: () => void;
   onSubmit: () => void;
+  city: string;
 }
 
-const PopupOffer = ({ onClose, onSubmit }: PopupOfferProps) => {
-  const [timeLeft, setTimeLeft] = useState(900);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  const minutes = Math.floor(timeLeft / 60);
-  const seconds = timeLeft % 60;
+const PopupOffer = ({ onClose, onSubmit, city }: PopupOfferProps) => {
+  const handlePhoneClick = () => {
+    if (typeof window !== 'undefined' && (window as any).ym) {
+      (window as any).ym(104279599, 'reachGoal', 'popup_phone_click');
+    }
+    window.location.href = 'tel:+79841771588';
+  };
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
@@ -40,24 +29,29 @@ const PopupOffer = ({ onClose, onSubmit }: PopupOfferProps) => {
 
         <div className="p-6 md:p-8">
           <div className="text-center mb-6">
-            <div className="inline-block bg-red-600 text-white px-5 py-2 rounded-full font-bold text-sm mb-4 shadow-lg animate-pulse">
-              🔥 АКЦИЯ ТОЛЬКО СЕГОДНЯ
+            <div className="inline-flex items-center justify-center gap-2 bg-green-600 text-white px-5 py-2 rounded-full font-bold text-sm mb-4 shadow-lg">
+              <Icon name="Phone" size={18} />
+              ОБРАТНЫЙ ЗВОНОК
             </div>
             
-            <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-              +5 000 ₽ к оценке
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+              Перезвоним через 2 минуты
             </h3>
             
             <p className="text-gray-600 text-base mb-4">
-              При выкупе авто в течение 3 часов после оценки
+              Работаем в {city}
             </p>
 
-            <div className="bg-gray-900 text-white rounded-xl p-4 mb-5">
-              <div className="text-sm text-gray-400 mb-1">Предложение действует:</div>
-              <div className="text-4xl font-bold tabular-nums">
-                {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
+            <a
+              href="tel:+79841771588"
+              onClick={handlePhoneClick}
+              className="block bg-gray-900 text-white rounded-xl p-5 mb-5 hover:bg-gray-800 transition-colors"
+            >
+              <div className="text-sm text-gray-400 mb-1">Позвоните сейчас:</div>
+              <div className="text-3xl md:text-4xl font-bold">
+                +7 (984) 177-15-88
               </div>
-            </div>
+            </a>
 
             <div className="space-y-3 mb-6 text-left">
               <div className="flex items-center gap-3">
@@ -75,17 +69,19 @@ const PopupOffer = ({ onClose, onSubmit }: PopupOfferProps) => {
             </div>
           </div>
 
-          <Button
-            onClick={onSubmit}
-            size="lg"
-            className="w-full bg-green-600 hover:bg-green-700 text-white text-lg font-bold py-6 rounded-xl shadow-lg hover:shadow-xl transition-all"
-          >
-            Оставить заявку
-          </Button>
+          <div className="space-y-3">
+            <Button
+              onClick={onSubmit}
+              size="lg"
+              className="w-full bg-green-600 hover:bg-green-700 text-white text-lg font-bold py-6 rounded-xl shadow-lg hover:shadow-xl transition-all"
+            >
+              Заказать обратный звонок
+            </Button>
 
-          <p className="text-xs text-gray-500 text-center mt-3">
-            Нажимая кнопку, вы получите обратный звонок в течение 2 минут
-          </p>
+            <p className="text-xs text-gray-500 text-center">
+              Или позвоните нам прямо сейчас по номеру выше
+            </p>
+          </div>
         </div>
       </div>
     </div>
