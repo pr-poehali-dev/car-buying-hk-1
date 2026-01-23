@@ -5,7 +5,6 @@ import Header from "@/components/index/Header";
 import HeroSection from "@/components/index/HeroSection";
 import ContentSections from "@/components/index/ContentSections";
 import CallbackForm from "@/components/index/CallbackForm";
-import PopupOffer from "@/components/index/PopupOffer";
 import WhatsAppButton from "@/components/index/WhatsAppButton";
 import ReviewsWidget from "@/components/index/ReviewsWidget";
 import UrgencyTimer from "@/components/index/UrgencyTimer";
@@ -21,7 +20,7 @@ const Index = () => {
   const [callbackMethod, setCallbackMethod] = useState("phone");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [city, setCity] = useState("Хабаровске");
-  const [showPopup, setShowPopup] = useState(false);
+
 
 
 
@@ -82,18 +81,7 @@ const Index = () => {
     detectCity();
   }, []);
 
-  useEffect(() => {
-    const popupShown = sessionStorage.getItem('popupShown');
-    
-    if (!popupShown) {
-      const timer = setTimeout(() => {
-        setShowPopup(true);
-        sessionStorage.setItem('popupShown', 'true');
-      }, 5000);
 
-      return () => clearTimeout(timer);
-    }
-  }, []);
 
   const handleCallRequest = () => {
     setShowCallbackForm(true);
@@ -159,16 +147,42 @@ const Index = () => {
     }
   };
 
-  const handlePopupClose = () => {
-    setShowPopup(false);
-  };
+  const handleQuickCallback = async (phone: string) => {
+    try {
+      const response = await fetch('https://functions.poehali.dev/f5104568-fc2e-4198-82d3-37b4b6c4fe80', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone, contactMethod: 'phone' })
+      });
 
-  const handlePopupSubmit = () => {
-    setShowPopup(false);
-    handleCallRequest();
-    
-    if (typeof window !== 'undefined' && (window as any).ym) {
-      (window as any).ym(104279599, 'reachGoal', 'popup_conversion');
+      const data = await response.json();
+
+      if (data.success) {
+        if (typeof window !== 'undefined' && (window as any).ym) {
+          (window as any).ym(104279599, 'reachGoal', 'quick_callback');
+        }
+        
+        if (typeof window !== 'undefined' && (window as any).VK && (window as any).VK.Retargeting) {
+          (window as any).VK.Retargeting.Event('lead');
+        }
+        
+        toast({
+          title: "Заявка принята!",
+          description: "Мы перезвоним вам через 2 минуты",
+        });
+      } else {
+        toast({
+          title: "Ошибка",
+          description: "Не удалось отправить заявку. Попробуйте позже.",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Ошибка",
+        description: "Не удалось отправить заявку. Попробуйте позже.",
+        variant: "destructive"
+      });
     }
   };
 
@@ -194,7 +208,7 @@ const Index = () => {
       
       <section className="py-4 bg-white">
         <div className="container mx-auto px-4">
-          <UrgencyTimer />
+          <UrgencyTimer city={city} onSubmit={handleQuickCallback} />
         </div>
       </section>
       
@@ -221,13 +235,7 @@ const Index = () => {
         handleCallbackSubmit={handleCallbackSubmit}
       />
       
-      {showPopup && (
-        <PopupOffer
-          onClose={handlePopupClose}
-          onSubmit={handlePopupSubmit}
-          city={city}
-        />
-      )}
+
       
       <WhatsAppButton />
       <StickyMobileButton />
