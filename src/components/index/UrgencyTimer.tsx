@@ -26,7 +26,7 @@ const UrgencyTimer = ({ city, onSubmit }: UrgencyTimerProps) => {
           <Icon name="Phone" size={28} className="flex-shrink-0" />
           <div className="font-bold text-2xl md:text-3xl">Заказать обратный звонок</div>
         </div>
-        <div className="text-base text-green-50">Перезвоним через 2 минуты • Работаем в {city}</div>
+        <div className="text-base text-green-50">Перезвоним через 2 минуты • Работаем в {city} и крае</div>
       </div>
       
       <form onSubmit={handleSubmit} className="max-w-md mx-auto">
