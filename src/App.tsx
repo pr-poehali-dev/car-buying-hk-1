@@ -16,6 +16,7 @@ import DamagedCars from "./pages/articles/DamagedCars";
 import CreditCars from "./pages/articles/CreditCars";
 import UrgentBuyout from "./pages/articles/UrgentBuyout";
 import SeoSettings from "./pages/SeoSettings";
+import ThankYou from "./pages/ThankYou";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -39,6 +40,7 @@ const App = () => (
           <Route path="/vykup-kreditnyh-avto" element={<CreditCars />} />
           <Route path="/srochnyj-vykup-avto" element={<UrgentBuyout />} />
           <Route path="/seo-settings" element={<SeoSettings />} />
+          <Route path="/spasibo" element={<ThankYou />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

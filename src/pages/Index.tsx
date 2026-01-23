@@ -114,13 +114,7 @@ const Index = () => {
           (window as any).VK.Retargeting.Event('lead');
         }
         
-        toast({
-          title: "Спасибо за обращение!",
-          description: "С вами свяжется специалист в течение 15 минут",
-        });
-        setShowCallbackForm(false);
-        setCallbackPhone("");
-        setCallbackMethod("phone");
+        navigate('/spasibo');
       } else {
         toast({
           title: "Ошибка",
@@ -166,10 +160,7 @@ const Index = () => {
           (window as any).VK.Retargeting.Event('lead');
         }
         
-        toast({
-          title: "Спасибо за обращение!",
-          description: "С вами свяжется специалист в течение 15 минут",
-        });
+        navigate('/spasibo');
       } else {
         toast({
           title: "Ошибка",

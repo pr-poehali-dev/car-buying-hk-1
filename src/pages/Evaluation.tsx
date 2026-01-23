@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import Icon from "@/components/ui/icon";
 import EvaluationHeader from "@/components/evaluation/EvaluationHeader";
@@ -6,6 +7,7 @@ import EvaluationProgress from "@/components/evaluation/EvaluationProgress";
 import EvaluationSteps from "@/components/evaluation/EvaluationSteps";
 
 const Evaluation = () => {
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [photos, setPhotos] = useState<string[]>([]);
@@ -125,23 +127,7 @@ const Evaluation = () => {
           (window as any).VK.Retargeting.Event('lead');
         }
         
-        toast({
-          title: "Спасибо за обращение!",
-          description: "С вами свяжется специалист в течение 15 минут",
-        });
-        setFormData({
-          brand: "",
-          model: "",
-          year: "",
-          condition: "",
-          legalStatus: "",
-          description: "",
-          location: "",
-          contactMethod: "",
-          phone: ""
-        });
-        setPhotos([]);
-        setCurrentStep(1);
+        navigate('/spasibo');
       } else {
         toast({
           title: "Ошибка",
