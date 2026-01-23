@@ -115,8 +115,8 @@ const Index = () => {
         }
         
         toast({
-          title: "Заявка принята!",
-          description: "Мы перезвоним вам в ближайшее время",
+          title: "Спасибо за обращение!",
+          description: "С вами свяжется специалист в течение 15 минут",
         });
         setShowCallbackForm(false);
         setCallbackPhone("");
@@ -167,8 +167,8 @@ const Index = () => {
         }
         
         toast({
-          title: "Заявка принята!",
-          description: "Мы перезвоним вам через 2 минуты",
+          title: "Спасибо за обращение!",
+          description: "С вами свяжется специалист в течение 15 минут",
         });
       } else {
         toast({
