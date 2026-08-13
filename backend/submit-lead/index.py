@@ -132,7 +132,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         
         # Отправляем уведомление в WhatsApp
         green_api_instance = os.environ.get('GREEN_API_INSTANCE_ID')
-        green_api_token = os.environ.get('GREEN_API_TOKEN')
+        green_api_token = os.environ.get('GREEN_API_TOKEN_V2')
         green_api_phone = os.environ.get('GREEN_API_NOTIFY_PHONE')
         
         whatsapp_message = f"""🚗 НОВАЯ ЗАЯВКА #{total_leads}
