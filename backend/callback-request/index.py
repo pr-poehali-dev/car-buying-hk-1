@@ -160,11 +160,12 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         else:
             telegram_error_text = 'TELEGRAM_BOT_TOKEN или TELEGRAM_CHAT_ID не настроены'
         
-        # WhatsApp через Green API с повторными попытками
+        # WhatsApp через Green API с повторными попытками (ВРЕМЕННО ПРИОСТАНОВЛЕНО по просьбе клиента, код сохранён для быстрого включения обратно)
         whatsapp_sent = False
         whatsapp_error_text = None
+        whatsapp_enabled = False
         
-        if green_api_instance and green_api_token and green_api_phone:
+        if whatsapp_enabled and green_api_instance and green_api_token and green_api_phone:
             whatsapp_url = f"https://7107.api.greenapi.com/waInstance{green_api_instance}/sendMessage/{green_api_token}"
             for attempt in range(2):
                 try:
