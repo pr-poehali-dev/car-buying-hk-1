@@ -24,10 +24,12 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     try:
         bot_token = os.environ.get('TELEGRAM_BOT_TOKEN', 'NOT_SET')
         chat_id = os.environ.get('TELEGRAM_CHAT_ID', 'NOT_SET')
+        proxy_url = os.environ.get('PROXY_URL')
+        proxies = {'http': proxy_url, 'https': proxy_url} if proxy_url else None
         
         # Проверяем getMe (информация о боте)
         me_url = f"https://api.telegram.org/bot{bot_token}/getMe"
-        me_response = requests.get(me_url, timeout=10)
+        me_response = requests.get(me_url, timeout=15, proxies=proxies)
         me_data = me_response.json()
         
         # Пробуем отправить тестовое сообщение
@@ -44,7 +46,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'chat_id': chat_id,
             'text': test_message,
             'parse_mode': 'HTML'
-        }, timeout=10)
+        }, timeout=15, proxies=proxies)
         
         send_data = send_response.json()
         
@@ -52,7 +54,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'bot_info': me_data,
             'send_result': send_data,
             'chat_id_used': chat_id,
-            'bot_token_prefix': bot_token[:20] + '...' if len(bot_token) > 20 else 'INVALID'
+            'bot_token_prefix': bot_token[:20] + '...' if len(bot_token) > 20 else 'INVALID',
+            'proxy_used': bool(proxy_url)
         }
         
         return {

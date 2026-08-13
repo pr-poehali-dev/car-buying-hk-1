@@ -108,6 +108,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         chat_id = os.environ['TELEGRAM_CHAT_ID']
         max_bot_token = os.environ.get('MAX_BOT_TOKEN')
         max_chat_id = os.environ.get('MAX_CHAT_ID')
+        proxy_url = os.environ.get('PROXY_URL')
+        proxies = {'http': proxy_url, 'https': proxy_url} if proxy_url else None
         
         message = f"""📞 <b>ОБРАТНЫЙ ЗВОНОК #{total_leads}</b>
 
@@ -141,7 +143,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'chat_id': chat_id,
                     'text': message,
                     'parse_mode': 'HTML'
-                }, timeout=4)
+                }, timeout=8, proxies=proxies)
                 
                 response_data = telegram_response.json()
                 if response_data.get('ok'):
