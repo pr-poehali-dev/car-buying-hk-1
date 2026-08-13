@@ -325,10 +325,11 @@ const EvaluationSteps = ({
             <div className="space-y-4">
               <div>
                 <Label className="text-sm md:text-base mb-3 block">Предпочитаемый способ связи</Label>
-                <div className="grid grid-cols-3 gap-2 md:gap-3">
+                <div className="grid grid-cols-2 gap-2 md:gap-3">
                   {[
                     { value: 'whatsapp', label: 'WhatsApp', icon: 'MessageCircle' },
                     { value: 'telegram', label: 'Telegram', icon: 'Send' },
+                    { value: 'max', label: 'MAX', icon: 'MessageSquare' },
                     { value: 'phone', label: 'Звонок', icon: 'Phone' }
                   ].map((option) => (
                     <button

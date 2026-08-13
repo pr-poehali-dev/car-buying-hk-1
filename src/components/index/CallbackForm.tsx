@@ -86,6 +86,17 @@ const CallbackForm = ({
                   />
                   <span className="text-gray-900 text-sm md:text-base">Telegram</span>
                 </label>
+                <label className="flex items-center gap-3 cursor-pointer touch-manipulation p-2 -ml-2 rounded hover:bg-gray-50">
+                  <input
+                    type="radio"
+                    name="callback-method"
+                    value="max"
+                    checked={callbackMethod === "max"}
+                    onChange={(e) => setCallbackMethod(e.target.value)}
+                    className="w-5 h-5"
+                  />
+                  <span className="text-gray-900 text-sm md:text-base">MAX</span>
+                </label>
               </div>
             </div>
             <Button type="submit" className="w-full bg-gray-900 hover:bg-gray-800 h-12 md:h-auto text-base md:text-lg touch-manipulation">

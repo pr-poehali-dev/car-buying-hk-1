@@ -127,6 +127,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         contact_map = {
             'whatsapp': 'WhatsApp',
             'telegram': 'Telegram',
+            'max': 'MAX',
             'phone': 'Телефон'
         }
         
