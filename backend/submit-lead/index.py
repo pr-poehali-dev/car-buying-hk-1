@@ -137,6 +137,9 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         max_chat_id = os.environ.get('MAX_CHAT_ID')
         proxy_url = os.environ.get('PROXY_URL')
         proxies = {'http': proxy_url, 'https': proxy_url} if proxy_url else None
+        green_api_instance = os.environ.get('GREEN_API_INSTANCE_ID')
+        green_api_token = os.environ.get('GREEN_API_TOKEN')
+        green_api_phone = os.environ.get('GREEN_API_NOTIFY_PHONE')
         
         message = f"""🚗 <b>НОВАЯ ЗАЯВКА #{total_leads}</b>
 
@@ -245,13 +248,38 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         else:
             max_error_text = 'MAX_BOT_TOKEN или MAX_CHAT_ID не настроены'
         
+        # WhatsApp через Green API с повторными попытками
+        whatsapp_sent = False
+        whatsapp_error_text = None
+        
+        if green_api_instance and green_api_token and green_api_phone:
+            whatsapp_url = f"https://api.green-api.com/waInstance{green_api_instance}/sendMessage/{green_api_token}"
+            for attempt in range(2):
+                try:
+                    whatsapp_response = requests.post(whatsapp_url, json={
+                        'chatId': f'{green_api_phone}@c.us',
+                        'message': max_message
+                    }, timeout=8)
+                    
+                    if whatsapp_response.status_code == 200:
+                        whatsapp_sent = True
+                        break
+                    else:
+                        whatsapp_error_text = whatsapp_response.text[:500]
+                        print(f'Green API warning (попытка {attempt+1}): {whatsapp_error_text}')
+                except Exception as whatsapp_error:
+                    whatsapp_error_text = str(whatsapp_error)
+                    print(f'Ошибка отправки в WhatsApp (попытка {attempt+1}): {whatsapp_error_text}')
+        else:
+            whatsapp_error_text = 'GREEN_API_INSTANCE_ID, GREEN_API_TOKEN или GREEN_API_NOTIFY_PHONE не настроены'
+        
         # Сохраняем статус отправки в БД, чтобы заявка не потерялась
         try:
             conn = psycopg2.connect(db_url)
             cur = conn.cursor()
             cur.execute(
-                "UPDATE t_p43245144_car_buying_hk_1.leads SET telegram_sent = %s, telegram_error = %s, max_sent = %s, max_error = %s WHERE id = %s",
-                (telegram_sent, telegram_error_text, max_sent, max_error_text, lead_id)
+                "UPDATE t_p43245144_car_buying_hk_1.leads SET telegram_sent = %s, telegram_error = %s, max_sent = %s, max_error = %s, whatsapp_sent = %s, whatsapp_error = %s WHERE id = %s",
+                (telegram_sent, telegram_error_text, max_sent, max_error_text, whatsapp_sent, whatsapp_error_text, lead_id)
             )
             conn.commit()
             cur.close()

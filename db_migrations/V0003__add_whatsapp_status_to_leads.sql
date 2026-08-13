@@ -1,0 +1,3 @@
+ALTER TABLE t_p43245144_car_buying_hk_1.leads 
+ADD COLUMN IF NOT EXISTS whatsapp_sent BOOLEAN DEFAULT FALSE,
+ADD COLUMN IF NOT EXISTS whatsapp_error TEXT;
