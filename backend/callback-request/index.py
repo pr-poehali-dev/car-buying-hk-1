@@ -103,9 +103,11 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         cur.close()
         conn.close()
         
-        # Отправляем в Telegram
+        # Отправляем уведомления в Telegram и MAX
         bot_token = os.environ['TELEGRAM_BOT_TOKEN']
         chat_id = os.environ['TELEGRAM_CHAT_ID']
+        max_bot_token = os.environ.get('MAX_BOT_TOKEN')
+        max_chat_id = os.environ.get('MAX_CHAT_ID')
         
         message = f"""📞 <b>ОБРАТНЫЙ ЗВОНОК #{total_leads}</b>
 
@@ -118,21 +120,77 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
 
 ⏰ <i>Перезвонить в течение 5 минут!</i>"""
         
-        # Отправляем в Telegram (не критично если не получится)
+        max_message = f"""📞 ОБРАТНЫЙ ЗВОНОК #{total_leads}
+
+МЕСТОПОЛОЖЕНИЕ: {city_name}
+
+КОНТАКТ:
+Способ связи: {contact_map.get(callback.contactMethod, callback.contactMethod)}
+Телефон: {callback.phone}
+
+Перезвонить в течение 5 минут!"""
+        
+        # Telegram с повторными попытками
+        telegram_sent = False
+        telegram_error_text = None
+        telegram_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+        
+        for attempt in range(2):
+            try:
+                telegram_response = requests.post(telegram_url, json={
+                    'chat_id': chat_id,
+                    'text': message,
+                    'parse_mode': 'HTML'
+                }, timeout=4)
+                
+                response_data = telegram_response.json()
+                if response_data.get('ok'):
+                    telegram_sent = True
+                    break
+                else:
+                    telegram_error_text = response_data.get('description', 'Unknown error')
+                    print(f'Telegram API warning (попытка {attempt+1}): {telegram_error_text}')
+            except Exception as telegram_error:
+                telegram_error_text = str(telegram_error)
+                print(f'Ошибка отправки в Telegram (попытка {attempt+1}): {telegram_error_text}')
+        
+        # MAX с повторными попытками
+        max_sent = False
+        max_error_text = None
+        
+        if max_bot_token and max_chat_id:
+            max_url = f"https://botapi.max.ru/messages?access_token={max_bot_token}&chat_id={max_chat_id}"
+            for attempt in range(2):
+                try:
+                    max_response = requests.post(max_url, json={
+                        'text': max_message
+                    }, timeout=4)
+                    
+                    if max_response.status_code == 200:
+                        max_sent = True
+                        break
+                    else:
+                        max_error_text = max_response.text[:500]
+                        print(f'MAX API warning (попытка {attempt+1}): {max_error_text}')
+                except Exception as max_error:
+                    max_error_text = str(max_error)
+                    print(f'Ошибка отправки в MAX (попытка {attempt+1}): {max_error_text}')
+        else:
+            max_error_text = 'MAX_BOT_TOKEN или MAX_CHAT_ID не настроены'
+        
+        # Сохраняем статус отправки в БД, чтобы заявка не потерялась
         try:
-            telegram_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
-            telegram_response = requests.post(telegram_url, json={
-                'chat_id': chat_id,
-                'text': message,
-                'parse_mode': 'HTML'
-            }, timeout=10)
-            
-            response_data = telegram_response.json()
-            if not response_data.get('ok'):
-                error_desc = response_data.get('description', 'Unknown error')
-                print(f'Telegram API warning: {error_desc}')
-        except Exception as telegram_error:
-            print(f'Ошибка отправки в Telegram: {telegram_error}')
+            conn = psycopg2.connect(db_url)
+            cur = conn.cursor()
+            cur.execute(
+                "UPDATE t_p43245144_car_buying_hk_1.leads SET telegram_sent = %s, telegram_error = %s, max_sent = %s, max_error = %s WHERE id = %s",
+                (telegram_sent, telegram_error_text, max_sent, max_error_text, lead_id)
+            )
+            conn.commit()
+            cur.close()
+            conn.close()
+        except Exception as db_error:
+            print(f'Ошибка обновления статуса уведомлений: {db_error}')
         
         return {
             'statusCode': 200,
