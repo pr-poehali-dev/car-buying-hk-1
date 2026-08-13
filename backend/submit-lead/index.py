@@ -26,7 +26,7 @@ class LeadRequest(BaseModel):
 
 def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     """
-    Принимает заявку на выкуп авто, сохраняет в базу данных и отправляет уведомление в WhatsApp
+    Принимает заявку на выкуп авто, сохраняет в базу данных и отправляет уведомление в Telegram и WhatsApp
     Args: event - dict с httpMethod, body, headers
           context - объект с request_id, function_name
     Returns: HTTP response dict
@@ -130,10 +130,33 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'phone': 'Телефон'
         }
         
-        # Отправляем уведомление в WhatsApp
+        # Отправляем уведомления в Telegram и WhatsApp
+        bot_token = os.environ.get('TELEGRAM_BOT_TOKEN')
+        chat_id = os.environ.get('TELEGRAM_CHAT_ID')
+        proxy_url = os.environ.get('PROXY_URL')
+        proxies = {'http': proxy_url, 'https': proxy_url} if proxy_url else None
         green_api_instance = os.environ.get('GREEN_API_INSTANCE_ID')
         green_api_token = os.environ.get('GREEN_API_TOKEN_V2')
         green_api_phone = os.environ.get('GREEN_API_NOTIFY_PHONE')
+        
+        telegram_message = f"""🚗 <b>НОВАЯ ЗАЯВКА #{total_leads}</b>
+
+<b>📋 АВТОМОБИЛЬ</b>
+🚘 {lead.brand} {lead.model} {lead.year}
+
+<b>🔧 СОСТОЯНИЕ</b>
+⚙️ Техническое: <b>{condition_map.get(lead.condition, lead.condition)}</b>
+📝 Юридическое: <b>{legal_map.get(lead.legalStatus, lead.legalStatus)}</b>
+💬 Описание: {lead.description if lead.description else '—'}
+
+<b>📍 МЕСТОПОЛОЖЕНИЕ</b>
+{location_map.get(lead.location, lead.location)}
+
+<b>📞 КОНТАКТ</b>
+✅ Способ: <b>{contact_map.get(lead.contactMethod, lead.contactMethod)}</b>
+📱 Телефон: <a href="tel:{lead.phone}">{lead.phone}</a>
+
+⏰ <i>Время отклика: до 15 минут</i>"""
         
         whatsapp_message = f"""🚗 НОВАЯ ЗАЯВКА #{total_leads}
 
@@ -151,6 +174,56 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
 Телефон: {lead.phone}
 
 Время отклика: до 15 минут"""
+        
+        # Telegram с повторными попытками
+        telegram_sent = False
+        telegram_error_text = None
+        
+        if bot_token and chat_id:
+            telegram_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+            for attempt in range(2):
+                try:
+                    telegram_response = requests.post(telegram_url, json={
+                        'chat_id': chat_id,
+                        'text': telegram_message,
+                        'parse_mode': 'HTML'
+                    }, timeout=8, proxies=proxies)
+                    
+                    response_data = telegram_response.json()
+                    if response_data.get('ok'):
+                        telegram_sent = True
+                        
+                        # Отправляем фото если есть
+                        if lead.photos and len(lead.photos) > 0:
+                            photo_url = f"https://api.telegram.org/bot{bot_token}/sendPhoto"
+                            for i, photo_base64 in enumerate(lead.photos[:5]):
+                                try:
+                                    if ',' in photo_base64:
+                                        photo_base64 = photo_base64.split(',')[1]
+                                    
+                                    photo_data = base64.b64decode(photo_base64)
+                                    
+                                    files = {
+                                        'photo': (f'photo{i+1}.jpg', photo_data, 'image/jpeg')
+                                    }
+                                    data = {
+                                        'chat_id': chat_id,
+                                        'caption': f'📷 Фото автомобиля {i+1}'
+                                    }
+                                    
+                                    requests.post(photo_url, data=data, files=files, timeout=10, proxies=proxies)
+                                        
+                                except Exception as photo_error:
+                                    print(f'Ошибка отправки фото {i+1}: {photo_error}')
+                        break
+                    else:
+                        telegram_error_text = response_data.get('description', 'Unknown error')
+                        print(f'Telegram API warning (попытка {attempt+1}): {telegram_error_text}')
+                except Exception as telegram_error:
+                    telegram_error_text = str(telegram_error)
+                    print(f'Ошибка отправки в Telegram (попытка {attempt+1}): {telegram_error_text}')
+        else:
+            telegram_error_text = 'TELEGRAM_BOT_TOKEN или TELEGRAM_CHAT_ID не настроены'
         
         # WhatsApp через Green API с повторными попытками
         whatsapp_sent = False
@@ -182,8 +255,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             conn = psycopg2.connect(db_url)
             cur = conn.cursor()
             cur.execute(
-                "UPDATE t_p43245144_car_buying_hk_1.leads SET whatsapp_sent = %s, whatsapp_error = %s WHERE id = %s",
-                (whatsapp_sent, whatsapp_error_text, lead_id)
+                "UPDATE t_p43245144_car_buying_hk_1.leads SET telegram_sent = %s, telegram_error = %s, whatsapp_sent = %s, whatsapp_error = %s WHERE id = %s",
+                (telegram_sent, telegram_error_text, whatsapp_sent, whatsapp_error_text, lead_id)
             )
             conn.commit()
             cur.close()

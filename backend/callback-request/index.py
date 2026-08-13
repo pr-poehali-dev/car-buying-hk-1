@@ -18,7 +18,7 @@ class CallbackRequest(BaseModel):
 
 def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     """
-    Принимает заявку на обратный звонок, сохраняет в базу данных и отправляет уведомление в WhatsApp
+    Принимает заявку на обратный звонок, сохраняет в базу данных и отправляет уведомление в Telegram и WhatsApp
     Args: event - dict с httpMethod, body, headers
           context - объект с request_id, function_name
     Returns: HTTP response dict
@@ -103,10 +103,25 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         cur.close()
         conn.close()
         
-        # Отправляем уведомление в WhatsApp
+        # Отправляем уведомления в Telegram и WhatsApp
+        bot_token = os.environ.get('TELEGRAM_BOT_TOKEN')
+        chat_id = os.environ.get('TELEGRAM_CHAT_ID')
+        proxy_url = os.environ.get('PROXY_URL')
+        proxies = {'http': proxy_url, 'https': proxy_url} if proxy_url else None
         green_api_instance = os.environ.get('GREEN_API_INSTANCE_ID')
         green_api_token = os.environ.get('GREEN_API_TOKEN_V2')
         green_api_phone = os.environ.get('GREEN_API_NOTIFY_PHONE')
+        
+        telegram_message = f"""📞 <b>ОБРАТНЫЙ ЗВОНОК #{total_leads}</b>
+
+<b>📍 МЕСТОПОЛОЖЕНИЕ</b>
+{city_name}
+
+<b>📱 КОНТАКТ</b>
+✅ Способ связи: <b>{contact_map.get(callback.contactMethod, callback.contactMethod)}</b>
+📱 Телефон: <a href="tel:{callback.phone}">{callback.phone}</a>
+
+⏰ <i>Перезвонить в течение 5 минут!</i>"""
         
         whatsapp_message = f"""📞 ОБРАТНЫЙ ЗВОНОК #{total_leads}
 
@@ -117,6 +132,33 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
 Телефон: {callback.phone}
 
 Перезвонить в течение 5 минут!"""
+        
+        # Telegram с повторными попытками
+        telegram_sent = False
+        telegram_error_text = None
+        
+        if bot_token and chat_id:
+            telegram_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+            for attempt in range(2):
+                try:
+                    telegram_response = requests.post(telegram_url, json={
+                        'chat_id': chat_id,
+                        'text': telegram_message,
+                        'parse_mode': 'HTML'
+                    }, timeout=8, proxies=proxies)
+                    
+                    response_data = telegram_response.json()
+                    if response_data.get('ok'):
+                        telegram_sent = True
+                        break
+                    else:
+                        telegram_error_text = response_data.get('description', 'Unknown error')
+                        print(f'Telegram API warning (попытка {attempt+1}): {telegram_error_text}')
+                except Exception as telegram_error:
+                    telegram_error_text = str(telegram_error)
+                    print(f'Ошибка отправки в Telegram (попытка {attempt+1}): {telegram_error_text}')
+        else:
+            telegram_error_text = 'TELEGRAM_BOT_TOKEN или TELEGRAM_CHAT_ID не настроены'
         
         # WhatsApp через Green API с повторными попытками
         whatsapp_sent = False
@@ -135,7 +177,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                         whatsapp_sent = True
                         break
                     else:
-                        whatsapp_error_text = f'HTTP {whatsapp_response.status_code} url={whatsapp_url[:60]} instance_len={len(green_api_instance)} token_len={len(green_api_token)} body={whatsapp_response.text[:300]}'
+                        whatsapp_error_text = f'HTTP {whatsapp_response.status_code}: {whatsapp_response.text[:300]}'
                         print(f'Green API warning (попытка {attempt+1}): {whatsapp_error_text}')
                 except Exception as whatsapp_error:
                     whatsapp_error_text = str(whatsapp_error)
@@ -148,8 +190,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             conn = psycopg2.connect(db_url)
             cur = conn.cursor()
             cur.execute(
-                "UPDATE t_p43245144_car_buying_hk_1.leads SET whatsapp_sent = %s, whatsapp_error = %s WHERE id = %s",
-                (whatsapp_sent, whatsapp_error_text, lead_id)
+                "UPDATE t_p43245144_car_buying_hk_1.leads SET telegram_sent = %s, telegram_error = %s, whatsapp_sent = %s, whatsapp_error = %s WHERE id = %s",
+                (telegram_sent, telegram_error_text, whatsapp_sent, whatsapp_error_text, lead_id)
             )
             conn.commit()
             cur.close()
