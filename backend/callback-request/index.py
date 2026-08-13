@@ -135,7 +135,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                         whatsapp_sent = True
                         break
                     else:
-                        whatsapp_error_text = whatsapp_response.text[:500]
+                        whatsapp_error_text = f'HTTP {whatsapp_response.status_code}: {whatsapp_response.text[:500]}'
                         print(f'Green API warning (попытка {attempt+1}): {whatsapp_error_text}')
                 except Exception as whatsapp_error:
                     whatsapp_error_text = str(whatsapp_error)
