@@ -157,7 +157,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         whatsapp_error_text = None
         
         if green_api_instance and green_api_token and green_api_phone:
-            whatsapp_url = f"https://api.green-api.com/waInstance{green_api_instance}/sendMessage/{green_api_token}"
+            whatsapp_url = f"https://7107.api.greenapi.com/waInstance{green_api_instance}/sendMessage/{green_api_token}"
             for attempt in range(2):
                 try:
                     whatsapp_response = requests.post(whatsapp_url, json={
