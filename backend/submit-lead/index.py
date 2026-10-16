@@ -176,35 +176,6 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
 
 Время отклика: до 15 минут"""
         
-        max_sent = False
-        max_error_text = None
-        max_token = os.environ.get('MAX_BOT_TOKEN')
-        max_chat = os.environ.get('MAX_CHAT_ID')
-        
-        if max_token and max_chat:
-            for attempt in range(3):
-                for id_param in ('chat_id', 'user_id'):
-                    try:
-                        max_response = requests.post(
-                            f"https://platform-api.max.ru/messages?{id_param}={max_chat}",
-                            json={'text': whatsapp_message},
-                            headers={'Authorization': max_token},
-                            timeout=5
-                        )
-                        if max_response.status_code == 200:
-                            max_sent = True
-                            max_error_text = None
-                            break
-                        max_error_text = f'HTTP {max_response.status_code}: {max_response.text[:300]}'
-                    except Exception as max_exc:
-                        max_error_text = str(max_exc)[:300]
-                if max_sent:
-                    break
-            if not max_sent:
-                print(f'Ошибка отправки в MAX: {max_error_text}')
-        else:
-            max_error_text = 'MAX_BOT_TOKEN или MAX_CHAT_ID не настроены'
-        
         # Telegram с повторными попытками
         telegram_sent = False
         telegram_error_text = None
@@ -255,10 +226,10 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         else:
             telegram_error_text = 'TELEGRAM_BOT_TOKEN или TELEGRAM_CHAT_ID не настроены'
         
-        # WhatsApp через Green API с повторными попытками (ВРЕМЕННО ПРИОСТАНОВЛЕНО по просьбе клиента, код сохранён для быстрого включения обратно)
+        # WhatsApp через Green API с повторными попытками
         whatsapp_sent = False
         whatsapp_error_text = None
-        whatsapp_enabled = False
+        whatsapp_enabled = True
         
         if whatsapp_enabled and green_api_instance and green_api_token and green_api_phone:
             whatsapp_url = f"https://7107.api.greenapi.com/waInstance{green_api_instance}/sendMessage/{green_api_token}"
@@ -286,8 +257,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             conn = psycopg2.connect(db_url)
             cur = conn.cursor()
             cur.execute(
-                "UPDATE t_p43245144_car_buying_hk_1.leads SET telegram_sent = %s, telegram_error = %s, whatsapp_sent = %s, whatsapp_error = %s, max_sent = %s, max_error = %s WHERE id = %s",
-                (telegram_sent, telegram_error_text, whatsapp_sent, whatsapp_error_text, max_sent, max_error_text, lead_id)
+                "UPDATE t_p43245144_car_buying_hk_1.leads SET telegram_sent = %s, telegram_error = %s, whatsapp_sent = %s, whatsapp_error = %s WHERE id = %s",
+                (telegram_sent, telegram_error_text, whatsapp_sent, whatsapp_error_text, lead_id)
             )
             conn.commit()
             cur.close()
