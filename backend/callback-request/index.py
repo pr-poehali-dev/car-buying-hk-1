@@ -109,8 +109,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         chat_id = os.environ.get('TELEGRAM_CHAT_ID')
         proxy_url = os.environ.get('PROXY_URL')
         proxies = {'http': proxy_url, 'https': proxy_url} if proxy_url else None
-        green_api_instance = os.environ.get('GREEN_API_INSTANCE_ID')
-        green_api_token = os.environ.get('GREEN_API_TOKEN_V2')
+        green_api_instance = os.environ.get('GREENAPI_INSTANCE')
+        green_api_token = os.environ.get('GREENAPI_TOKEN')
         green_api_phone = os.environ.get('GREEN_API_NOTIFY_PHONE')
         
         telegram_message = f"""📞 <b>ОБРАТНЫЙ ЗВОНОК #{total_leads}</b>
