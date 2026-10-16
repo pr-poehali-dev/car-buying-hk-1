@@ -3,22 +3,23 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
-import Evaluation from "./pages/Evaluation";
-import HowItWorks from "./pages/HowItWorks";
-import Reviews from "./pages/Reviews";
-import Komsomolsk from "./pages/cities/Komsomolsk";
-import Amursk from "./pages/cities/Amursk";
-import SovetskayaGavan from "./pages/cities/SovetskayaGavan";
-import Bikin from "./pages/cities/Bikin";
-import DamagedCars from "./pages/articles/DamagedCars";
-import CreditCars from "./pages/articles/CreditCars";
-import UrgentBuyout from "./pages/articles/UrgentBuyout";
-import SeoSettings from "./pages/SeoSettings";
-import ThankYou from "./pages/ThankYou";
-import AdminLeads from "./pages/AdminLeads";
-import NotFound from "./pages/NotFound";
+const Evaluation = lazy(() => import("./pages/Evaluation"));
+const HowItWorks = lazy(() => import("./pages/HowItWorks"));
+const Reviews = lazy(() => import("./pages/Reviews"));
+const Komsomolsk = lazy(() => import("./pages/cities/Komsomolsk"));
+const Amursk = lazy(() => import("./pages/cities/Amursk"));
+const SovetskayaGavan = lazy(() => import("./pages/cities/SovetskayaGavan"));
+const Bikin = lazy(() => import("./pages/cities/Bikin"));
+const DamagedCars = lazy(() => import("./pages/articles/DamagedCars"));
+const CreditCars = lazy(() => import("./pages/articles/CreditCars"));
+const UrgentBuyout = lazy(() => import("./pages/articles/UrgentBuyout"));
+const SeoSettings = lazy(() => import("./pages/SeoSettings"));
+const ThankYou = lazy(() => import("./pages/ThankYou"));
+const AdminLeads = lazy(() => import("./pages/AdminLeads"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <Suspense fallback={null}>
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/evaluation" element={<Evaluation />} />
@@ -46,6 +48,7 @@ const App = () => (
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        </Suspense>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

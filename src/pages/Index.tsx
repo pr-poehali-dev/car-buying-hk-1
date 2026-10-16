@@ -78,7 +78,8 @@ const Index = () => {
       }
     };
 
-    detectCity();
+    const timer = setTimeout(detectCity, 2500);
+    return () => clearTimeout(timer);
   }, []);
 
 

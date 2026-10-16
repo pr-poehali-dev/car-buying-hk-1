@@ -36,7 +36,7 @@ const DamagedCars = () => {
             <p className="text-xl text-gray-600 mb-8">После ДТП не знаете, что делать с автомобилем? Мы выкупим битое авто по честной цене за 15 минут. Деньги сразу наличными.</p>
 
             <img 
-              src="https://cdn.poehali.dev/projects/67e7cf58-b4b6-432f-8bfa-54cde7992932/files/a831bee9-327c-4fa9-b47b-a42be3b0cde0.jpg" 
+              src="/hero.webp" 
               alt="Выкуп битых авто"
               className="w-full h-96 object-cover rounded-lg mb-8"
             />

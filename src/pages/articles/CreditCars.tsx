@@ -36,7 +36,7 @@ const CreditCars = () => {
             <p className="text-xl text-gray-600 mb-8">Автомобиль в кредите и нужно продать? Мы поможем закрыть кредит в банке и выкупим ваше авто. Работаем со всеми банками края.</p>
 
             <img 
-              src="https://cdn.poehali.dev/projects/67e7cf58-b4b6-432f-8bfa-54cde7992932/files/a831bee9-327c-4fa9-b47b-a42be3b0cde0.jpg" 
+              src="/hero.webp" 
               alt="Выкуп кредитных авто"
               className="w-full h-96 object-cover rounded-lg mb-8"
             />

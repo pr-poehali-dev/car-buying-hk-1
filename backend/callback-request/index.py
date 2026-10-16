@@ -140,13 +140,13 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         
         if bot_token and chat_id:
             telegram_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
-            for attempt in range(2):
+            for attempt in range(1):
                 try:
                     telegram_response = requests.post(telegram_url, json={
                         'chat_id': chat_id,
                         'text': telegram_message,
                         'parse_mode': 'HTML'
-                    }, timeout=6, proxies=proxies if attempt == 0 else None)
+                    }, timeout=4, proxies=proxies)
                     
                     response_data = telegram_response.json()
                     if response_data.get('ok'):

@@ -92,7 +92,7 @@ const Bikin = () => {
       <section className="relative min-h-[500px] md:h-[600px] flex items-center py-12 md:py-0">
         <div className="absolute inset-0 z-0">
           <img 
-            src="https://cdn.poehali.dev/projects/67e7cf58-b4b6-432f-8bfa-54cde7992932/files/a831bee9-327c-4fa9-b47b-a42be3b0cde0.jpg"
+            src="/hero.webp"
             alt="Выкуп авто в Бикине"
             className="w-full h-full object-cover"
           />
