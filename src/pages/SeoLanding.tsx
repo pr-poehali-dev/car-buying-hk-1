@@ -1,3 +1,4 @@
+import { trackGoal } from "@/lib/analytics";
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -42,7 +43,7 @@ const SeoLanding = ({ slug }: Props) => {
       });
       const data = await res.json();
       if (data.success) {
-        if ((window as any).ym) (window as any).ym(104279599, 'reachGoal', 'callback_request');
+        trackGoal('callback_request');
         navigate('/spasibo');
       } else {
         toast({ title: 'Ошибка', description: 'Не удалось отправить заявку. Попробуйте позже.', variant: 'destructive' });
@@ -160,6 +161,7 @@ const SeoLanding = ({ slug }: Props) => {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a
               href="tel:+79841771588"
+              onClick={() => trackGoal('phone_click')}
               className="inline-flex items-center justify-center bg-green-600 hover:bg-green-700 text-white font-bold px-8 py-4 rounded-lg"
             >
               +7 (984) 177-15-88

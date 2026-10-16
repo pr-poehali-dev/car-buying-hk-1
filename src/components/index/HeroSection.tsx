@@ -1,3 +1,4 @@
+import { trackGoal } from "@/lib/analytics";
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
 
@@ -9,9 +10,7 @@ interface HeroSectionProps {
 
 const HeroSection = ({ city, handleEvaluationClick, handleCallRequest }: HeroSectionProps) => {
   const handlePhoneClick = () => {
-    if (typeof window !== 'undefined' && (window as any).ym) {
-      (window as any).ym(104279599, 'reachGoal', 'hero_phone_click');
-    }
+    trackGoal('hero_phone_click');
     window.location.href = 'tel:+79841771588';
   };
 

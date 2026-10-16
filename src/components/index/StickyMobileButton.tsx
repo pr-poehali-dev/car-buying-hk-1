@@ -1,3 +1,4 @@
+import { trackGoal } from "@/lib/analytics";
 import { useState, useEffect } from "react";
 import Icon from "@/components/ui/icon";
 
@@ -18,9 +19,7 @@ const StickyMobileButton = () => {
   }, []);
 
   const handleClick = () => {
-    if (typeof window !== 'undefined' && (window as any).ym) {
-      (window as any).ym(104279599, 'reachGoal', 'sticky_button_click');
-    }
+    trackGoal('sticky_button_click');
     window.location.href = 'tel:+79841771588';
   };
 

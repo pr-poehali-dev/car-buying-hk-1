@@ -1,3 +1,4 @@
+import { trackGoal } from "@/lib/analytics";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
@@ -10,9 +11,7 @@ interface PopupOfferProps {
 
 const PopupOffer = ({ onClose, onSubmit, city }: PopupOfferProps) => {
   const handlePhoneClick = () => {
-    if (typeof window !== 'undefined' && (window as any).ym) {
-      (window as any).ym(104279599, 'reachGoal', 'popup_phone_click');
-    }
+    trackGoal('popup_phone_click');
     window.location.href = 'tel:+79841771588';
   };
 

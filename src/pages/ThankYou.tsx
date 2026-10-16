@@ -1,3 +1,4 @@
+import { trackGoal } from "@/lib/analytics";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -15,9 +16,7 @@ const ThankYou = () => {
   }, []);
 
   const handlePhoneClick = () => {
-    if (typeof window !== 'undefined' && (window as any).ym) {
-      (window as any).ym(104279599, 'reachGoal', 'phone_click');
-    }
+    trackGoal('phone_click');
   };
 
   return (

@@ -1,3 +1,4 @@
+import { trackGoal } from "@/lib/analytics";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -107,9 +108,7 @@ const Index = () => {
       const data = await response.json();
 
       if (data.success) {
-        if (typeof window !== 'undefined' && (window as any).ym) {
-          (window as any).ym(104279599, 'reachGoal', 'callback_request');
-        }
+        trackGoal('callback_request');
         
         if (typeof window !== 'undefined' && (window as any).VK && (window as any).VK.Retargeting) {
           (window as any).VK.Retargeting.Event('lead');
@@ -137,9 +136,7 @@ const Index = () => {
   };
 
   const handlePhoneClick = () => {
-    if (typeof window !== 'undefined' && (window as any).ym) {
-      (window as any).ym(104279599, 'reachGoal', 'phone_click');
-    }
+    trackGoal('phone_click');
   };
 
   const handleQuickCallback = async (phone: string, selectedCity: string) => {
@@ -153,9 +150,7 @@ const Index = () => {
       const data = await response.json();
 
       if (data.success) {
-        if (typeof window !== 'undefined' && (window as any).ym) {
-          (window as any).ym(104279599, 'reachGoal', 'quick_callback');
-        }
+        trackGoal('quick_callback');
         
         if (typeof window !== 'undefined' && (window as any).VK && (window as any).VK.Retargeting) {
           (window as any).VK.Retargeting.Event('lead');

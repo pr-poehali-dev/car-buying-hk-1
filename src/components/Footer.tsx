@@ -1,3 +1,4 @@
+import { trackGoal } from '@/lib/analytics';
 import { Link } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 import { seoPages } from '@/data/seoPages';
@@ -54,7 +55,7 @@ const Footer = () => (
             <Icon name="Car" size={22} className="text-gray-900" />
             <span className="font-semibold text-gray-900">АвтоВыкуп</span>
           </div>
-          <a href="tel:+79841771588" className="text-gray-900 font-bold text-lg block mb-2">
+          <a href="tel:+79841771588" onClick={() => trackGoal('phone_click')} className="text-gray-900 font-bold text-lg block mb-2">
             +7 (984) 177-15-88
           </a>
           <p className="text-gray-600 text-sm">Хабаровск и Хабаровский край. Ежедневно, выезд бесплатный.</p>

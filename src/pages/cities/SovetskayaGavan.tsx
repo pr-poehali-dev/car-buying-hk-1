@@ -1,3 +1,4 @@
+import { trackGoal } from "@/lib/analytics";
 import Footer from "@/components/Footer";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -48,9 +49,7 @@ const SovetskayaGavan = () => {
       const data = await response.json();
 
       if (data.success) {
-        if (typeof window !== 'undefined' && (window as any).ym) {
-          (window as any).ym(104279599, 'reachGoal', 'callback_request');
-        }
+        trackGoal('callback_request');
         
         if (typeof window !== 'undefined' && (window as any).VK && (window as any).VK.Retargeting) {
           (window as any).VK.Retargeting.Event('lead');

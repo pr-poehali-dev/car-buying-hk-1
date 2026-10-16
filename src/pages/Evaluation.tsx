@@ -1,3 +1,4 @@
+import { trackGoal } from "@/lib/analytics";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -118,9 +119,7 @@ const Evaluation = () => {
       
       if (data.success) {
         // Отправляем цель в Яндекс.Метрику
-        if (typeof window !== 'undefined' && (window as any).ym) {
-          (window as any).ym(104279599, 'reachGoal', 'evaluation_request');
-        }
+        trackGoal('evaluation_request');
         
         // Отправляем событие в VK Pixel
         if (typeof window !== 'undefined' && (window as any).VK && (window as any).VK.Retargeting) {
@@ -190,9 +189,7 @@ const Evaluation = () => {
   };
 
   const handlePhoneClick = () => {
-    if (typeof window !== 'undefined' && (window as any).ym) {
-      (window as any).ym(104279599, 'reachGoal', 'phone_click');
-    }
+    trackGoal('phone_click');
   };
 
   return (
