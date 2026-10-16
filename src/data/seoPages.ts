@@ -10,7 +10,7 @@ export interface SeoPoint {
 
 export interface SeoPageData {
   slug: string;
-  kind: 'city' | 'service';
+  kind: 'city' | 'service' | 'brand';
   name: string;
   h1: string;
   title: string;
@@ -86,6 +86,42 @@ const makeService = (s: {
   points: SeoPoint[];
   faq: SeoFaq[];
 }): SeoPageData => ({ ...s, kind: 'service', callbackCity: 'Хабаровск' });
+
+interface BrandInput {
+  slug: string;
+  name: string;
+  ru: string;
+  models: string;
+  about: string;
+}
+
+const makeBrand = (b: BrandInput): SeoPageData => ({
+  slug: b.slug,
+  kind: 'brand',
+  name: `Выкуп ${b.ru}`,
+  h1: `Выкуп ${b.name} в Хабаровске`,
+  title: `Выкуп ${b.name} в Хабаровске — дорого, за 15 минут | ${PHONE}`,
+  description: `Выкупаем ${b.name} в Хабаровске и крае: ${b.models}. Оценка за 15 минут, выезд, деньги сразу. Звоните ${PHONE}`,
+  lead: `Продайте ${b.name} в день обращения: оценка за 15 минут, выезд к вам, расчёт сразу.`,
+  paragraphs: [
+    b.about,
+    `Выкупаем ${b.name} разных поколений и комплектаций, в том числе: ${b.models}. Принимаем машины с правым и левым рулём, с любым пробегом и в любом состоянии: после ДТП, не на ходу, в кредите.`,
+    'Чтобы быстрее узнать цену, пришлите в WhatsApp фото автомобиля, год выпуска, пробег и описание состояния. Назовём предварительную стоимость и договоримся об осмотре. Окончательную цену определяем после осмотра.',
+  ],
+  points: [
+    { title: `Знаем ${b.name}`, text: 'Учитываем комплектацию, двигатель, коробку и спрос на модель.' },
+    { title: 'Выезд к вам', text: 'Осматриваем авто в Хабаровске и крае, выезд бесплатный.' },
+    { title: 'Деньги сразу', text: 'Расчёт при подписании договора купли-продажи.' },
+    { title: 'Любое состояние', text: 'Битые, кредитные, без документов, не на ходу.' },
+  ],
+  faq: [
+    { q: `Какие модели ${b.name} вы выкупаете?`, a: `Берём разные модели, например: ${b.models}. Если вашей модели нет в списке, позвоните, скорее всего, выкупим.` },
+    { q: 'Выкупаете ли вы авто с правым рулём?', a: 'Да, правый руль не проблема. На Дальнем Востоке такие автомобили составляют большую часть сделок.' },
+    { q: 'Как быстро назовёте цену?', a: 'Предварительную цену называем за 15 минут по телефону или по фото в WhatsApp. Итоговую после осмотра.' },
+    { q: `Можно ли продать ${b.name} после ДТП?`, a: 'Да. Оцениваем реальное состояние кузова и узлов и называем честную цену.' },
+  ],
+  callbackCity: 'Хабаровск',
+});
 
 export const seoPages: SeoPageData[] = [
   makeCity({
@@ -249,6 +285,48 @@ export const seoPages: SeoPageData[] = [
       { q: 'Берёте ли старые японские машины?', a: 'Да, возраст не важен. Оцениваем по состоянию, комплектации и спросу.' },
       { q: 'Как узнать цену быстро?', a: 'Отправьте фото и описание в WhatsApp или оставьте заявку, мы перезвоним и назовём предварительную цену.' },
     ],
+  }),
+  makeBrand({
+    slug: 'vykup-toyota',
+    name: 'Toyota',
+    ru: 'Тойота',
+    models: 'Camry, Corolla, RAV4, Land Cruiser, Prius, Vitz, Passo, Hilux Surf',
+    about: 'Toyota — самая популярная марка на Дальнем Востоке, и спрос на неё стабильно высокий. Мы хорошо знаем эти машины и платим по реальной рыночной цене.',
+  }),
+  makeBrand({
+    slug: 'vykup-nissan',
+    name: 'Nissan',
+    ru: 'Ниссан',
+    models: 'X-Trail, Note, Serena, Tiida, Teana, Terrano, Dualis',
+    about: 'Nissan часто встречается в Хабаровском крае, особенно кроссоверы и семейные минивэны. Выкупаем модели разных лет и комплектаций.',
+  }),
+  makeBrand({
+    slug: 'vykup-honda',
+    name: 'Honda',
+    ru: 'Хонда',
+    models: 'Fit, CR-V, Freed, Stepwgn, HR-V, Civic, Accord',
+    about: 'Honda ценится за надёжность и экономичность. Выкупаем компактные хэтчбеки, кроссоверы и минивэны, в том числе с большим пробегом.',
+  }),
+  makeBrand({
+    slug: 'vykup-mazda',
+    name: 'Mazda',
+    ru: 'Мазда',
+    models: 'Demio, Axela, Atenza, CX-5, Bongo, Familia',
+    about: 'Mazda популярна у тех, кто выбирает динамику и приятную управляемость. Принимаем легковые модели, кроссоверы и коммерческие версии.',
+  }),
+  makeBrand({
+    slug: 'vykup-subaru',
+    name: 'Subaru',
+    ru: 'Субару',
+    models: 'Forester, Impreza, Legacy, Outback, XV',
+    about: 'Subaru с полным приводом хорошо подходит для региона, поэтому спрос на неё не падает. Учитываем тип двигателя, привод и состояние кузова.',
+  }),
+  makeBrand({
+    slug: 'vykup-mitsubishi',
+    name: 'Mitsubishi',
+    ru: 'Митсубиси',
+    models: 'Pajero, Outlander, Delica, Lancer, RVR',
+    about: 'Mitsubishi, особенно внедорожники Pajero и Delica, остаются востребованными на Дальнем Востоке. Выкупаем и свежие модели, и автомобили 90-х и 2000-х годов.',
   }),
 ];
 

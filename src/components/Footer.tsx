@@ -18,6 +18,8 @@ const services = [
   ...seoPages.filter((p) => p.kind === 'service').map((p) => ({ to: `/${p.slug}`, label: p.name })),
 ];
 
+const brands = seoPages.filter((p) => p.kind === 'brand').map((p) => ({ to: `/${p.slug}`, label: p.name }));
+
 const info = [
   { to: '/evaluation', label: 'Оценка авто' },
   { to: '/how-it-works', label: 'Как мы работаем' },
@@ -42,9 +44,10 @@ const Column = ({ title, links }: { title: string; links: { to: string; label: s
 const Footer = () => (
   <footer className="bg-gray-50 border-t border-gray-200 py-10">
     <div className="container mx-auto px-4">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-8">
         <Column title="Города и районы" links={cities} />
         <Column title="Услуги" links={services} />
+        <Column title="Марки" links={brands} />
         <Column title="Информация" links={info} />
         <div className="col-span-2 md:col-span-1">
           <div className="flex items-center gap-2 mb-3">
