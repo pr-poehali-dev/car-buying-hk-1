@@ -1,3 +1,5 @@
+import Footer from "@/components/Footer";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
 
@@ -75,39 +77,39 @@ const ContentSections = ({ handleEvaluationClick, handlePhoneClick }: ContentSec
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-6">
               <div className="flex items-center gap-2 p-3 md:p-4 bg-gray-50 rounded-lg">
                 <Icon name="MapPin" size={18} className="text-gray-900 flex-shrink-0 md:w-5 md:h-5" />
-                <span className="text-gray-900 font-medium text-sm md:text-base">Хабаровск</span>
+                <Link to="/" className="text-gray-900 font-medium text-sm md:text-base hover:underline">Хабаровск</Link>
               </div>
               <div className="flex items-center gap-2 p-3 md:p-4 bg-gray-50 rounded-lg">
                 <Icon name="MapPin" size={18} className="text-gray-900 flex-shrink-0 md:w-5 md:h-5" />
-                <span className="text-gray-900 font-medium text-sm md:text-base">Комсомольск-на-Амуре</span>
+                <Link to="/komsomolsk" className="text-gray-900 font-medium text-sm md:text-base hover:underline">Комсомольск-на-Амуре</Link>
               </div>
               <div className="flex items-center gap-2 p-3 md:p-4 bg-gray-50 rounded-lg">
                 <Icon name="MapPin" size={18} className="text-gray-900 flex-shrink-0 md:w-5 md:h-5" />
-                <span className="text-gray-900 font-medium text-sm md:text-base">Амурск</span>
+                <Link to="/amursk" className="text-gray-900 font-medium text-sm md:text-base hover:underline">Амурск</Link>
               </div>
               <div className="flex items-center gap-2 p-3 md:p-4 bg-gray-50 rounded-lg">
                 <Icon name="MapPin" size={18} className="text-gray-900 flex-shrink-0 md:w-5 md:h-5" />
-                <span className="text-gray-900 font-medium text-sm md:text-base">Советская Гавань</span>
+                <Link to="/sovetskaya-gavan" className="text-gray-900 font-medium text-sm md:text-base hover:underline">Советская Гавань</Link>
               </div>
               <div className="flex items-center gap-2 p-3 md:p-4 bg-gray-50 rounded-lg">
                 <Icon name="MapPin" size={18} className="text-gray-900 flex-shrink-0 md:w-5 md:h-5" />
-                <span className="text-gray-900 font-medium text-sm md:text-base">Бикин</span>
+                <Link to="/bikin" className="text-gray-900 font-medium text-sm md:text-base hover:underline">Бикин</Link>
               </div>
               <div className="flex items-center gap-2 p-3 md:p-4 bg-gray-50 rounded-lg">
                 <Icon name="MapPin" size={18} className="text-gray-900 flex-shrink-0 md:w-5 md:h-5" />
-                <span className="text-gray-900 font-medium text-sm md:text-base">Вяземский</span>
+                <Link to="/vyazemsky" className="text-gray-900 font-medium text-sm md:text-base hover:underline">Вяземский</Link>
               </div>
               <div className="flex items-center gap-2 p-3 md:p-4 bg-gray-50 rounded-lg">
                 <Icon name="MapPin" size={18} className="text-gray-900 flex-shrink-0 md:w-5 md:h-5" />
-                <span className="text-gray-900 font-medium text-sm md:text-base">Николаевск-на-Амуре</span>
+                <Link to="/nikolaevsk-na-amure" className="text-gray-900 font-medium text-sm md:text-base hover:underline">Николаевск-на-Амуре</Link>
               </div>
               <div className="flex items-center gap-2 p-3 md:p-4 bg-gray-50 rounded-lg">
                 <Icon name="MapPin" size={18} className="text-gray-900 flex-shrink-0 md:w-5 md:h-5" />
-                <span className="text-gray-900 font-medium text-sm md:text-base">Ванино</span>
+                <Link to="/vanino" className="text-gray-900 font-medium text-sm md:text-base hover:underline">Ванино</Link>
               </div>
               <div className="flex items-center gap-2 p-3 md:p-4 bg-gray-50 rounded-lg">
                 <Icon name="MapPin" size={18} className="text-gray-900 flex-shrink-0 md:w-5 md:h-5" />
-                <span className="text-gray-900 font-medium text-sm md:text-base">Переяславка</span>
+                <Link to="/pereyaslavka" className="text-gray-900 font-medium text-sm md:text-base hover:underline">Переяславка</Link>
               </div>
             </div>
             <div className="text-center">
@@ -277,20 +279,7 @@ const ContentSections = ({ handleEvaluationClick, handlePhoneClick }: ContentSec
 
 
 
-      <footer className="bg-white border-t border-gray-200 py-6 md:py-8">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Icon name="Car" size={20} className="text-gray-900 md:w-6 md:h-6" />
-              <span className="font-semibold text-gray-900 text-sm md:text-base">АвтоВыкуп</span>
-            </div>
-            <div className="text-gray-600 text-xs md:text-sm text-center">
-              © 2024 Выкуп автомобилей в Хабаровске
-            </div>
-            <a href="tel:+79841771588" onClick={handlePhoneClick} className="text-gray-900 font-bold text-base md:text-lg touch-manipulation">+7 (984) 177-15-88</a>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </>
   );
 };

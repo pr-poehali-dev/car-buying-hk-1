@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -250,33 +251,7 @@ const Reviews = () => {
         </div>
       </section>
 
-      <footer className="bg-gray-50 py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Icon name="Car" size={28} className="text-gray-900" />
-                <span className="text-xl font-semibold text-gray-900">АвтоВыкуп</span>
-              </div>
-              <p className="text-gray-600">Профессиональный выкуп автомобилей в Хабаровске</p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Навигация</h3>
-              <div className="space-y-2">
-                <Link to="/" className="block text-gray-600 hover:text-gray-900">Главная</Link>
-                <Link to="/how-it-works" className="block text-gray-600 hover:text-gray-900">Как мы работаем</Link>
-                <Link to="/reviews" className="block text-gray-600 hover:text-gray-900">Отзывы</Link>
-                <Link to="/evaluation" className="block text-gray-600 hover:text-gray-900">Оценка авто</Link>
-              </div>
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Контакты</h3>
-              <p className="text-gray-600 mb-2">Телефон:</p>
-              <a href="tel:+79841771588" className="text-gray-900 font-bold text-lg">+7 (984) 177-15-88</a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -177,6 +178,7 @@ const CreditCars = () => {
         </div>
       </article>
 
+      <Footer />
       <WhatsAppButton />
     </div>
   );

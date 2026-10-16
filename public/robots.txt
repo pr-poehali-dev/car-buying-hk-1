@@ -2,22 +2,13 @@ User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /admin-leads
+Disallow: /spasibo
+Disallow: /seo-settings
 
-# Яндекс
 User-agent: Yandex
 Allow: /
+Disallow: /admin-leads
+Disallow: /spasibo
+Disallow: /seo-settings
 
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
-
-# Sitemap
 Sitemap: https://avtovykupkhb27.ru/sitemap.xml

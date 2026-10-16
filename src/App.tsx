@@ -6,6 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
+import CanonicalTag from "./components/CanonicalTag";
+import { seoPages } from "./data/seoPages";
 const Evaluation = lazy(() => import("./pages/Evaluation"));
 const HowItWorks = lazy(() => import("./pages/HowItWorks"));
 const Reviews = lazy(() => import("./pages/Reviews"));
@@ -18,6 +20,7 @@ const CreditCars = lazy(() => import("./pages/articles/CreditCars"));
 const UrgentBuyout = lazy(() => import("./pages/articles/UrgentBuyout"));
 const SeoSettings = lazy(() => import("./pages/SeoSettings"));
 const ThankYou = lazy(() => import("./pages/ThankYou"));
+const SeoLanding = lazy(() => import("./pages/SeoLanding"));
 const AdminLeads = lazy(() => import("./pages/AdminLeads"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
@@ -29,6 +32,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <CanonicalTag />
         <Suspense fallback={null}>
         <Routes>
           <Route path="/" element={<Index />} />
@@ -43,6 +47,9 @@ const App = () => (
           <Route path="/vykup-kreditnyh-avto" element={<CreditCars />} />
           <Route path="/srochnyj-vykup-avto" element={<UrgentBuyout />} />
           <Route path="/seo-settings" element={<SeoSettings />} />
+          {seoPages.map((p) => (
+            <Route key={p.slug} path={`/${p.slug}`} element={<SeoLanding slug={p.slug} />} />
+          ))}
           <Route path="/spasibo" element={<ThankYou />} />
           <Route path="/admin-leads" element={<AdminLeads />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
