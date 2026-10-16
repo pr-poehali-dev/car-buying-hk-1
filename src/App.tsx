@@ -17,6 +17,7 @@ import CreditCars from "./pages/articles/CreditCars";
 import UrgentBuyout from "./pages/articles/UrgentBuyout";
 import SeoSettings from "./pages/SeoSettings";
 import ThankYou from "./pages/ThankYou";
+import AdminLeads from "./pages/AdminLeads";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -41,6 +42,7 @@ const App = () => (
           <Route path="/srochnyj-vykup-avto" element={<UrgentBuyout />} />
           <Route path="/seo-settings" element={<SeoSettings />} />
           <Route path="/spasibo" element={<ThankYou />} />
+          <Route path="/admin-leads" element={<AdminLeads />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
