@@ -188,7 +188,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                         'chat_id': chat_id,
                         'text': telegram_message,
                         'parse_mode': 'HTML'
-                    }, timeout=8, proxies=proxies)
+                    }, timeout=6, proxies=proxies if attempt == 0 else None)
                     
                     response_data = telegram_response.json()
                     if response_data.get('ok'):
