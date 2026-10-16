@@ -169,7 +169,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         whatsapp_enabled = True
         
         if whatsapp_enabled and green_api_instance and green_api_token and green_api_phone:
-            whatsapp_url = f"https://7107.api.greenapi.com/waInstance{green_api_instance}/sendMessage/{green_api_token}"
+            whatsapp_url = f"https://{green_api_instance[:4]}.api.green-api.com/waInstance{green_api_instance}/sendMessage/{green_api_token}"
             for attempt in range(2):
                 try:
                     whatsapp_response = requests.post(whatsapp_url, json={
@@ -177,7 +177,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                         'message': whatsapp_message
                     }, timeout=8)
                     
-                    if whatsapp_response.status_code == 200:
+                    if whatsapp_response.status_code == 200 and 'idMessage' in whatsapp_response.text:
                         whatsapp_sent = True
                         break
                     else:
