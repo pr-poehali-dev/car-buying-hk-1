@@ -138,7 +138,9 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         telegram_sent = False
         telegram_error_text = None
         
-        if bot_token and chat_id:
+        telegram_enabled = False
+        
+        if telegram_enabled and bot_token and chat_id:
             telegram_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
             for attempt in range(1):
                 try:
@@ -159,7 +161,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     telegram_error_text = str(telegram_error)
                     print(f'Ошибка отправки в Telegram (попытка {attempt+1}): {telegram_error_text}')
         else:
-            telegram_error_text = 'TELEGRAM_BOT_TOKEN или TELEGRAM_CHAT_ID не настроены'
+            telegram_error_text = 'Отправка в Telegram отключена'
         
         # WhatsApp через Green API с повторными попытками
         whatsapp_sent = False
