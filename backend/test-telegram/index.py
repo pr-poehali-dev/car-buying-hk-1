@@ -9,7 +9,7 @@ def handler(event, context):
     tok = os.environ.get('GREEN_API_TOKEN_V2', '')
     phone = os.environ.get('GREEN_API_NOTIFY_PHONE', '')
     base = f"https://{inst[:4]}.api.green-api.com/waInstance{inst}"
-    out = {'notify_phone_tail': phone[-6:], 'notify_phone_len': len(phone), 'instance_len': len(inst), 'token_len': len(tok)}
+    out = {'notify_phone_tail': phone[-6:], 'notify_phone_len': len(phone), 'instance_len': len(inst), 'instance_head': inst[:4], 'instance_tail': inst[-4:], 'token_head': tok[:3], 'token_len': len(tok)}
 
     def call(name, method, url, body=None):
         try:
