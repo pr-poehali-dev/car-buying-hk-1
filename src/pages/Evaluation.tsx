@@ -1,6 +1,6 @@
 import { trackGoal } from "@/lib/analytics";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/lib/router-compat";
 import { useToast } from "@/hooks/use-toast";
 import Icon from "@/components/ui/icon";
 import EvaluationHeader from "@/components/evaluation/EvaluationHeader";

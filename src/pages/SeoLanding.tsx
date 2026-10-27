@@ -1,18 +1,16 @@
 import { trackGoal } from "@/lib/analytics";
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from "@/lib/router-compat";
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import Header from '@/components/index/Header';
 import CallbackForm from '@/components/index/CallbackForm';
 import WhatsAppButton from '@/components/index/WhatsAppButton';
 import Footer from '@/components/Footer';
-import Seo from '@/components/Seo';
 import NotFound from '@/pages/NotFound';
 import { useToast } from '@/hooks/use-toast';
 import { getSeoPage } from '@/data/seoPages';
 
-const SITE = 'https://avtovykupkhb27.ru';
 const API = 'https://functions.poehali.dev/f5104568-fc2e-4198-82d3-37b4b6c4fe80';
 
 interface Props {
@@ -55,38 +53,10 @@ const SeoLanding = ({ slug }: Props) => {
     }
   };
 
-  const url = `${SITE}/${page.slug}`;
-  const jsonLd = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Главная', item: `${SITE}/` },
-        { '@type': 'ListItem', position: 2, name: page.name, item: url },
-      ],
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: page.faq.map((f) => ({
-        '@type': 'Question',
-        name: f.q,
-        acceptedAnswer: { '@type': 'Answer', text: f.a },
-      })),
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'Service',
-      name: page.h1,
-      serviceType: 'Выкуп автомобилей',
-      areaServed: { '@type': 'AdministrativeArea', name: page.kind === 'city' ? page.name : 'Хабаровский край' },
-      provider: { '@type': 'AutoDealer', name: 'АвтоВыкуп Хабаровск', telephone: '+79841771588', url: `${SITE}/` },
-    },
-  ];
+  /* JSON-LD of this page is rendered in head() of src/routes/$slug.tsx (telephone '+79841771588') */
 
   return (
     <div className="min-h-screen bg-white">
-      <Seo title={page.title} description={page.description} path={`/${page.slug}`} jsonLd={jsonLd} />
       <Header mobileMenuOpen={menuOpen} setMobileMenuOpen={setMenuOpen} handlePhoneClick={() => {}} />
 
       <section className="relative min-h-[460px] md:h-[520px] flex items-center py-12 md:py-0">

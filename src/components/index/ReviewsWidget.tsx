@@ -2,7 +2,11 @@ import { useState, useEffect } from "react";
 import Icon from "@/components/ui/icon";
 
 const ReviewsWidget = () => {
-  const [reviewCount] = useState(387 + Math.floor(Math.random() * 15));
+  const [reviewCount, setReviewCount] = useState(387);
+
+  useEffect(() => {
+    setReviewCount(387 + Math.floor(Math.random() * 15));
+  }, []);
 
   return (
     <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-400 rounded-xl p-5 shadow-lg">
