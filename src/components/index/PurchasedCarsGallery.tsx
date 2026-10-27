@@ -7,43 +7,37 @@ const purchasedCars = [
     id: 1,
     image: "https://avatars.mds.yandex.net/get-autoru-vos/1640662/26275bb4df37874a90de806ebcef4059/1200x900",
     model: "Toyota Mark II 2004",
-    price: "450 000",
-    date: "18 января 2025"
+    price: "450 000"
   },
   {
     id: 2,
     image: "https://avatars.mds.yandex.net/get-autoru-vos/2165021/643da49380b15a200850500ef6e8335c/1200x900",
     model: "Nissan Primera 2006",
-    price: "320 000",
-    date: "16 января 2025"
+    price: "320 000"
   },
   {
     id: 3,
     image: "https://avatars.mds.yandex.net/get-autoru-vos/1698998/7965d60772a1fab63184826508b036cb/1200x900",
     model: "Mazda Demio 2008",
-    price: "280 000",
-    date: "14 января 2025"
+    price: "280 000"
   },
   {
     id: 4,
     image: "https://avatars.mds.yandex.net/get-autoru-vos/2160912/4a91afd31522cf92deb477075220226d/1200x900",
     model: "Subaru Forester 2005",
-    price: "520 000",
-    date: "12 января 2025"
+    price: "520 000"
   },
   {
     id: 5,
     image: "https://s.auto.drom.ru/photo/6Ho0HQj2hQxvmIludCgwfcfm2UJyVbsuewJOqWhoW7IoO5b6TBZo8_Gtnw6SYCKOhBEuBQZ-SmTRsxHWeOoz3BuS8cQfEg.jpg",
     model: "Honda Fit 2007",
-    price: "340 000",
-    date: "10 января 2025"
+    price: "340 000"
   },
   {
     id: 6,
     image: "https://avatars.mds.yandex.net/get-autoru-vos/1904718/3c92d548f2648ac6d8f2231df2acd2d0/1200x900",
     model: "Toyota Corolla 2003",
-    price: "380 000",
-    date: "8 января 2025"
+    price: "380 000"
   }
 ];
 
@@ -53,12 +47,9 @@ export default function PurchasedCarsGallery() {
   return (
     <section className="py-12 md:py-20 bg-white">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-3xl font-bold text-center mb-3 text-gray-900">
-          Примеры выкупленных авто в январе
+        <h2 className="text-3xl md:text-3xl font-bold text-center mb-8 md:mb-12 text-gray-900">
+          Примеры цен выкупа
         </h2>
-        <p className="text-center text-gray-600 mb-8 md:mb-12 max-w-2xl mx-auto">
-          Реальные сделки с нашими клиентами
-        </p>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mb-8">
           {purchasedCars.map((car) => (
@@ -76,7 +67,6 @@ export default function PurchasedCarsGallery() {
                 <h3 className="font-bold text-lg text-gray-900 mb-2">{car.model}</h3>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600 mb-1">{car.date}</p>
                     <p className="text-xl font-bold text-green-600">
                       {car.price} ₽
                     </p>
