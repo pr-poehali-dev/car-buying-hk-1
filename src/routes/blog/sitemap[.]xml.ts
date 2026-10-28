@@ -20,7 +20,7 @@ export const Route = createFileRoute('/blog/sitemap.xml')({
           }
           const urls = [
             `<url><loc>${SITE}/blog</loc></url>`,
-            ...entries.map((entry) => `<url><loc>${SITE}/blog/${escapeXml(entry.slug)}</loc><lastmod>${escapeXml(entry.updated_at.slice(0, 10))}</lastmod></url>`),
+            ...entries.map((entry) => `<url><loc>${SITE}/blog/${escapeXml(encodeURIComponent(entry.slug))}</loc><lastmod>${escapeXml(entry.updated_at.slice(0, 10))}</lastmod></url>`),
           ];
           return new Response(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.join('')}</urlset>`, {
             headers: {'Content-Type': 'application/xml; charset=utf-8', 'Cache-Control': 'public, max-age=300'},

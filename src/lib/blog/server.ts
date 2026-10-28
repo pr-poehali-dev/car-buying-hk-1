@@ -3,7 +3,7 @@ import functions from '../../../backend/func2url.json';
 
 export const SITE = 'https://avtovykupkhb27.ru';
 const FUNCTION_HOST = 'functions.poehali.dev';
-const SLUG = /^[a-z0-9](?:[a-z0-9-]{0,118}[a-z0-9])?$/;
+const SLUG = /^[a-zа-яё0-9](?:[a-zа-яё0-9-]{0,118}[a-zа-яё0-9])?$/u;
 
 export type BlogSummary = {
   id: number;
@@ -59,8 +59,11 @@ export const getBlogList = createServerFn({method: 'GET'})
 
 export const getBlogArticle = createServerFn({method: 'GET'})
   .validator((slug: string) => {
-    if (!SLUG.test(slug)) throw new Error('invalid_slug');
-    return slug;
+    let decoded: string;
+    try { decoded = decodeURIComponent(slug); }
+    catch { throw new Error('invalid_slug'); }
+    if (!SLUG.test(decoded)) throw new Error('invalid_slug');
+    return decoded;
   })
   .handler(async ({data: slug}) => {
     const response = await functionRequest({mode: 'article', slug});

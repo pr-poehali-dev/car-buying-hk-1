@@ -36,7 +36,7 @@ function BlogIndex() {
           <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
             {articles.map((article) => (
               <article key={article.id} className="rounded-xl border border-gray-200 overflow-hidden bg-white shadow-sm">
-                <a href={`/blog/${article.slug}`}>
+                <a href={`/blog/${encodeURIComponent(article.slug)}`}>
                   <img src={`/blog/media/${article.cover_media_id}`} alt={article.image_alt || article.title}
                     className="w-full aspect-[16/9] object-cover" loading="lazy"/>
                 </a>
@@ -45,10 +45,10 @@ function BlogIndex() {
                     {new Date(article.created_at).toLocaleDateString('ru-RU')}
                   </time>
                   <h2 className="text-xl font-bold mt-2 mb-3 leading-snug">
-                    <a href={`/blog/${article.slug}`} className="hover:text-blue-700">{article.title}</a>
+                    <a href={`/blog/${encodeURIComponent(article.slug)}`} className="hover:text-blue-700">{article.title}</a>
                   </h2>
                   <p className="text-gray-600 line-clamp-3">{article.excerpt}</p>
-                  <a href={`/blog/${article.slug}`} className="inline-block mt-5 text-blue-700 font-semibold hover:underline">Читать статью →</a>
+                  <a href={`/blog/${encodeURIComponent(article.slug)}`} className="inline-block mt-5 text-blue-700 font-semibold hover:underline">Читать статью →</a>
                 </div>
               </article>
             ))}

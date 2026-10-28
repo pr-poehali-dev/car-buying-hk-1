@@ -28,7 +28,7 @@ export const Route = createFileRoute('/blog/$slug')({
     if (!article) return {};
     const title = article.seo?.title || article.title;
     const description = article.seo?.description || article.excerpt;
-    const url = `${SITE}/blog/${article.slug}`;
+    const url = `${SITE}/blog/${encodeURIComponent(article.slug)}`;
     const cover = `${SITE}/blog/media/${article.cover_media_id}`;
     const articleSchema = {
       '@context': 'https://schema.org', '@type': 'Article', headline: article.title,
@@ -52,7 +52,7 @@ export const Route = createFileRoute('/blog/$slug')({
     const incomingArticle = incoming.find((schema) => hasSchemaType(schema, new Set(['Article', 'BlogPosting', 'NewsArticle'])));
     const hasBreadcrumb = incoming.some((schema) => hasSchemaType(schema, new Set(['BreadcrumbList'])));
     const hasFaq = incoming.some((schema) => hasSchemaType(schema, new Set(['FAQPage'])));
-    const schemas = [incomingArticle || articleSchema,
+    const schemas = [{...articleSchema, ...(incomingArticle || {})},
       ...(!hasBreadcrumb ? [breadcrumb] : []),
       ...incoming.filter((schema) => schema !== incomingArticle),
       ...(!hasFaq ? faq : [])];

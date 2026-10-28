@@ -15,7 +15,7 @@ import re
 import socket
 import ssl
 import uuid
-from urllib.parse import urlsplit
+from urllib.parse import quote, urlsplit
 from urllib.request import build_opener, HTTPRedirectHandler, Request
 
 from bleach._vendor import html5lib
@@ -26,8 +26,8 @@ from psycopg2.extras import Json, RealDictCursor
 
 SCHEMA = "t_p43245144_car_buying_hk_1"
 SITE = "https://avtovykupkhb27.ru"
-CONNECTOR_VERSION = "2.5.2"
-SLUG = re.compile(r"^[a-z0-9](?:[a-z0-9-]{0,118}[a-z0-9])?$")
+CONNECTOR_VERSION = "2.5.3"
+SLUG = re.compile(r"^[a-zа-яё0-9](?:[a-zа-яё0-9-]{0,118}[a-zа-яё0-9])?$")
 CAPABILITIES = [
     "seo_meta", "canonical", "open_graph", "schema_org", "inline_images",
     "cover_images", "seo_event_repair", "seo_head_runtime",
@@ -43,7 +43,9 @@ ALLOWED_TAGS = {
 }
 GLOBAL_ATTRIBUTES = {
     "class", "id", "title", "aria-label", "data-benefits-block", "data-case-block",
-    "data-optiai-authorship", "itemprop", "itemscope", "itemtype", "itemid", "style",
+    "data-optiai-authorship", "data-social-proof", "data-social-proof-kind",
+    "data-social-proof-quote", "data-social-proof-attribution",
+    "itemprop", "itemscope", "itemtype", "itemid", "style",
 }
 TAG_ATTRIBUTES = {
     "a": {"href", "rel", "target"},
@@ -61,9 +63,26 @@ STYLE_LENGTHS = {"width", "max-width", "height", "margin", "margin-left", "margi
 STYLE_KEYWORDS = {
     "float": {"none", "left", "right"},
     "clear": {"none", "both", "left", "right"},
-    "display": {"block", "inline", "inline-block", "flow-root"},
+    "display": {"block", "inline", "inline-block", "flow-root", "flex", "inline-flex"},
     "text-align": {"left", "right", "center", "justify"},
     "font-weight": {"normal", "bold", "400", "500", "600", "700"},
+    "font-style": {"normal", "italic"},
+    "border-collapse": {"collapse"},
+    "list-style": {"none"},
+    "cursor": {"pointer"},
+    "align-items": {"center"},
+    "flex-wrap": {"wrap", "nowrap"},
+    "justify-content": {"center"},
+    "text-decoration": {"none", "underline"},
+}
+SAFE_COLOR = r"(?:#[0-9a-f]{3,8}|rgba\(\s*(?:\d{1,3}\s*,\s*){3}(?:0|1|0?\.\d+)\s*\))"
+SAFE_BORDER = re.compile(r"^(?:0|\d+(?:\.\d+)?px)\s+(?:solid|dashed|dotted)\s+" + SAFE_COLOR + r"$", re.I)
+SAFE_SHADOW = re.compile(r"^(?:(?:0|-?\d+(?:\.\d+)?px)\s+){3}" + SAFE_COLOR + r"$", re.I)
+SAFE_BACKGROUND = re.compile(r"^(?:" + SAFE_COLOR + r"|linear-gradient\(\d{1,3}deg,#[0-9a-f]{3,8},#[0-9a-f]{3,8}\))$", re.I)
+SAFE_COLOR_VALUE = re.compile(r"^" + SAFE_COLOR + r"$", re.I)
+SAFE_STYLE_HASHES = {
+    "7b3f8b63400fea208d8a6e4337f17607a79864b40b68ab7d8c1049ebf7ebe67b",
+    "8d5a717eac3349881b7fcd60ba78bc7014db09a8b7644f89c76fd492f2a8a2ac",
 }
 
 
@@ -160,6 +179,27 @@ def validate_style(value):
         elif name in STYLE_KEYWORDS:
             if raw not in STYLE_KEYWORDS[name]:
                 raise ValueError("invalid_style")
+        elif name in {"color", "text-decoration-color"}:
+            if not SAFE_COLOR_VALUE.fullmatch(raw):
+                raise ValueError("invalid_style")
+        elif name == "background":
+            if not SAFE_BACKGROUND.fullmatch(raw):
+                raise ValueError("invalid_style")
+        elif name in {"border", "border-left", "border-top"}:
+            if not SAFE_BORDER.fullmatch(raw):
+                raise ValueError("invalid_style")
+        elif name == "box-shadow":
+            if not SAFE_SHADOW.fullmatch(raw):
+                raise ValueError("invalid_style")
+        elif name in {"letter-spacing", "text-underline-offset", "gap"}:
+            if not SAFE_LENGTH.fullmatch(raw):
+                raise ValueError("invalid_style")
+        elif name == "opacity":
+            if not re.fullmatch(r"(?:0(?:\.\d+)?|1(?:\.0+)?)", raw):
+                raise ValueError("invalid_style")
+        elif name == "transition":
+            if raw != "text-decoration-color .2s ease":
+                raise ValueError("invalid_style")
         else:
             raise ValueError("unsupported_style")
 
@@ -199,6 +239,53 @@ def schema_types(value):
     return types
 
 
+def article_schemas_for_html(source, schemas):
+    """Use validated authorship microdata when the article has no JSON-LD."""
+    soup = BeautifulSoup(source, "html.parser")
+    card = soup.find(attrs={"data-optiai-authorship": "1"})
+    if not card:
+        return schemas
+    if card.get("itemtype") != "https://schema.org/Article":
+        raise ValueError("invalid_itemtype")
+
+    def entity(prop, allowed_types):
+        node = card.find(lambda tag: tag.has_attr("itemscope") and prop in (tag.get("itemprop") or "").split())
+        if node is None:
+            raise ValueError("invalid_article")
+        itemtype = node.get("itemtype") or ""
+        kind = itemtype.removeprefix("https://schema.org/")
+        if kind not in allowed_types or itemtype != "https://schema.org/" + kind:
+            raise ValueError("invalid_itemtype")
+        name_tag = node.find(lambda tag: "name" in (tag.get("itemprop") or "").split())
+        if name_tag is None:
+            raise ValueError("invalid_article")
+        name = (name_tag.get("content") or name_tag.get_text(" ", strip=True)).strip()
+        if not name or len(name) > 200:
+            raise ValueError("invalid_article")
+        value = {"@type": kind, "name": name}
+        url_tag = node.find(lambda tag: "url" in (tag.get("itemprop") or "").split())
+        if url_tag is not None:
+            url = (url_tag.get("content") or url_tag.get("href") or "").strip()
+            parsed = urlsplit(url)
+            if (parsed.scheme == "https" and parsed.hostname == urlsplit(SITE).hostname
+                    and not parsed.username and not parsed.password and not parsed.fragment):
+                value["url"] = url
+        return value
+
+    author = entity("author", {"Person", "Organization"})
+    publisher = entity("publisher", {"Organization"})
+    for schema in schemas:
+        if isinstance(schema, dict) and schema.get("@type") in ("Article", "BlogPosting", "NewsArticle"):
+            schema.setdefault("author", author)
+            schema.setdefault("publisher", publisher)
+            return schemas
+    if not any("Article" in schema_types(s) or "BlogPosting" in schema_types(s)
+               or "NewsArticle" in schema_types(s) for s in schemas):
+        schemas.insert(0, {"@context": "https://schema.org", "@type": "Article",
+                           "author": author, "publisher": publisher})
+    return schemas
+
+
 def parse_article_html(source):
     """Validate the browser's HTML5 parse tree; keep safe markup and JSON-LD."""
     try:
@@ -213,6 +300,12 @@ def parse_article_html(source):
             continue
         tag = node.tag.lower()
         attrs = {name.lower(): value for name, value in node.attrib.items()}
+        if tag == "style":
+            css = node.text or ""
+            if (attrs or len(css.encode("utf-8")) > 8192 or
+                    hashlib.sha256(css.encode("utf-8")).hexdigest() not in SAFE_STYLE_HASHES):
+                raise ValueError("unsafe_style")
+            continue
         if tag == "script":
             if (not {"type"} <= set(attrs) or set(attrs) - {"type", "id"}
                     or attrs["type"].strip().lower() != "application/ld+json"
@@ -263,7 +356,7 @@ def parse_article_html(source):
         for name, value in attrs.items():
             if len(value) > 2000 and name not in ("content", "style"):
                 raise ValueError("oversized_html_attribute")
-    return tree, images, schemas
+    return tree, images, article_schemas_for_html(source, schemas)
 
 
 def validate(data):
@@ -440,7 +533,7 @@ def public_check(path, expected):
 
 
 def article_url(slug):
-    return f"{SITE}/blog/{slug}"
+    return f"{SITE}/blog/{quote(slug, safe='-')}"
 
 
 def handle_post(data):
