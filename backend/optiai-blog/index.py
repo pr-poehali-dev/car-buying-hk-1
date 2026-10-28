@@ -14,6 +14,7 @@ import os
 import re
 import socket
 import ssl
+import uuid
 from urllib.parse import urlsplit
 from urllib.request import build_opener, HTTPRedirectHandler, Request
 
@@ -25,12 +26,13 @@ from psycopg2.extras import Json, RealDictCursor
 
 SCHEMA = "t_p43245144_car_buying_hk_1"
 SITE = "https://avtovykupkhb27.ru"
-CONNECTOR_VERSION = "2.5.1"
+CONNECTOR_VERSION = "2.5.2"
 SLUG = re.compile(r"^[a-z0-9](?:[a-z0-9-]{0,118}[a-z0-9])?$")
 CAPABILITIES = [
     "seo_meta", "canonical", "open_graph", "schema_org", "inline_images",
     "cover_images", "seo_event_repair", "seo_head_runtime",
     "seo_runtime_diagnostics", "picture_alt", "article_content_api", "dry_run",
+    "safe_errors_v1",
 ]
 ALLOWED_TAGS = {
     "article", "section", "div", "span", "h1", "h2", "h3", "h4", "h5", "h6",
@@ -72,6 +74,49 @@ def response(status, data):
         "body": json.dumps(data, ensure_ascii=False, default=str),
         "isBase64Encoded": False,
     }
+
+
+def safe_error(status, error_code, field, reason_code):
+    """Return only protocol-defined error details, never request content."""
+    request_id = str(uuid.uuid4())
+    print("optiai-blog rejected status=%s code=%s field=%s reason=%s request_id=%s" %
+          (status, error_code, field, reason_code, request_id))
+    return response(status, {"success": False, "error_code": error_code,
+                             "field": field, "reason_code": reason_code,
+                             "request_id": request_id})
+
+
+def validation_error(exc):
+    code = str(exc)
+    fields = {
+        "invalid_slug": ("slug", "invalid_slug"),
+        "invalid_title": ("title", "invalid_title"),
+        "missing_article": ("title", "invalid_title"),
+        "invalid_seo": ("seo", "invalid_seo"),
+        "invalid_excerpt": ("excerpt", "invalid_request"),
+        "invalid_image_alt": ("image_alt", "invalid_request"),
+        "invalid_images": ("inline_images", "invalid_request"),
+        "missing_cover": ("image_url", "invalid_media_url"),
+        "invalid_media_url": ("image_url", "invalid_media_url"),
+        "untrusted_media_url": ("image_url", "invalid_media_url"),
+        "invalid_article": ("article", "invalid_request"),
+    }
+    if code in fields:
+        field, reason = fields[code]
+        return safe_error(400, "validation_failed", field, reason)
+    if code in {"unsafe_media_dns", "media_unavailable", "invalid_media_type",
+                "invalid_media_size", "invalid_media_bytes"}:
+        return safe_error(422, "media_failed", "media", "media_download_failed")
+    if code in {"invalid_html", "invalid_html_images", "missing_local_media"}:
+        return safe_error(400, "validation_failed", "html", "invalid_html")
+    if code in {"unsafe_style", "invalid_style", "unsupported_style", "invalid_link",
+                "unsafe_link", "schema_too_complex", "unsafe_script", "invalid_jsonld",
+                "duplicate_article_schema", "unsupported_html_tag", "unsafe_html_attribute",
+                "invalid_microdata_meta", "invalid_itemprop", "invalid_itemscope",
+                "invalid_itemtype", "invalid_itemid", "invalid_microdata_content",
+                "oversized_html_attribute"}:
+        return safe_error(400, "validation_failed", "html", "unsupported_html_markup")
+    return safe_error(400, "validation_failed", "request", "invalid_request")
 
 
 def read_body(event):
@@ -400,7 +445,7 @@ def article_url(slug):
 
 def handle_post(data):
     if not require_auth(data):
-        return response(403, {"success": False})
+        return safe_error(403, "authentication_failed", "token", "invalid_token")
     action = data.get("action") or "publish"
     if action == "capabilities":
         return response(200, {"success": True, "connector_version": CONNECTOR_VERSION,
@@ -418,17 +463,17 @@ def handle_post(data):
                                   "robots_ready": robots, "sitemap_ready": sitemap})
         except Exception as exc:
             log_error("diagnostics", exc)
-            return response(503, {"success": False, "error": "storage_unavailable"})
+            return safe_error(503, "storage_failed", "storage", "article_storage_failed")
     if action in ("publish", "dry_run"):
         slug, seo, cover, images, schemas = validate(data)
         if action == "dry_run":
             with connect() as conn, conn.cursor() as cur:
                 if not table_ready(cur):
-                    return response(503, {"success": False, "error": "storage_unavailable"})
+                    return safe_error(503, "storage_failed", "storage", "article_storage_failed")
             return response(200, {"success": True, "dry_run": True, "accepted": True, "stored": False})
         with connect() as conn, conn.cursor() as cur:
             if not table_ready(cur):
-                return response(503, {"success": False, "error": "storage_unavailable"})
+                return safe_error(503, "storage_failed", "storage", "article_storage_failed")
             ids = {url: store_media(cur, url) for url in dict.fromkeys([cover, *images])}
             rendered = render_article(data["html"], ids)
             digest = hashlib.sha256(data["html"].encode("utf-8")).hexdigest()
@@ -462,7 +507,7 @@ def handle_post(data):
                         (article_id, article_id, slug, slug))
             row = cur.fetchone()
             if not row:
-                return response(404, {"success": False, "error": "not_found"})
+                return safe_error(404, "validation_failed", "article", "invalid_request")
             if action == "update_article":
                 new_html = data.get("html")
                 if not isinstance(new_html, str) or not new_html or len(new_html.encode("utf-8")) > 4 * 1024 * 1024:
@@ -475,7 +520,7 @@ def handle_post(data):
                              Json(schemas), Json(extract_faq(new_html)), row[0]))
                 row = (row[0], row[1], new_html)
         return response(200, {"success": True, "id": row[0], "url": article_url(row[1]), "html": row[2]})
-    return response(400, {"success": False, "error": "unknown_action"})
+    return safe_error(400, "unsupported_action", "request", "unsupported_action")
 
 
 def handle_get(event):
@@ -493,25 +538,25 @@ def handle_get(event):
         if mode == "article":
             slug = query.get("slug", "")
             if not SLUG.fullmatch(slug):
-                return response(404, {"success": False})
+                return safe_error(404, "validation_failed", "slug", "invalid_slug")
             cur.execute(f"SELECT id, slug, title, excerpt, render_html, seo, cover_media_id, image_alt, faq, schema_json, "
                         f"created_at, updated_at FROM {SCHEMA}.optiai_blog_articles WHERE slug=%s", (slug,))
             row = cur.fetchone()
-            return response(200, {"success": True, "article": row}) if row else response(404, {"success": False})
+            return response(200, {"success": True, "article": row}) if row else safe_error(404, "validation_failed", "article", "invalid_request")
         if mode == "media":
             media_id = query.get("id", "")
             if not str(media_id).isdigit():
-                return response(404, {"success": False})
+                return safe_error(404, "validation_failed", "media", "invalid_request")
             cur.execute(f"SELECT bytes, mime FROM {SCHEMA}.optiai_blog_media WHERE id=%s", (int(media_id),))
             row = cur.fetchone()
             if not row:
-                return response(404, {"success": False})
+                return safe_error(404, "validation_failed", "media", "invalid_request")
             return {"statusCode": 200, "headers": {"Content-Type": row["mime"],
                     "Cache-Control": "public, max-age=31536000, immutable",
                     "X-Content-Type-Options": "nosniff"},
                     "body": base64.b64encode(bytes(row["bytes"])).decode("ascii"),
                     "isBase64Encoded": True}
-    return response(404, {"success": False})
+    return safe_error(404, "validation_failed", "request", "invalid_request")
 
 
 def handler(event, context):
@@ -521,9 +566,9 @@ def handler(event, context):
             return handle_post(read_body(event))
         if method == "GET":
             return handle_get(event)
-        return response(405, {"success": False})
-    except (ValueError, TypeError, json.JSONDecodeError):
-        return response(400, {"success": False, "error": "invalid_request"})
+        return safe_error(405, "unsupported_action", "request", "unsupported_action")
+    except (ValueError, TypeError) as exc:
+        return validation_error(exc)
     except Exception as exc:
         log_error("handler", exc)
-        return response(503, {"success": False, "error": "temporarily_unavailable"})
+        return safe_error(503, "temporary_unavailable", "request", "upstream_unavailable")
