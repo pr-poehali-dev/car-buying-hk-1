@@ -205,6 +205,10 @@ def extract_faq(source):
     return result
 
 
+def log_error(stage, exc):
+    print("optiai-blog error stage=%s type=%s pgcode=%s" % (stage, type(exc).__name__, getattr(exc, "pgcode", None)))
+
+
 def connect():
     return psycopg2.connect(os.environ["DATABASE_URL"], connect_timeout=5)
 
@@ -256,7 +260,8 @@ def handle_post(data):
             return response(200, {"success": True, "https": True,
                                   "data_root_ready": ready, "blog_root_ready": ready and blog,
                                   "robots_ready": robots, "sitemap_ready": sitemap})
-        except Exception:
+        except Exception as exc:
+            log_error("diagnostics", exc)
             return response(503, {"success": False, "error": "storage_unavailable"})
     if action in ("publish", "dry_run"):
         slug, seo, cover, images = validate(data)
@@ -361,5 +366,6 @@ def handler(event, context):
         return response(405, {"success": False})
     except (ValueError, TypeError, json.JSONDecodeError):
         return response(400, {"success": False, "error": "invalid_request"})
-    except Exception:
+    except Exception as exc:
+        log_error("handler", exc)
         return response(503, {"success": False, "error": "temporarily_unavailable"})
