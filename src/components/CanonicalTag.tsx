@@ -7,6 +7,9 @@ const CanonicalTag = () => {
   const { pathname } = useLocation();
   const clean = pathname.length > 1 ? pathname.replace(/\/+$/, '') : '/';
 
+  // Blog metadata is rendered in <head> by its server routes.
+  if (clean === '/blog' || clean.startsWith('/blog/')) return null;
+
   return (
     <>
       <link rel="canonical" href={`${SITE}${clean}`} />

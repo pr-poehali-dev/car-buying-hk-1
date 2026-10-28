@@ -24,6 +24,11 @@ import { Route as SpasiboRouteImport } from './routes/spasibo'
 import { Route as SrochnyjVykupAvtoRouteImport } from './routes/srochnyj-vykup-avto'
 import { Route as VykupBityhAvtoRouteImport } from './routes/vykup-bityh-avto'
 import { Route as VykupKreditnyhAvtoRouteImport } from './routes/vykup-kreditnyh-avto'
+import { Route as ApiOptiaiRouteImport } from './routes/api/optiai'
+import { Route as BlogIndexRouteImport } from './routes/blog/index'
+import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
+import { Route as BlogSitemapDotxmlRouteImport } from './routes/blog/sitemap[.]xml'
+import { Route as BlogMediaIdRouteImport } from './routes/blog/media/$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -100,6 +105,31 @@ const VykupKreditnyhAvtoRoute = VykupKreditnyhAvtoRouteImport.update({
   path: '/vykup-kreditnyh-avto',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiOptiaiRoute = ApiOptiaiRouteImport.update({
+  id: '/api/optiai',
+  path: '/api/optiai',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSitemapDotxmlRoute = BlogSitemapDotxmlRouteImport.update({
+  id: '/blog/sitemap.xml',
+  path: '/blog/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogMediaIdRoute = BlogMediaIdRouteImport.update({
+  id: '/blog/media/$id',
+  path: '/blog/media/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -117,6 +147,11 @@ export interface FileRoutesByFullPath {
   '/srochnyj-vykup-avto': typeof SrochnyjVykupAvtoRoute
   '/vykup-bityh-avto': typeof VykupBityhAvtoRoute
   '/vykup-kreditnyh-avto': typeof VykupKreditnyhAvtoRoute
+  '/api/optiai': typeof ApiOptiaiRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/blog/sitemap.xml': typeof BlogSitemapDotxmlRoute
+  '/blog/': typeof BlogIndexRoute
+  '/blog/media/$id': typeof BlogMediaIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -134,6 +169,11 @@ export interface FileRoutesByTo {
   '/srochnyj-vykup-avto': typeof SrochnyjVykupAvtoRoute
   '/vykup-bityh-avto': typeof VykupBityhAvtoRoute
   '/vykup-kreditnyh-avto': typeof VykupKreditnyhAvtoRoute
+  '/api/optiai': typeof ApiOptiaiRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/blog/sitemap.xml': typeof BlogSitemapDotxmlRoute
+  '/blog': typeof BlogIndexRoute
+  '/blog/media/$id': typeof BlogMediaIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -152,6 +192,11 @@ export interface FileRoutesById {
   '/srochnyj-vykup-avto': typeof SrochnyjVykupAvtoRoute
   '/vykup-bityh-avto': typeof VykupBityhAvtoRoute
   '/vykup-kreditnyh-avto': typeof VykupKreditnyhAvtoRoute
+  '/api/optiai': typeof ApiOptiaiRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/blog/sitemap.xml': typeof BlogSitemapDotxmlRoute
+  '/blog/': typeof BlogIndexRoute
+  '/blog/media/$id': typeof BlogMediaIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -171,6 +216,11 @@ export interface FileRouteTypes {
     | '/srochnyj-vykup-avto'
     | '/vykup-bityh-avto'
     | '/vykup-kreditnyh-avto'
+    | '/api/optiai'
+    | '/blog/$slug'
+    | '/blog/sitemap.xml'
+    | '/blog/'
+    | '/blog/media/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -188,6 +238,11 @@ export interface FileRouteTypes {
     | '/srochnyj-vykup-avto'
     | '/vykup-bityh-avto'
     | '/vykup-kreditnyh-avto'
+    | '/api/optiai'
+    | '/blog/$slug'
+    | '/blog/sitemap.xml'
+    | '/blog'
+    | '/blog/media/$id'
   id:
     | '__root__'
     | '/'
@@ -205,6 +260,11 @@ export interface FileRouteTypes {
     | '/srochnyj-vykup-avto'
     | '/vykup-bityh-avto'
     | '/vykup-kreditnyh-avto'
+    | '/api/optiai'
+    | '/blog/$slug'
+    | '/blog/sitemap.xml'
+    | '/blog/'
+    | '/blog/media/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -223,6 +283,11 @@ export interface RootRouteChildren {
   SrochnyjVykupAvtoRoute: typeof SrochnyjVykupAvtoRoute
   VykupBityhAvtoRoute: typeof VykupBityhAvtoRoute
   VykupKreditnyhAvtoRoute: typeof VykupKreditnyhAvtoRoute
+  ApiOptiaiRoute: typeof ApiOptiaiRoute
+  BlogSlugRoute: typeof BlogSlugRoute
+  BlogSitemapDotxmlRoute: typeof BlogSitemapDotxmlRoute
+  BlogIndexRoute: typeof BlogIndexRoute
+  BlogMediaIdRoute: typeof BlogMediaIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -332,6 +397,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VykupKreditnyhAvtoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/optiai': {
+      id: '/api/optiai'
+      path: '/api/optiai'
+      fullPath: '/api/optiai'
+      preLoaderRoute: typeof ApiOptiaiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/sitemap.xml': {
+      id: '/blog/sitemap.xml'
+      path: '/blog/sitemap.xml'
+      fullPath: '/blog/sitemap.xml'
+      preLoaderRoute: typeof BlogSitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/media/$id': {
+      id: '/blog/media/$id'
+      path: '/blog/media/$id'
+      fullPath: '/blog/media/$id'
+      preLoaderRoute: typeof BlogMediaIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -351,6 +451,11 @@ const rootRouteChildren: RootRouteChildren = {
   SrochnyjVykupAvtoRoute: SrochnyjVykupAvtoRoute,
   VykupBityhAvtoRoute: VykupBityhAvtoRoute,
   VykupKreditnyhAvtoRoute: VykupKreditnyhAvtoRoute,
+  ApiOptiaiRoute: ApiOptiaiRoute,
+  BlogSlugRoute: BlogSlugRoute,
+  BlogSitemapDotxmlRoute: BlogSitemapDotxmlRoute,
+  BlogIndexRoute: BlogIndexRoute,
+  BlogMediaIdRoute: BlogMediaIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -25,6 +25,7 @@ const info = [
   { to: '/evaluation', label: 'Оценка авто' },
   { to: '/how-it-works', label: 'Как мы работаем' },
   { to: '/reviews', label: 'Отзывы' },
+  { to: '/blog', label: 'Блог' },
 ];
 
 const Column = ({ title, links }: { title: string; links: { to: string; label: string }[] }) => (

@@ -1,0 +1,1 @@
+{"tests": [{"name": "Wrong token rejected", "method": "POST", "path": "/", "body": {"token": "wrong", "iblock_id": "blog", "action": "capabilities"}, "expectedStatus": 403}]}

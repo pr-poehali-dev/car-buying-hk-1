@@ -20,6 +20,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen, handlePhoneClick }: HeaderP
           <Link to="/how-it-works" className="text-gray-600 hover:text-gray-900 transition">Как мы работаем</Link>
           <Link to="/reviews" className="text-gray-600 hover:text-gray-900 transition">Отзывы</Link>
           <Link to="/evaluation" className="text-gray-600 hover:text-gray-900 transition">Оценка авто</Link>
+          <Link to="/blog" className="text-gray-600 hover:text-gray-900 transition">Блог</Link>
         </nav>
         <button 
           className="md:hidden p-2 -mr-2 touch-manipulation" 
@@ -37,6 +38,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen, handlePhoneClick }: HeaderP
             <Link to="/how-it-works" className="text-gray-600 hover:text-gray-900 transition" onClick={() => setMobileMenuOpen(false)}>Как мы работаем</Link>
             <Link to="/reviews" className="text-gray-600 hover:text-gray-900 transition" onClick={() => setMobileMenuOpen(false)}>Отзывы</Link>
             <Link to="/evaluation" className="text-gray-600 hover:text-gray-900 transition" onClick={() => setMobileMenuOpen(false)}>Оценка авто</Link>
+            <Link to="/blog" className="text-gray-600 hover:text-gray-900 transition" onClick={() => setMobileMenuOpen(false)}>Блог</Link>
             <a href="tel:+79841771588" onClick={handlePhoneClick} className="text-white bg-gray-900 hover:bg-gray-800 font-bold text-lg py-3 px-4 rounded-lg text-center touch-manipulation">+7 (984) 177-15-88</a>
           </nav>
         </div>

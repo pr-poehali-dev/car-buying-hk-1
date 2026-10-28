@@ -28,6 +28,7 @@ const Reviews = () => {
             <Link to="/how-it-works" className="text-gray-600 hover:text-gray-900 transition">Как мы работаем</Link>
             <Link to="/reviews" className="text-gray-900 font-semibold">Отзывы</Link>
             <Link to="/evaluation" className="text-gray-600 hover:text-gray-900 transition">Оценка авто</Link>
+            <Link to="/blog" className="text-gray-600 hover:text-gray-900 transition">Блог</Link>
           </nav>
           <button 
             className="md:hidden p-2" 
@@ -45,6 +46,7 @@ const Reviews = () => {
               <Link to="/how-it-works" className="text-gray-600 hover:text-gray-900 transition" onClick={() => setMobileMenuOpen(false)}>Как мы работаем</Link>
               <Link to="/reviews" className="text-gray-900 font-semibold" onClick={() => setMobileMenuOpen(false)}>Отзывы</Link>
               <Link to="/evaluation" className="text-gray-600 hover:text-gray-900 transition" onClick={() => setMobileMenuOpen(false)}>Оценка авто</Link>
+              <Link to="/blog" className="text-gray-600 hover:text-gray-900 transition" onClick={() => setMobileMenuOpen(false)}>Блог</Link>
               <a href="tel:+79841771588" className="text-gray-900 font-bold text-lg">+7 (984) 177-15-88</a>
             </nav>
           </div>
