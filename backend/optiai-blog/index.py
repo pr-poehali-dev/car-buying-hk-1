@@ -17,7 +17,7 @@ import ssl
 from urllib.parse import urlsplit
 from urllib.request import build_opener, HTTPRedirectHandler, Request
 
-import bleach
+from bleach._vendor import html5lib
 from bs4 import BeautifulSoup
 import psycopg2
 from psycopg2.extras import Json, RealDictCursor
@@ -25,25 +25,43 @@ from psycopg2.extras import Json, RealDictCursor
 
 SCHEMA = "t_p43245144_car_buying_hk_1"
 SITE = "https://avtovykupkhb27.ru"
+CONNECTOR_VERSION = "2.5.1"
 SLUG = re.compile(r"^[a-z0-9](?:[a-z0-9-]{0,118}[a-z0-9])?$")
 CAPABILITIES = [
     "seo_meta", "canonical", "open_graph", "schema_org", "inline_images",
     "cover_images", "seo_event_repair", "seo_head_runtime",
     "seo_runtime_diagnostics", "picture_alt", "article_content_api", "dry_run",
 ]
-ALLOWED_TAGS = set(bleach.sanitizer.ALLOWED_TAGS) | {
+ALLOWED_TAGS = {
     "article", "section", "div", "span", "h1", "h2", "h3", "h4", "h5", "h6",
     "p", "br", "hr", "img", "figure", "figcaption", "table", "thead",
     "tbody", "tr", "th", "td", "ul", "ol", "li", "blockquote", "pre",
     "code", "strong", "em", "b", "i", "small", "sup", "sub", "mark",
-    "details", "summary", "a",
+    "details", "summary", "a", "time", "meta", "abbr", "dl", "dt", "dd",
 }
-ALLOWED_ATTRIBUTES = {
-    "*": ["class", "id", "title", "aria-label", "data-benefits-block", "data-case-block"],
-    "a": ["href", "title", "rel", "target", "class", "id"],
-    "img": ["src", "alt", "width", "height", "loading", "class", "id"],
-    "th": ["scope", "colspan", "rowspan", "class", "id"],
-    "td": ["colspan", "rowspan", "class", "id"],
+GLOBAL_ATTRIBUTES = {
+    "class", "id", "title", "aria-label", "data-benefits-block", "data-case-block",
+    "data-optiai-authorship", "itemprop", "itemscope", "itemtype", "itemid", "style",
+}
+TAG_ATTRIBUTES = {
+    "a": {"href", "rel", "target"},
+    "img": {"src", "alt", "width", "height", "loading", "decoding"},
+    "th": {"scope", "colspan", "rowspan"},
+    "td": {"colspan", "rowspan"},
+    "time": {"datetime"},
+    "blockquote": {"cite"},
+    "details": {"open"},
+    "meta": {"content"},
+}
+ITEMPROP = re.compile(r"^[A-Za-z][A-Za-z0-9:_-]*(?:\s+[A-Za-z][A-Za-z0-9:_-]*)*$")
+SAFE_LENGTH = re.compile(r"^(?:auto|0|-?\d+(?:\.\d+)?(?:px|em|rem|%|vw|vh)?)(?:\s+(?:auto|0|-?\d+(?:\.\d+)?(?:px|em|rem|%|vw|vh)?)){0,3}$", re.I)
+STYLE_LENGTHS = {"width", "max-width", "height", "margin", "margin-left", "margin-right", "margin-top", "margin-bottom", "padding", "padding-left", "padding-right", "padding-top", "padding-bottom", "font-size", "line-height", "border-radius"}
+STYLE_KEYWORDS = {
+    "float": {"none", "left", "right"},
+    "clear": {"none", "both", "left", "right"},
+    "display": {"block", "inline", "inline-block", "flow-root"},
+    "text-align": {"left", "right", "center", "justify"},
+    "font-weight": {"normal", "bold", "400", "500", "600", "700"},
 }
 
 
@@ -78,6 +96,131 @@ def require_auth(data):
     return data.get("iblock_id") == "blog"
 
 
+def validate_style(value):
+    if len(value) > 1000 or any(ord(ch) < 32 for ch in value) or any(
+            bad in value.lower() for bad in ("url(", "expression", "@import", "var(", "\\", "/*", "*/")):
+        raise ValueError("unsafe_style")
+    for part in value.split(";"):
+        if not part.strip():
+            continue
+        if ":" not in part:
+            raise ValueError("invalid_style")
+        name, raw = part.split(":", 1)
+        name, raw = name.strip().lower(), raw.strip().lower()
+        if raw.endswith("!important"):
+            raw = raw[:-10].strip()
+        if name in STYLE_LENGTHS:
+            if not SAFE_LENGTH.fullmatch(raw):
+                raise ValueError("invalid_style")
+        elif name in STYLE_KEYWORDS:
+            if raw not in STYLE_KEYWORDS[name]:
+                raise ValueError("invalid_style")
+        else:
+            raise ValueError("unsupported_style")
+
+
+def validate_link(value):
+    if not value or value.strip() != value or any(ord(ch) < 33 or ord(ch) == 127 for ch in value):
+        raise ValueError("invalid_link")
+    if value.startswith(("/", "#", "?")) and not value.startswith("//"):
+        return
+    parsed = urlsplit(value)
+    if not parsed.scheme and not parsed.netloc and ":" not in value.split("/", 1)[0]:
+        return
+    if parsed.scheme.lower() not in ("https", "http", "mailto", "tel"):
+        raise ValueError("unsafe_link")
+    if parsed.scheme.lower() in ("https", "http") and (not parsed.hostname or parsed.username or parsed.password):
+        raise ValueError("unsafe_link")
+
+
+def schema_types(value):
+    pending = [value]
+    types = set()
+    seen = 0
+    while pending:
+        node = pending.pop()
+        seen += 1
+        if seen > 10000:
+            raise ValueError("schema_too_complex")
+        if isinstance(node, dict):
+            kind = node.get("@type")
+            if isinstance(kind, str):
+                types.add(kind)
+            elif isinstance(kind, list):
+                types.update(x for x in kind if isinstance(x, str))
+            pending.extend(node.values())
+        elif isinstance(node, list):
+            pending.extend(node)
+    return types
+
+
+def parse_article_html(source):
+    """Validate the browser's HTML5 parse tree; keep safe markup and JSON-LD."""
+    try:
+        tree = html5lib.HTMLParser(strict=True, namespaceHTMLElements=False).parseFragment(source)
+    except Exception as exc:
+        raise ValueError("invalid_html") from exc
+    schemas = []
+    images = []
+    article_schemas = 0
+    for node in tree.iter():
+        if node is tree or not isinstance(node.tag, str):
+            continue
+        tag = node.tag.lower()
+        attrs = {name.lower(): value for name, value in node.attrib.items()}
+        if tag == "script":
+            if (not {"type"} <= set(attrs) or set(attrs) - {"type", "id"}
+                    or attrs["type"].strip().lower() != "application/ld+json"
+                    or ("id" in attrs and not re.fullmatch(r"[A-Za-z][A-Za-z0-9_-]{0,99}", attrs["id"]))
+                    or len((node.text or "").encode("utf-8")) > 256 * 1024):
+                raise ValueError("unsafe_script")
+            try:
+                schema = json.loads(node.text or "")
+            except (ValueError, TypeError) as exc:
+                raise ValueError("invalid_jsonld") from exc
+            if not isinstance(schema, (dict, list)):
+                raise ValueError("invalid_jsonld")
+            types = schema_types(schema)
+            if "Article" in types or "BlogPosting" in types or "NewsArticle" in types:
+                article_schemas += 1
+            if article_schemas > 1:
+                raise ValueError("duplicate_article_schema")
+            schemas.append(schema)
+            continue
+        if tag not in ALLOWED_TAGS:
+            raise ValueError("unsupported_html_tag")
+        allowed = GLOBAL_ATTRIBUTES | TAG_ATTRIBUTES.get(tag, set())
+        if any(name not in allowed or name.startswith("on") for name in attrs):
+            raise ValueError("unsafe_html_attribute")
+        if tag == "meta" and (set(attrs) - {"itemprop", "content"} or
+                               not attrs.get("itemprop") or "content" not in attrs):
+            raise ValueError("invalid_microdata_meta")
+        if "itemprop" in attrs and (len(attrs["itemprop"]) > 300 or not ITEMPROP.fullmatch(attrs["itemprop"])):
+            raise ValueError("invalid_itemprop")
+        if "itemscope" in attrs and attrs["itemscope"] not in ("", "itemscope"):
+            raise ValueError("invalid_itemscope")
+        if "itemtype" in attrs and (not attrs["itemtype"].startswith("https://schema.org/") or
+                                    any(ch.isspace() for ch in attrs["itemtype"])):
+            raise ValueError("invalid_itemtype")
+        if "itemid" in attrs and not (attrs["itemid"].startswith("#") or
+                                     attrs["itemid"].startswith(SITE + "/")):
+            raise ValueError("invalid_itemid")
+        if "content" in attrs and (len(attrs["content"]) > 5000 or
+                                   any(ord(ch) < 32 for ch in attrs["content"])):
+            raise ValueError("invalid_microdata_content")
+        if "style" in attrs:
+            validate_style(attrs["style"])
+        if "href" in attrs:
+            validate_link(attrs["href"])
+        if "src" in attrs:
+            validate_media_url(attrs["src"])
+            images.append(attrs["src"])
+        for name, value in attrs.items():
+            if len(value) > 2000 and name not in ("content", "style"):
+                raise ValueError("oversized_html_attribute")
+    return tree, images, schemas
+
+
 def validate(data):
     slug = data.get("slug")
     if not isinstance(slug, str) or not SLUG.fullmatch(slug):
@@ -97,8 +240,8 @@ def validate(data):
     images = data.get("inline_images") or []
     if not isinstance(images, list) or len(images) > 30 or any(not isinstance(u, str) for u in images):
         raise ValueError("invalid_images")
-    html_images = [tag.get("src") for tag in BeautifulSoup(data["html"], "html.parser").find_all("img")]
-    if len(html_images) > 30 or any(not isinstance(u, str) for u in html_images):
+    _, html_images, schemas = parse_article_html(data["html"])
+    if len(html_images) > 30:
         raise ValueError("invalid_html_images")
     images = list(dict.fromkeys([*images, *html_images]))
     cover = data.get("image_url") or seo.get("image")
@@ -106,7 +249,7 @@ def validate(data):
         raise ValueError("missing_cover")
     for url in [cover, *images]:
         validate_media_url(url)
-    return slug, seo, cover, images
+    return slug, seo, cover, images, schemas
 
 
 def validate_media_url(url):
@@ -173,19 +316,31 @@ def store_media(cur, url):
 
 
 def render_article(source, media_urls):
-    soup = BeautifulSoup(source, "html.parser")
-    for tag in soup.find_all("img"):
-        src = tag.get("src")
-        if src in media_urls:
-            tag["src"] = f"/blog/media/{media_urls[src]}"
-            if not tag.get("alt"):
-                tag["alt"] = "Иллюстрация к статье"
-        else:
-            tag.decompose()
-    cleaner = bleach.Cleaner(tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES,
-                             protocols=["https", "http", "mailto", "tel"],
-                             strip=True, strip_comments=False)
-    return cleaner.clean(str(soup))
+    tree, _, _ = parse_article_html(source)
+
+    def rewrite(parent):
+        for node in list(parent):
+            if isinstance(node.tag, str) and node.tag.lower() == "script":
+                previous = list(parent)
+                index = previous.index(node)
+                if index:
+                    previous[index - 1].tail = (previous[index - 1].tail or "") + (node.tail or "")
+                else:
+                    parent.text = (parent.text or "") + (node.tail or "")
+                parent.remove(node)
+                continue
+            if isinstance(node.tag, str) and node.tag.lower() == "img":
+                source_url = node.get("src")
+                if source_url not in media_urls:
+                    raise ValueError("missing_local_media")
+                node.set("src", f"/blog/media/{media_urls[source_url]}")
+                if not node.get("alt"):
+                    node.set("alt", "Иллюстрация к статье")
+            rewrite(node)
+
+    rewrite(tree)
+    return html5lib.serialize(tree, tree="etree", quote_attr_values="always",
+                              omit_optional_tags=False)
 
 
 def extract_faq(source):
@@ -248,7 +403,7 @@ def handle_post(data):
         return response(403, {"success": False})
     action = data.get("action") or "publish"
     if action == "capabilities":
-        return response(200, {"success": True, "connector_version": "2.5.0",
+        return response(200, {"success": True, "connector_version": CONNECTOR_VERSION,
                               "seo_module": True, "seo_module_version": "1.4.0",
                               "seo_event_ready": True, "capabilities": CAPABILITIES})
     if action == "diagnostics":
@@ -265,7 +420,7 @@ def handle_post(data):
             log_error("diagnostics", exc)
             return response(503, {"success": False, "error": "storage_unavailable"})
     if action in ("publish", "dry_run"):
-        slug, seo, cover, images = validate(data)
+        slug, seo, cover, images, schemas = validate(data)
         if action == "dry_run":
             with connect() as conn, conn.cursor() as cur:
                 if not table_ready(cur):
@@ -279,16 +434,16 @@ def handle_post(data):
             digest = hashlib.sha256(data["html"].encode("utf-8")).hexdigest()
             cur.execute(
                 f"INSERT INTO {SCHEMA}.optiai_blog_articles "
-                "(slug, title, excerpt, html, render_html, html_sha256, seo, cover_media_id, image_alt, media_map, faq) "
-                "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ON CONFLICT (slug) DO UPDATE SET "
+                "(slug, title, excerpt, html, render_html, html_sha256, seo, cover_media_id, image_alt, media_map, faq, schema_json) "
+                "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ON CONFLICT (slug) DO UPDATE SET "
                 "title=EXCLUDED.title, excerpt=EXCLUDED.excerpt, html=EXCLUDED.html, "
                 "render_html=EXCLUDED.render_html, html_sha256=EXCLUDED.html_sha256, "
                 "seo=EXCLUDED.seo, cover_media_id=EXCLUDED.cover_media_id, "
                 "image_alt=EXCLUDED.image_alt, media_map=EXCLUDED.media_map, "
-                "faq=EXCLUDED.faq, updated_at=now() RETURNING id",
+                "faq=EXCLUDED.faq, schema_json=EXCLUDED.schema_json, updated_at=now() RETURNING id",
                 (slug, data["title"], data.get("excerpt", ""), data["html"], rendered,
                  digest, Json(seo), ids[cover], data.get("image_alt", ""), Json(ids),
-                 Json(extract_faq(data["html"]))),
+                 Json(extract_faq(data["html"])), Json(schemas)),
             )
             article_id = cur.fetchone()[0]
         return response(200, {"success": True, "id": article_id, "url": article_url(slug),
@@ -312,10 +467,12 @@ def handle_post(data):
                 new_html = data.get("html")
                 if not isinstance(new_html, str) or not new_html or len(new_html.encode("utf-8")) > 4 * 1024 * 1024:
                     raise ValueError("invalid_html")
+                _, _, schemas = parse_article_html(new_html)
                 rendered = render_article(new_html, row[3] or {})
                 cur.execute(f"UPDATE {SCHEMA}.optiai_blog_articles SET html=%s, render_html=%s, "
-                            "html_sha256=%s, updated_at=now() WHERE id=%s",
-                            (new_html, rendered, hashlib.sha256(new_html.encode("utf-8")).hexdigest(), row[0]))
+                            "html_sha256=%s, schema_json=%s, faq=%s, updated_at=now() WHERE id=%s",
+                            (new_html, rendered, hashlib.sha256(new_html.encode("utf-8")).hexdigest(),
+                             Json(schemas), Json(extract_faq(new_html)), row[0]))
                 row = (row[0], row[1], new_html)
         return response(200, {"success": True, "id": row[0], "url": article_url(row[1]), "html": row[2]})
     return response(400, {"success": False, "error": "unknown_action"})
@@ -337,7 +494,7 @@ def handle_get(event):
             slug = query.get("slug", "")
             if not SLUG.fullmatch(slug):
                 return response(404, {"success": False})
-            cur.execute(f"SELECT id, slug, title, excerpt, render_html, seo, cover_media_id, image_alt, faq, "
+            cur.execute(f"SELECT id, slug, title, excerpt, render_html, seo, cover_media_id, image_alt, faq, schema_json, "
                         f"created_at, updated_at FROM {SCHEMA}.optiai_blog_articles WHERE slug=%s", (slug,))
             row = cur.fetchone()
             return response(200, {"success": True, "article": row}) if row else response(404, {"success": False})

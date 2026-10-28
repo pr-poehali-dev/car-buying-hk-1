@@ -2,6 +2,22 @@ import {createFileRoute, notFound} from '@tanstack/react-router';
 import BlogShell from '@/components/blog/BlogShell';
 import {getBlogArticle, SITE} from '@/lib/blog/server';
 
+function hasSchemaType(value: unknown, wanted: Set<string>): boolean {
+  const pending: unknown[] = [value];
+  let checked = 0;
+  while (pending.length && checked++ < 10000) {
+    const node = pending.pop();
+    if (Array.isArray(node)) pending.push(...node);
+    else if (node && typeof node === 'object') {
+      const data = node as Record<string, unknown>;
+      if (typeof data['@type'] === 'string' && wanted.has(data['@type'])) return true;
+      if (Array.isArray(data['@type']) && data['@type'].some((type) => typeof type === 'string' && wanted.has(type))) return true;
+      pending.push(...Object.values(data));
+    }
+  }
+  return false;
+}
+
 export const Route = createFileRoute('/blog/$slug')({
   loader: async ({params}) => {
     const article = await getBlogArticle({data: params.slug});
@@ -32,6 +48,14 @@ export const Route = createFileRoute('/blog/$slug')({
       mainEntity: article.faq.map(({q, a}) => ({'@type': 'Question', name: q,
         acceptedAnswer: {'@type': 'Answer', text: a}})),
     }] : [];
+    const incoming = Array.isArray(article.schema_json) ? article.schema_json : [];
+    const incomingArticle = incoming.find((schema) => hasSchemaType(schema, new Set(['Article', 'BlogPosting', 'NewsArticle'])));
+    const hasBreadcrumb = incoming.some((schema) => hasSchemaType(schema, new Set(['BreadcrumbList'])));
+    const hasFaq = incoming.some((schema) => hasSchemaType(schema, new Set(['FAQPage'])));
+    const schemas = [incomingArticle || articleSchema,
+      ...(!hasBreadcrumb ? [breadcrumb] : []),
+      ...incoming.filter((schema) => schema !== incomingArticle),
+      ...(!hasFaq ? faq : [])];
     return {
       links: [{rel: 'canonical', href: url}],
       meta: [
@@ -47,7 +71,7 @@ export const Route = createFileRoute('/blog/$slug')({
         {name: 'twitter:description', content: description},
         {name: 'twitter:image', content: cover},
       ],
-      scripts: [articleSchema, breadcrumb, ...faq].map((schema, index) => ({
+      scripts: schemas.map((schema, index) => ({
         id: index === 0 ? 'optiai-seo-schema' : undefined,
         type: 'application/ld+json', children: JSON.stringify(schema).replace(/</g, '\\u003c'),
       })),

@@ -21,9 +21,13 @@ CREATE TABLE IF NOT EXISTS t_p43245144_car_buying_hk_1.optiai_blog_articles (
     image_alt TEXT NOT NULL DEFAULT '',
     media_map JSONB NOT NULL DEFAULT '{}'::jsonb,
     faq JSONB NOT NULL DEFAULT '[]'::jsonb,
+    schema_json JSONB NOT NULL DEFAULT '[]'::jsonb,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+ALTER TABLE t_p43245144_car_buying_hk_1.optiai_blog_articles
+    ADD COLUMN IF NOT EXISTS schema_json JSONB NOT NULL DEFAULT '[]'::jsonb;
 
 CREATE INDEX IF NOT EXISTS optiai_blog_articles_updated_idx
     ON t_p43245144_car_buying_hk_1.optiai_blog_articles (updated_at DESC);

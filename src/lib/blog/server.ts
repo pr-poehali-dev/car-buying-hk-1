@@ -20,6 +20,7 @@ export type BlogSummary = {
 export type BlogArticle = BlogSummary & {
   render_html: string;
   faq: {q: string; a: string}[];
+  schema_json: Array<Record<string, any>>;
 };
 
 function functionUrl(): string {
