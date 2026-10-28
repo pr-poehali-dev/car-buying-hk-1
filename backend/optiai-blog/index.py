@@ -214,15 +214,16 @@ def connect():
 
 
 def table_ready(cur):
-    articles = f"{SCHEMA}.optiai_blog_articles"
-    media = f"{SCHEMA}.optiai_blog_media"
-    cur.execute("SELECT to_regclass(%s), to_regclass(%s)", (articles, media))
-    found = cur.fetchone()
-    if not found or not all(found):
+    try:
+        cur.execute(f"SELECT 1 FROM {SCHEMA}.optiai_blog_media LIMIT 1")
+        cur.fetchall()
+        cur.execute(f"SELECT 1 FROM {SCHEMA}.optiai_blog_articles LIMIT 1")
+        cur.fetchall()
+    except psycopg2.Error as exc:
+        log_error("table_ready", exc)
+        cur.connection.rollback()
         return False
-    cur.execute("SELECT has_table_privilege(current_user, %s, 'SELECT,INSERT,UPDATE'), "
-                "has_table_privilege(current_user, %s, 'SELECT,INSERT,UPDATE')", (articles, media))
-    return all(cur.fetchone())
+    return True
 
 
 class NoRedirect(HTTPRedirectHandler):
