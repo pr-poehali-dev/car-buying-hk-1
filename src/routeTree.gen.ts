@@ -14,6 +14,7 @@ import { Route as SlugRouteImport } from './routes/$slug'
 import { Route as AdminLeadsRouteImport } from './routes/admin-leads'
 import { Route as AmurskRouteImport } from './routes/amursk'
 import { Route as BikinRouteImport } from './routes/bikin'
+import { Route as BlogSitemapRouteImport } from './routes/blog-sitemap'
 import { Route as EvaluationRouteImport } from './routes/evaluation'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as KomsomolskRouteImport } from './routes/komsomolsk'
@@ -53,6 +54,11 @@ const AmurskRoute = AmurskRouteImport.update({
 const BikinRoute = BikinRouteImport.update({
   id: '/bikin',
   path: '/bikin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSitemapRoute = BlogSitemapRouteImport.update({
+  id: '/blog-sitemap',
+  path: '/blog-sitemap',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EvaluationRoute = EvaluationRouteImport.update({
@@ -137,6 +143,7 @@ export interface FileRoutesByFullPath {
   '/admin-leads': typeof AdminLeadsRoute
   '/amursk': typeof AmurskRoute
   '/bikin': typeof BikinRoute
+  '/blog-sitemap': typeof BlogSitemapRoute
   '/evaluation': typeof EvaluationRoute
   '/how-it-works': typeof HowItWorksRoute
   '/komsomolsk': typeof KomsomolskRoute
@@ -159,6 +166,7 @@ export interface FileRoutesByTo {
   '/admin-leads': typeof AdminLeadsRoute
   '/amursk': typeof AmurskRoute
   '/bikin': typeof BikinRoute
+  '/blog-sitemap': typeof BlogSitemapRoute
   '/evaluation': typeof EvaluationRoute
   '/how-it-works': typeof HowItWorksRoute
   '/komsomolsk': typeof KomsomolskRoute
@@ -182,6 +190,7 @@ export interface FileRoutesById {
   '/admin-leads': typeof AdminLeadsRoute
   '/amursk': typeof AmurskRoute
   '/bikin': typeof BikinRoute
+  '/blog-sitemap': typeof BlogSitemapRoute
   '/evaluation': typeof EvaluationRoute
   '/how-it-works': typeof HowItWorksRoute
   '/komsomolsk': typeof KomsomolskRoute
@@ -206,6 +215,7 @@ export interface FileRouteTypes {
     | '/admin-leads'
     | '/amursk'
     | '/bikin'
+    | '/blog-sitemap'
     | '/evaluation'
     | '/how-it-works'
     | '/komsomolsk'
@@ -228,6 +238,7 @@ export interface FileRouteTypes {
     | '/admin-leads'
     | '/amursk'
     | '/bikin'
+    | '/blog-sitemap'
     | '/evaluation'
     | '/how-it-works'
     | '/komsomolsk'
@@ -250,6 +261,7 @@ export interface FileRouteTypes {
     | '/admin-leads'
     | '/amursk'
     | '/bikin'
+    | '/blog-sitemap'
     | '/evaluation'
     | '/how-it-works'
     | '/komsomolsk'
@@ -273,6 +285,7 @@ export interface RootRouteChildren {
   AdminLeadsRoute: typeof AdminLeadsRoute
   AmurskRoute: typeof AmurskRoute
   BikinRoute: typeof BikinRoute
+  BlogSitemapRoute: typeof BlogSitemapRoute
   EvaluationRoute: typeof EvaluationRoute
   HowItWorksRoute: typeof HowItWorksRoute
   KomsomolskRoute: typeof KomsomolskRoute
@@ -325,6 +338,13 @@ declare module '@tanstack/react-router' {
       path: '/bikin'
       fullPath: '/bikin'
       preLoaderRoute: typeof BikinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog-sitemap': {
+      id: '/blog-sitemap'
+      path: '/blog-sitemap'
+      fullPath: '/blog-sitemap'
+      preLoaderRoute: typeof BlogSitemapRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/evaluation': {
@@ -441,6 +461,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminLeadsRoute: AdminLeadsRoute,
   AmurskRoute: AmurskRoute,
   BikinRoute: BikinRoute,
+  BlogSitemapRoute: BlogSitemapRoute,
   EvaluationRoute: EvaluationRoute,
   HowItWorksRoute: HowItWorksRoute,
   KomsomolskRoute: KomsomolskRoute,

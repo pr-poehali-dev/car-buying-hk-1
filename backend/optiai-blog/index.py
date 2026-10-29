@@ -26,7 +26,7 @@ from psycopg2.extras import Json, RealDictCursor
 
 SCHEMA = "t_p43245144_car_buying_hk_1"
 SITE = "https://avtovykupkhb27.ru"
-CONNECTOR_VERSION = "2.5.3"
+CONNECTOR_VERSION = "2.5.4"
 SLUG = re.compile(r"^[a-zа-яё0-9](?:[a-zа-яё0-9-]{0,118}[a-zа-яё0-9])?$")
 CAPABILITIES = [
     "seo_meta", "canonical", "open_graph", "schema_org", "inline_images",
@@ -549,8 +549,10 @@ def handle_post(data):
             with connect() as conn, conn.cursor() as cur:
                 ready = table_ready(cur)
             robots = public_check("/robots.txt", "/blog/sitemap.xml")
-            sitemap = public_check("/sitemap.xml", "<urlset") and public_check("/blog/sitemap.xml", "<urlset")
-            blog = public_check("/blog", "Блог")
+            sitemap = (public_check("/sitemap.xml", "<urlset")
+                       and public_check("/blog/sitemap.xml", "<urlset")
+                       and public_check("/blog-sitemap", "<urlset"))
+            blog = public_check("/blog?page=1", "Блог")
             return response(200, {"success": True, "https": True,
                                   "data_root_ready": ready, "blog_root_ready": ready and blog,
                                   "robots_ready": robots, "sitemap_ready": sitemap})
